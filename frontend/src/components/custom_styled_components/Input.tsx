@@ -2,18 +2,20 @@ import React, { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 interface inputProps extends InputHTMLAttributes<HTMLInputElement> {
-	id: string;
+	id?: string;
 	label: string;
 	name: string;
 }
 
 const InputGroupStyle = styled.div``;
 
-const input: React.FC<inputProps> = ({ label, id, name, ...rest }) => {
+const input: React.FC<inputProps> = ({ label, id = '', name, ...rest }) => {
+	const newId = id ? `${id}-input` : `${name}-input`;
+
 	return (
 		<InputGroupStyle>
-			<label htmlFor={`${id}-input`}>{label}</label>
-			<input {...rest} id={`${id}-input`} name={name} />
+			<label htmlFor={newId}>{label}</label>
+			<input {...rest} id={newId} name={name} />
 		</InputGroupStyle>
 	);
 };
