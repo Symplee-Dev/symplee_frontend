@@ -1,6 +1,10 @@
 import { bindActionCreators } from 'redux';
 
-export const userReducer = (state = {}, action) => {
+const initialState = {
+	isLoggedIn: false
+};
+
+export const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		default:
 			return state;
