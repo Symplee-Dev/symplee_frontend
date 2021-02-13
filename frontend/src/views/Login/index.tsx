@@ -9,7 +9,7 @@ const Login: React.FC<LoginProps> = () => {
 	};
 	return (
 		<div>
-			<h2>Login</h2>
+			<h1>Login</h1>
 			<form onSubmit={onSubmit}>
 				<Input id="username" name="username" label="Username" />
 				<Input
