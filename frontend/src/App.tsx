@@ -1,11 +1,14 @@
-function App() {
+import React from 'react';
+import Login from '../src/views/Login';
+
+interface AppProps {}
+
+const App: React.FC<AppProps> = () => {
 	return (
-		<div className="App">
-			<header className="App-header">
-				<p>This app is working</p>
-			</header>
-		</div>
+		<>
+			<Login />
+		</>
 	);
-}
+};
 
 export default App;
