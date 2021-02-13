@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import App from './App';
+
+import './indexStyle.scss';
+
 const apolloClient = new ApolloClient({
-	uri: '',
+	uri: 'https://bolt--backend.herokuapp.com/graphql',
 	cache: new InMemoryCache()
 });
 
