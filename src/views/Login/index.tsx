@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 // import styled from 'styled-components';
 
 import Input from '../../components/custom_styled_components/Input';
+import { motion } from 'framer-motion';
 
 interface LoginProps {}
 
@@ -22,7 +23,7 @@ const Login: React.FC<LoginProps> = () => {
 		e.preventDefault();
 	};
 	return (
-		<div>
+		<motion.div exit={{ opacity: 0 }}>
 			<h1>Login</h1>
 			<form onSubmit={onSubmit}>
 				<Input
@@ -44,7 +45,7 @@ const Login: React.FC<LoginProps> = () => {
 				/>
 				<button type="submit">Login</button>
 			</form>
-		</div>
+		</motion.div>
 	);
 };
 

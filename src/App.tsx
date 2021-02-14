@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, useLocation, Switch } from 'react-router-dom';
 
 // views
 import Login from '../src/views/Login';
@@ -7,22 +7,24 @@ import Home from '../src/views/Home';
 import Register from './views/Register';
 import UserUi from './views/UserUI';
 
-import NavBar from './components/NavBar';
-import { Container } from '@material-ui/core';
+import { AnimatePresence } from 'framer-motion';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
+	const location = useLocation();
+
 	return (
-		<>
-			<NavBar />
-			<Container>
-				<Route path="/login" component={Login} />
+		<AnimatePresence exitBeforeEnter>
+			<Switch location={location} key={location.pathname}>
+				<Route path="/login">
+					<Login />
+				</Route>
 				<Route path="/signup" component={Register} />
 				<Route path="/chat" component={UserUi} />
-				<Route exact path="/" component={Home} />
-			</Container>
-		</>
+				<Route path="/" component={Home} />
+			</Switch>
+		</AnimatePresence>
 	);
 };
 
