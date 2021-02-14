@@ -1,0 +1,65 @@
+.home-root {
+	margin-top: 10%;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.left {
+		width: 50%;
+
+		h2 {
+			font-size: 3rem;
+			letter-spacing: 2px;
+
+			.logo {
+				letter-spacing: 4px;
+				color: #bb86fc;
+			}
+		}
+
+		p {
+			margin-top: 1rem;
+			line-height: 2;
+			font-size: 1.2rem;
+			font-weight: 300;
+			width: 75%;
+		}
+
+		button {
+			margin-top: 1.5rem;
+			background-color: #bb86fc;
+			color: white;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 700;
+			font-size: 1.2rem;
+			letter-spacing: 1.5px;
+			width: 50%;
+			height: 50px;
+			border-radius: 1rem;
+			border: none;
+			outline: none;
+			transition: 0.3s;
+		}
+
+		button:hover {
+			cursor: pointer;
+			background: white;
+			color: #23272a;
+			width: 70%;
+		}
+
+		hr {
+			margin-top: 0.5rem;
+			width: 75%;
+		}
+	}
+
+	.right {
+		width: 50%;
+
+		img {
+			width: 90%;
+		}
+	}
+}
