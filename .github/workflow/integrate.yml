@@ -1,13 +1,21 @@
-name: Typecheck, and Lint
+name: Typecheck
 
-on: [push]
+on:
+    push:
+        branches:
+            - '**'
+    workflow_dispatch:
+
 jobs:
     main:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: install
-              run: npm install
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: setup
+              run: |
+                  yarn install
             - name: typecheck
-              working-directory: ${{ github.workspace }}
               run: npm run typecheck
