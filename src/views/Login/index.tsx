@@ -31,6 +31,7 @@ const Login: React.FC<LoginProps> = () => {
 					label="Username"
 					value={loginCredentials.username}
 					onChange={onChange}
+					required
 				/>
 				<Input
 					id="password"
@@ -39,6 +40,7 @@ const Login: React.FC<LoginProps> = () => {
 					type="password"
 					value={loginCredentials.password}
 					onChange={onChange}
+					required
 				/>
 				<button type="submit">Login</button>
 			</form>
