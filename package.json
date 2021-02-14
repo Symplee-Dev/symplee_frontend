@@ -1,6 +1,7 @@
 {
 	"name": "frontend",
 	"version": "0.1.0",
+	"description": "Testing For Intregration",
 	"private": true,
 	"dependencies": {
 		"graphql": "^15.5.0",
