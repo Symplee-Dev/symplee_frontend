@@ -1,0 +1,13 @@
+name: Typecheck, and Lint
+
+on: [push]
+jobs:
+    main:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: install
+              run: npm install
+            - name: typecheck
+              working-directory: ${{ github.workspace }}
+              run: npm run typecheck
