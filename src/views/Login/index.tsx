@@ -4,7 +4,14 @@ import './style.scss';
 import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
-import { MenuItem, Select, TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import {
+	MenuItem,
+	Select,
+	TextField,
+	createMuiTheme,
+	ThemeProvider
+} from '@material-ui/core';
 
 interface LoginProps {}
 
@@ -19,7 +26,14 @@ const Login: React.FC<LoginProps> = () => {
 		'EMAIL'
 	);
 
-	//@ts-ignore
+	const theme = createMuiTheme({
+		palette: {
+			primary: {
+				main: '#BB86FC'
+			}
+		}
+	});
+
 	const onChange = event => {
 		setLoginCredentials({
 			...loginCredentials,
@@ -32,7 +46,7 @@ const Login: React.FC<LoginProps> = () => {
 	};
 
 	return (
-		<>
+		<ThemeProvider theme={theme}>
 			<NavBar />
 			<div className="login login__container">
 				<motion.div exit={{ opacity: 0 }}>
@@ -61,12 +75,17 @@ const Login: React.FC<LoginProps> = () => {
 								<>
 									<p className="input-title">Email</p>
 									<TextField
+										required
+										color="primary"
 										name="username"
 										variant="filled"
 										className="input-field"
 										type="email"
 										value={loginCredentials.username}
 										onChange={onChange}
+										inputProps={{
+											className: 'input-field'
+										}}
 									/>
 								</>
 							)}
@@ -79,19 +98,29 @@ const Login: React.FC<LoginProps> = () => {
 
 									<div className="username-input-group">
 										<TextField
+											required
 											name="username"
+											color="primary"
 											variant="filled"
 											className="input-field"
 											type="text"
 											value={loginCredentials.username}
 											onChange={onChange}
+											inputProps={{
+												className: 'input-field'
+											}}
 										/>
 										<TextField
+											required
+											color="primary"
 											name="key"
 											className="key-field"
 											variant="filled"
 											value={loginCredentials.key}
 											onChange={onChange}
+											inputProps={{
+												className: 'input-field'
+											}}
 										/>
 									</div>
 								</>
@@ -99,37 +128,25 @@ const Login: React.FC<LoginProps> = () => {
 
 							<p className="input-title">Password</p>
 							<TextField
+								required
 								name="password"
 								variant="filled"
+								color="primary"
 								className="input-field"
 								type="password"
 								value={loginCredentials.password}
 								onChange={onChange}
+								inputProps={{
+									className: 'input-field'
+								}}
 							/>
-
-							{/* <Input
-							id="username"
-							name="username"
-							label="Username"
-							value={loginCredentials.username}
-							onChange={onChange}
-							required
-						/>
-						<Input
-							id="password"
-							name="password"
-							label="Password"
-							type="password"
-							value={loginCredentials.password}
-							onChange={onChange}
-							required
-						/> */}
-							{/* <button type="submit">Login</button> */}
+							<Link to="/signup">Don't have an account?</Link>
+							<button>Log In</button>
 						</form>
 					</FadeIn>
 				</motion.div>
 			</div>
-		</>
+		</ThemeProvider>
 	);
 };
 
