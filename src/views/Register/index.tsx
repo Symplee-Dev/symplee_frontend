@@ -1,20 +1,32 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import './style.scss';
 import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
-import { TextField } from '@material-ui/core';
+import { TextField, LinearProgress, Snackbar } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+//@ts-ignore
+import { useSignupMutation } from '../../@types/graphql/generated.d.ts';
+import { useHistory } from 'react-router';
+import Alert from '@material-ui/lab/Alert';
 
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = () => {
+	const history = useHistory();
+
 	const [registerCredentials, setRegisterCredentials] = useState({
 		username: '',
 		email: '',
 		password: '',
 		name: ''
 	});
+
+	const [errorState, setErrorState] = useState('');
+
+	const [signup, { data, loading, error }] = useSignupMutation();
+
+	const [notifState, setNotifState] = useState(false);
 
 	const onChange = event => {
 		setRegisterCredentials({
@@ -25,7 +37,28 @@ const Register: React.FC<RegisterProps> = () => {
 
 	const onSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
+		signup({
+			variables: {
+				...registerCredentials
+			}
+		});
 	};
+
+	useEffect(() => {
+		if (!loading) {
+			if (error) {
+				setErrorState(error.message);
+			}
+
+			if (!error && data) {
+				setNotifState(true);
+				setTimeout(() => {
+					history.push('/login');
+				}, 2000);
+			}
+		}
+	});
 
 	return (
 		<>
@@ -94,8 +127,32 @@ const Register: React.FC<RegisterProps> = () => {
 							}}
 						/>
 						<Link to="/login">Already have an account?</Link>
-						<button>Create Account</button>
+						{errorState.length > 0 && (
+							<p className="input-title error">
+								{errorState.toString()}
+							</p>
+						)}
+						{!loading ? (
+							<button>Create Account</button>
+						) : (
+							<LinearProgress
+								color="primary"
+								style={{
+									marginTop: '1.5rem',
+									width: '100%'
+								}}
+							/>
+						)}
 					</form>
+					<Snackbar
+						open={notifState}
+						autoHideDuration={3000}
+						onClose={() => setNotifState(false)}
+					>
+						<Alert onClose={() => setNotifState(false)}>
+							You're almost there! Please sign in.
+						</Alert>
+					</Snackbar>
 				</FadeIn>
 			</motion.div>
 		</>

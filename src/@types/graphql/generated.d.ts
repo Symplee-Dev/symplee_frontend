@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import { DocumentNode } from 'graphql';
-
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
 	[K in keyof T]: T[K];
@@ -76,6 +74,34 @@ export type User = {
 	name: Scalars['String'];
 	username: Scalars['String'];
 	key: Scalars['String'];
+	chatGroups: Array<Maybe<ChatGroup>>;
+};
+
+export type ChatGroup = {
+	__typename?: 'ChatGroup';
+	id: Scalars['Int'];
+	name: Scalars['String'];
+	isPublic: Scalars['Boolean'];
+	createdAt: Scalars['String'];
+	chats: Array<Maybe<Chat>>;
+};
+
+export type Chat = {
+	__typename?: 'Chat';
+	id: Scalars['Int'];
+	name: Scalars['String'];
+	isPublic: Scalars['Boolean'];
+	createdById: Scalars['Int'];
+	messages: Array<Maybe<Message>>;
+};
+
+export type Message = {
+	__typename?: 'Message';
+	id: Scalars['Int'];
+	body: Scalars['String'];
+	authorId: Scalars['Int'];
+	chatId: Scalars['Int'];
+	createdAt: Scalars['String'];
 };
 
 export enum CacheControlScope {

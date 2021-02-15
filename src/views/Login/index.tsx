@@ -46,7 +46,7 @@ const Login: React.FC<LoginProps> = () => {
 			if (!error && data) {
 				setAuth(data.login.token);
 				localStorage.setItem('bolttoken', data.login.token);
-				history.push('/app');
+				history.push('/');
 			}
 		}
 	}, [data, loading, error, errorState, history, setAuth]);
@@ -55,14 +55,10 @@ const Login: React.FC<LoginProps> = () => {
 		e.preventDefault();
 
 		if (usernameType === 'USERNAME') {
-			setLoginCredentials({
-				...loginCredentials,
-				username: loginCredentials.username + '#' + loginCredentials.key
-			});
-
 			login({
 				variables: {
-					username: loginCredentials.username,
+					username:
+						loginCredentials.username + '#' + loginCredentials.key,
 					password: loginCredentials.password
 				}
 			});
