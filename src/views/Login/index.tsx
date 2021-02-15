@@ -10,8 +10,13 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
 	const [loginCredentials, setLoginCredentials] = useState({
 		username: '',
-		password: ''
+		password: '',
+		email: ''
 	});
+
+	const [usernameType, setUsernameType] = useState<'USERNAME' | 'EMAIL'>(
+		'EMAIL'
+	);
 
 	//@ts-ignore
 	const onChange = event => {
@@ -30,9 +35,13 @@ const Login: React.FC<LoginProps> = () => {
 			<div className="login login__container">
 				<motion.div exit={{ opacity: 0 }}>
 					<FadeIn delay={300}>
-						<h3>Login</h3>
-						<hr />
+						<h3>Welcome Back!</h3>
 						<form onSubmit={onSubmit}>
+							{/* Switch component = using username or email */}
+							{usernameType === 'EMAIL' && (
+								<p className="input-title">Email</p>
+							)}
+
 							{/* <Input
 							id="username"
 							name="username"
