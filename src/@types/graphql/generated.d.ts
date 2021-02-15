@@ -138,6 +138,23 @@ export type SignupMutation = { __typename?: 'Mutation' } & {
 	>;
 };
 
+export type UserQueryVariables = Exact<{
+	id: Scalars['Int'];
+}>;
+
+export type UserQuery = { __typename?: 'Query' } & {
+	user?: Maybe<
+		{ __typename?: 'User' } & Pick<
+			User,
+			'username' | 'id' | 'email' | 'key'
+		> & {
+				chatGroups: Array<
+					Maybe<{ __typename?: 'ChatGroup' } & Pick<ChatGroup, 'id'>>
+				>;
+			}
+	>;
+};
+
 export const LoginDocument = gql`
 	mutation Login($username: String, $email: String, $password: String!) {
 		login(
@@ -257,6 +274,55 @@ export type SignupMutationOptions = Apollo.BaseMutationOptions<
 	SignupMutation,
 	SignupMutationVariables
 >;
+export const UserDocument = gql`
+	query User($id: Int!) {
+		user(id: $id) {
+			username
+			id
+			email
+			key
+			chatGroups {
+				id
+			}
+		}
+	}
+`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(
+	baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>
+) {
+	return Apollo.useQuery<UserQuery, UserQueryVariables>(
+		UserDocument,
+		baseOptions
+	);
+}
+export function useUserLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>
+) {
+	return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(
+		UserDocument,
+		baseOptions
+	);
+}
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 
 declare module '*/login.graphql' {
 	const defaultDocument: DocumentNode;
@@ -268,6 +334,13 @@ declare module '*/login.graphql' {
 declare module '*/signup.graphql' {
 	const defaultDocument: DocumentNode;
 	export const Signup: DocumentNode;
+
+	export default defaultDocument;
+}
+
+declare module '*/user.graphql' {
+	const defaultDocument: DocumentNode;
+	export const User: DocumentNode;
 
 	export default defaultDocument;
 }

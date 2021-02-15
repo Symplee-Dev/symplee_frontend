@@ -8,7 +8,7 @@ import './scss/indexStyle.scss';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/index';
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
 	uri:
 		process.env.NODE_ENV === 'production'
 			? 'https://bolt--backend.herokuapp.com/graphql'

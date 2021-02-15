@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useSelectAuth } from './redux/selectors';
 import HomeApp from './HomeApp/index';
+import decode from 'jwt-decode';
+import { SET_USER_ID, SET_LOGGED_IN } from './redux/actions/index';
 
 interface AppProps {}
 
@@ -32,8 +34,14 @@ const App: React.FC<AppProps> = () => {
 
 	useEffect(() => {
 		const token = localStorage.getItem('bolttoken');
+
 		if (token && token.length > 0) {
-			dispatch({ type: 'SET_LOGGED_IN', payload: token });
+			const user: { userId: number; username: string } = decode(
+				token ?? ''
+			);
+			console.log(user);
+			dispatch({ type: SET_USER_ID, payload: { userId: user.userId } });
+			dispatch({ type: SET_LOGGED_IN, payload: token });
 		}
 	}, [dispatch]);
 

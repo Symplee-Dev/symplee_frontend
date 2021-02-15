@@ -4,6 +4,7 @@ export const ADD_USER = 'ADD_USER';
 export const FETCH_USER = 'FETCH_USER';
 export const EDIT_USER = 'EDIT_USER';
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
+export const SET_USER_ID = 'SET_USER_ID';
 
 export const addUser = (state, action) => {
 	return {

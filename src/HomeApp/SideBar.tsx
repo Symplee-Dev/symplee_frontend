@@ -7,6 +7,9 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import PublicIcon from '@material-ui/icons/Public';
+//@ts-ignore
+import { useUserQuery } from '../@types/graphql/generated.d.ts';
+import { RootStateOrAny, useSelector } from 'react-redux';
 
 const testGroups = [
 	{
@@ -82,6 +85,12 @@ const Sidebar = () => {
 
 	const [pageState, setPageState] = useState('');
 
+	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
+
+	const { data, loading, error } = useUserQuery({
+		variables: { id: userId }
+	});
+
 	useEffect(() => {
 		setPageState(location.pathname);
 	}, [location]);
@@ -142,9 +151,10 @@ const Sidebar = () => {
 
 				<h6 style={{ marginTop: '1.5rem' }}>Chat Groups </h6>
 
-				{testGroups.map(group => (
-					<>
+				<>
+					{testGroups.map(group => (
 						<div
+							key={group.id}
 							className={`sidebar-section ${
 								pageState === `/group/${group.id}` &&
 								'sidebar-active'
@@ -158,8 +168,8 @@ const Sidebar = () => {
 							/>
 							<p>{group.name}</p>
 						</div>
-					</>
-				))}
+					))}
+				</>
 
 				<div className="sidebar-section ">
 					<AddCircleIcon className="sidebar-icon" />
