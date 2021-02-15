@@ -1,7 +1,10 @@
+import Sidebar from './SideBar';
+import './index.scss';
+
 const HomeApp = () => {
 	return (
-		<div>
-			<h1>Logged In</h1>
+		<div className="home-app">
+			<Sidebar />
 		</div>
 	);
 };
