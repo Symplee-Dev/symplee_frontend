@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import Input from '../../components/custom_styled_components/Input';
-import './style.scss'
+import './style.scss';
+import { motion } from 'framer-motion';
 
 interface RegisterProps {}
 
@@ -20,7 +21,7 @@ const Register: React.FC<RegisterProps> = () => {
 		e.preventDefault();
 	};
 	return (
-		<div className='signup signup__container'>
+		<motion.div className="signup signup__container" exit={{ opacity: 0 }}>
 			<h1>Sign Up</h1>
 			<form onSubmit={onSubmit}>
 				<Input
@@ -50,7 +51,7 @@ const Register: React.FC<RegisterProps> = () => {
 				/>
 				<button type="submit">Register</button>
 			</form>
-		</div>
+		</motion.div>
 	);
 };
 

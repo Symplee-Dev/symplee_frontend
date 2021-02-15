@@ -1,8 +1,9 @@
 import React, { FormEvent, useState } from 'react';
 // import styled from 'styled-components';
-import './style.scss'
-import Input from '../../components/custom_styled_components/Input';
+import './style.scss';
 import { motion } from 'framer-motion';
+import NavBar from '../../components/NavBar';
+import FadeIn from 'react-fade-in';
 
 interface LoginProps {}
 
@@ -12,6 +13,7 @@ const Login: React.FC<LoginProps> = () => {
 		password: ''
 	});
 
+	//@ts-ignore
 	const onChange = event => {
 		setLoginCredentials({
 			...loginCredentials,
@@ -23,31 +25,37 @@ const Login: React.FC<LoginProps> = () => {
 		e.preventDefault();
 	};
 	return (
-	<div className='login login__container'>
-		<motion.div exit={{ opacity: 0 }}>
-			<h1>Login</h1>
-			<form onSubmit={onSubmit}>
-				<Input
-					id="username"
-					name="username"
-					label="Username"
-					value={loginCredentials.username}
-					onChange={onChange}
-					required
-				/>
-				<Input
-					id="password"
-					name="password"
-					label="Password"
-					type="password"
-					value={loginCredentials.password}
-					onChange={onChange}
-					required
-				/>
-				<button type="submit">Login</button>
-			</form>
-		</motion.div>
-	</div>
+		<>
+			<NavBar />
+			<div className="login login__container">
+				<motion.div exit={{ opacity: 0 }}>
+					<FadeIn delay={300}>
+						<h3>Login</h3>
+						<hr />
+						<form onSubmit={onSubmit}>
+							{/* <Input
+							id="username"
+							name="username"
+							label="Username"
+							value={loginCredentials.username}
+							onChange={onChange}
+							required
+						/>
+						<Input
+							id="password"
+							name="password"
+							label="Password"
+							type="password"
+							value={loginCredentials.password}
+							onChange={onChange}
+							required
+						/> */}
+							{/* <button type="submit">Login</button> */}
+						</form>
+					</FadeIn>
+				</motion.div>
+			</div>
+		</>
 	);
 };
 

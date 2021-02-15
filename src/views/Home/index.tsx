@@ -5,10 +5,13 @@ import heroimg from './hero.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in';
+import { useHistory } from 'react-router';
 
 interface HomeViewProps {}
 
 const HomeView: React.FC<HomeViewProps> = () => {
+	const history = useHistory();
+
 	return (
 		<>
 			<Navbar />
@@ -29,7 +32,9 @@ const HomeView: React.FC<HomeViewProps> = () => {
 							building a community. Bolt has the tools to help you
 							get started lightning fast.
 						</p>
-						<button>Join Now</button>
+						<button onClick={() => history.push('/signup')}>
+							Join Now
+						</button>
 					</FadeIn>
 				</div>
 				<div className="right">

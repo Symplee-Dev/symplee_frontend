@@ -17,12 +17,18 @@ const App: React.FC<AppProps> = () => {
 	return (
 		<AnimatePresence exitBeforeEnter>
 			<Switch location={location} key={location.pathname}>
-				<Route path="/login">
+				<Route exact path="/login">
 					<Login />
 				</Route>
-				<Route path="/signup" component={Register} />
-				<Route path="/chat" component={UserUi} />
-				<Route path="/" component={Home} />
+				<Route exact path="/signup">
+					<Register />
+				</Route>
+				<Route exact path="/chat">
+					<UserUi />
+				</Route>
+				<Route path="/">
+					<Home />
+				</Route>
 			</Switch>
 		</AnimatePresence>
 	);
