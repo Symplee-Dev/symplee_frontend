@@ -7,7 +7,10 @@ import App from './App';
 import './scss/indexStyle.scss';
 
 const apolloClient = new ApolloClient({
-	uri: 'https://bolt--backend.herokuapp.com/graphql',
+	uri:
+		process.env.NODE_ENV === 'production'
+			? 'https://bolt--backend.herokuapp.com/graphql'
+			: 'http://localhost:5000/graphql',
 	cache: new InMemoryCache()
 });
 
