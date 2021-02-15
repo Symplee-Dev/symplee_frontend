@@ -1,17 +1,10 @@
 import React, { FormEvent, useState } from 'react';
-// import styled from 'styled-components';
 import './style.scss';
 import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
-import {
-	MenuItem,
-	Select,
-	TextField,
-	createMuiTheme,
-	ThemeProvider
-} from '@material-ui/core';
+import { MenuItem, Select, TextField } from '@material-ui/core';
 
 interface LoginProps {}
 
@@ -26,14 +19,6 @@ const Login: React.FC<LoginProps> = () => {
 		'EMAIL'
 	);
 
-	const theme = createMuiTheme({
-		palette: {
-			primary: {
-				main: '#BB86FC'
-			}
-		}
-	});
-
 	const onChange = event => {
 		setLoginCredentials({
 			...loginCredentials,
@@ -46,7 +31,7 @@ const Login: React.FC<LoginProps> = () => {
 	};
 
 	return (
-		<ThemeProvider theme={theme}>
+		<>
 			<NavBar />
 			<div className="login login__container">
 				<motion.div exit={{ opacity: 0 }}>
@@ -146,7 +131,7 @@ const Login: React.FC<LoginProps> = () => {
 					</FadeIn>
 				</motion.div>
 			</div>
-		</ThemeProvider>
+		</>
 	);
 };
 
