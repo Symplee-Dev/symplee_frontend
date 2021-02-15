@@ -45,6 +45,7 @@ const Login: React.FC<LoginProps> = () => {
 
 			if (!error && data) {
 				setAuth(data.login.token);
+				localStorage.setItem('bolttoken', data.login.token);
 				history.push('/app');
 			}
 		}

@@ -9,11 +9,18 @@ import UserUi from './views/UserUI';
 
 import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelectAuth } from './redux/selectors';
+import HomeApp from './HomeApp/index';
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
 	const location = useLocation();
+
+	const dispatch = useDispatch();
+	const authenticated = useSelectAuth();
 
 	const theme = createMuiTheme({
 		palette: {
@@ -22,6 +29,13 @@ const App: React.FC<AppProps> = () => {
 			}
 		}
 	});
+
+	useEffect(() => {
+		const token = localStorage.getItem('bolttoken');
+		if (token && token.length > 0) {
+			dispatch({ type: 'SET_LOGGED_IN', payload: token });
+		}
+	}, [dispatch]);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -36,8 +50,9 @@ const App: React.FC<AppProps> = () => {
 					<Route exact path="/chat">
 						<UserUi />
 					</Route>
+
 					<Route path="/">
-						<Home />
+						{authenticated ? <HomeApp /> : <Home />}
 					</Route>
 				</Switch>
 			</AnimatePresence>
