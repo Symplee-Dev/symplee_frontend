@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 
 import './scss/indexStyle.scss';
+import { Provider } from 'react-redux';
+import { store } from './redux/store/index';
 
 const apolloClient = new ApolloClient({
 	uri:
@@ -19,10 +21,12 @@ const apolloClient = new ApolloClient({
 });
 
 ReactDOM.render(
-	<ApolloProvider client={apolloClient}>
-		<Router>
-			<App />
-		</Router>
-	</ApolloProvider>,
+	<Provider store={store}>
+		<ApolloProvider client={apolloClient}>
+			<Router>
+				<App />
+			</Router>
+		</ApolloProvider>
+	</Provider>,
 	document.getElementById('root')
 );

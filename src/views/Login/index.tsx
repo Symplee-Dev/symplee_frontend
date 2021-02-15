@@ -8,6 +8,7 @@ import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
 //@ts-ignore
 import { useLoginMutation } from '../../@types/graphql/generated.d.ts';
 import { useHistory } from 'react-router';
+import { useLogin } from '../../redux/actions/index';
 
 interface LoginProps {}
 
@@ -27,6 +28,8 @@ const Login: React.FC<LoginProps> = () => {
 
 	const [login, { data, loading, error }] = useLoginMutation();
 
+	const setAuth = useLogin();
+
 	const onChange = event => {
 		setLoginCredentials({
 			...loginCredentials,
@@ -41,10 +44,11 @@ const Login: React.FC<LoginProps> = () => {
 			}
 
 			if (!error && data) {
+				setAuth(data.login.token);
 				history.push('/app');
 			}
 		}
-	}, [data, loading, error, errorState, history]);
+	}, [data, loading, error, errorState, history, setAuth]);
 
 	const onSubmit = (e: FormEvent) => {
 		e.preventDefault();
@@ -62,7 +66,6 @@ const Login: React.FC<LoginProps> = () => {
 				}
 			});
 		} else {
-			console.log(loginCredentials);
 			login({
 				variables: {
 					email: loginCredentials.username,

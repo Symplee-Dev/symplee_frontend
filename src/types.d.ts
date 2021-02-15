@@ -1,5 +1,6 @@
 export interface Rstate {
 	user: {
-		isLoggedIn: boolean;
+		authenticated: boolean;
+		token: string;
 	};
 }

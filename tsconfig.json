@@ -23,7 +23,8 @@
 			"./node_modules/@types/",
 			"src/@types",
 			"./src/domains/",
-			"../@types"
+			"../@types",
+			"./src/@types/graphql/generated.d.ts"
 		]
 	},
 	"include": ["./src/*/", "src/@types"]
