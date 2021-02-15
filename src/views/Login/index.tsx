@@ -1,23 +1,31 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import './style.scss';
 import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
-import { MenuItem, Select, TextField } from '@material-ui/core';
+import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
+//@ts-ignore
+import { useLoginMutation } from '../../@types/graphql/generated.d.ts';
+import { useHistory } from 'react-router';
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
+	const history = useHistory();
+
 	const [loginCredentials, setLoginCredentials] = useState({
 		username: '',
 		password: '',
 		key: ''
 	});
+	const [errorState, setErrorState] = useState('');
 
 	const [usernameType, setUsernameType] = useState<'USERNAME' | 'EMAIL'>(
 		'EMAIL'
 	);
+
+	const [login, { data, loading, error }] = useLoginMutation();
 
 	const onChange = event => {
 		setLoginCredentials({
@@ -26,8 +34,42 @@ const Login: React.FC<LoginProps> = () => {
 		});
 	};
 
+	useEffect(() => {
+		if (!loading) {
+			if (error) {
+				setErrorState(error.message);
+			}
+
+			if (!error && data) {
+				history.push('/app');
+			}
+		}
+	}, [data, loading, error, errorState, history]);
+
 	const onSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
+		if (usernameType === 'USERNAME') {
+			setLoginCredentials({
+				...loginCredentials,
+				username: loginCredentials.username + '#' + loginCredentials.key
+			});
+
+			login({
+				variables: {
+					username: loginCredentials.username,
+					password: loginCredentials.password
+				}
+			});
+		} else {
+			console.log(loginCredentials);
+			login({
+				variables: {
+					email: loginCredentials.username,
+					password: loginCredentials.password
+				}
+			});
+		}
 	};
 
 	return (
@@ -126,7 +168,22 @@ const Login: React.FC<LoginProps> = () => {
 								}}
 							/>
 							<Link to="/signup">Don't have an account?</Link>
-							<button>Log In</button>
+							{errorState.length > 0 && (
+								<p className="input-title error">
+									{errorState.toString()}
+								</p>
+							)}
+							{!loading ? (
+								<button>Log In</button>
+							) : (
+								<LinearProgress
+									color="primary"
+									style={{
+										marginTop: '1.5rem',
+										width: '100%'
+									}}
+								/>
+							)}
 						</form>
 					</FadeIn>
 				</motion.div>

@@ -11,7 +11,11 @@ const apolloClient = new ApolloClient({
 		process.env.NODE_ENV === 'production'
 			? 'https://bolt--backend.herokuapp.com/graphql'
 			: 'http://localhost:5000/graphql',
-	cache: new InMemoryCache()
+	cache: new InMemoryCache(),
+	defaultOptions: {
+		mutate: { errorPolicy: 'all' },
+		query: { errorPolicy: 'all' }
+	}
 });
 
 ReactDOM.render(
