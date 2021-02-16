@@ -10,11 +10,14 @@ import PublicIcon from '@material-ui/icons/Public';
 //@ts-ignore
 import { useUserQuery } from '../@types/graphql/generated.d.ts';
 import { RootStateOrAny, useSelector } from 'react-redux';
+import { Avatar, Tooltip } from '@material-ui/core';
+import { useHistory } from 'react-router';
+import randomHex from 'random-hex';
 
 const testGroups = [
 	{
 		id: 1,
-		name: 'Group 1',
+		name: 'Boys 1',
 		isPublic: true,
 		createdAt: new Date(),
 		chats: [
@@ -58,7 +61,7 @@ const testGroups = [
 	},
 	{
 		id: 3,
-		name: 'Group 3',
+		name: 'Lambda 3',
 		isPublic: true,
 		createdAt: new Date(),
 		chats: [
@@ -82,6 +85,7 @@ const testGroups = [
 
 const Sidebar = () => {
 	const location = useLocation();
+	const history = useHistory();
 
 	const [pageState, setPageState] = useState('');
 
@@ -92,13 +96,12 @@ const Sidebar = () => {
 	});
 
 	useEffect(() => {
-		setPageState(location.pathname);
-	}, [location]);
+		setPageState(window.location.pathname);
+	});
 
 	return (
 		<div className="sidebar hide-scrollbar">
 			<FadeIn delay={100} className="sidebar-container">
-				<h6>Quick Menu</h6>
 				<div
 					className={`sidebar-section ${
 						pageState === '/' && 'sidebar-active'
@@ -109,7 +112,6 @@ const Sidebar = () => {
 							pageState === '/' && 'active'
 						}`}
 					/>
-					<p>Home</p>
 				</div>
 				<div
 					className={`sidebar-section ${
@@ -121,7 +123,6 @@ const Sidebar = () => {
 							pageState === '/settings' && 'active'
 						}`}
 					/>
-					<p>Settings</p>
 				</div>
 				<div
 					className={`sidebar-section ${
@@ -133,7 +134,6 @@ const Sidebar = () => {
 							pageState === '/you' && 'active'
 						}`}
 					/>
-					<p>You</p>
 				</div>
 
 				<div
@@ -146,34 +146,42 @@ const Sidebar = () => {
 							pageState === '/discover' && 'active'
 						}`}
 					/>
-					<p>Discover</p>
 				</div>
 
-				<h6 style={{ marginTop: '1.5rem' }}>Chat Groups </h6>
+				<h6 style={{ marginTop: '1.5rem' }}>Connect</h6>
 
 				<>
 					{testGroups.map(group => (
-						<div
-							key={group.id}
-							className={`sidebar-section ${
-								pageState === `/group/${group.id}` &&
-								'sidebar-active'
-							}`}
-						>
-							<ChatBubbleIcon
-								className={`sidebar-icon ${
-									pageState === `'/group/${group.id}` &&
-									'active'
+						<Tooltip title={group.name} placement="right">
+							<div
+								onClick={() =>
+									history.push('/group/' + group.id)
+								}
+								key={group.id}
+								className={`sidebar-avatar-section ${
+									pageState === `/group/${group.id}` &&
+									'sidebar-avatar-active'
 								}`}
-							/>
-							<p>{group.name}</p>
-						</div>
+							>
+								<Avatar
+									alt={group.name}
+									className={`sidebar-avatar ${
+										pageState === `/group/${group.id}` &&
+										'avatar-active'
+									}`}
+									style={{
+										background: randomHex.generate()
+									}}
+								>
+									{group.name[0]}
+								</Avatar>
+							</div>
+						</Tooltip>
 					))}
 				</>
 
 				<div className="sidebar-section ">
 					<AddCircleIcon className="sidebar-icon" />
-					<p>Add</p>
 				</div>
 			</FadeIn>
 		</div>
