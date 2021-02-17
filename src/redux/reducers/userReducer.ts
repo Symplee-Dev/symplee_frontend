@@ -1,4 +1,4 @@
-import { SET_LOGGED_IN, SET_USER_ID } from '../actions/index';
+import { SET_LOGGED_IN, SET_LOGGED_OUT, SET_USER_ID } from '../actions/index';
 const initialState = {
 	authenticated: false,
 	token: '',
@@ -12,6 +12,9 @@ export const userReducer = (state = initialState, action) => {
 		}
 		case SET_USER_ID: {
 			return { ...state, userId: action.payload.userId };
+		}
+		case SET_LOGGED_OUT: {
+			return { ...initialState };
 		}
 		default:
 			return state;

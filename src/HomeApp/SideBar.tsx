@@ -4,15 +4,17 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import PublicIcon from '@material-ui/icons/Public';
 //@ts-ignore
 import { useUserQuery } from '../@types/graphql/generated.d.ts';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import { Avatar, Tooltip } from '@material-ui/core';
+import { Avatar, SvgIconTypeMap, Tooltip } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import randomHex from 'random-hex';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useLogout } from '../redux/actions';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 const testGroups = [
 	{
@@ -83,6 +85,34 @@ const testGroups = [
 	}
 ];
 
+const NavComponent = ({
+	route,
+	pageState,
+	tooltip,
+	Icon
+}: {
+	route: string;
+	pageState: string;
+	tooltip: string;
+	Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+}) => {
+	return (
+		<Tooltip placement="right" title={tooltip}>
+			<div
+				className={`sidebar-section ${
+					pageState === route && 'sidebar-active'
+				}`}
+			>
+				<Icon
+					className={`sidebar-icon ${
+						pageState === route && 'active'
+					}`}
+				/>
+			</div>
+		</Tooltip>
+	);
+};
+
 const Sidebar = () => {
 	const location = useLocation();
 	const history = useHistory();
@@ -91,61 +121,44 @@ const Sidebar = () => {
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
+	const logout = useLogout();
+
 	const { data, loading, error } = useUserQuery({
 		variables: { id: userId }
 	});
 
+	const links: {
+		route: string;
+		tooltip: string;
+		Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	}[] = [
+		{ Icon: AppsIcon, route: '/', tooltip: 'Dashboard' },
+		{ Icon: SettingsIcon, route: '/settings', tooltip: 'Settings' },
+		{ Icon: AccountBoxIcon, route: '/you', tooltip: 'Your Account' },
+		{ Icon: PublicIcon, route: '/discover', tooltip: 'Discover' }
+	];
+
 	useEffect(() => {
 		setPageState(window.location.pathname);
-	});
+	}, [window.location.pathname]);
 
 	return (
 		<div className="sidebar hide-scrollbar">
 			<FadeIn delay={100} className="sidebar-container">
-				<div
-					className={`sidebar-section ${
-						pageState === '/' && 'sidebar-active'
-					}`}
-				>
-					<AppsIcon
-						className={`sidebar-icon ${
-							pageState === '/' && 'active'
-						}`}
+				{links.map(link => (
+					<NavComponent
+						Icon={link.Icon}
+						tooltip={link.tooltip}
+						route={link.route}
+						pageState={pageState}
 					/>
-				</div>
+				))}
 				<div
-					className={`sidebar-section ${
-						pageState === '/settings' && 'sidebar-active'
-					}`}
+					className="sidebar-section-logout"
+					id="logout"
+					onClick={() => logout()}
 				>
-					<SettingsIcon
-						className={`sidebar-icon ${
-							pageState === '/settings' && 'active'
-						}`}
-					/>
-				</div>
-				<div
-					className={`sidebar-section ${
-						pageState === '/you' && 'sidebar-active'
-					}`}
-				>
-					<AccountBoxIcon
-						className={`sidebar-icon ${
-							pageState === '/you' && 'active'
-						}`}
-					/>
-				</div>
-
-				<div
-					className={`sidebar-section ${
-						pageState === '/discover' && 'sidebar-active'
-					}`}
-				>
-					<PublicIcon
-						className={`sidebar-icon ${
-							pageState === '/discover' && 'active'
-						}`}
-					/>
+					<ExitToAppIcon className="sidebar-icon" />
 				</div>
 
 				<h6 style={{ marginTop: '1.5rem' }}>Connect</h6>
@@ -180,9 +193,11 @@ const Sidebar = () => {
 					))}
 				</>
 
-				<div className="sidebar-section ">
-					<AddCircleIcon className="sidebar-icon" />
-				</div>
+				<Tooltip title="Add Group" placement="right">
+					<div className="sidebar-section ">
+						<AddCircleIcon className="sidebar-icon" />
+					</div>
+				</Tooltip>
 			</FadeIn>
 		</div>
 	);

@@ -1,6 +1,6 @@
-body {
+.body-app {
 	margin: 0;
-	padding: 0 !important ;
+	padding: 0 !important;
 	max-width: none !important;
 	width: 100%;
 }
@@ -60,11 +60,29 @@ body {
 
 				.sidebar-icon {
 					font-size: 2.5rem;
-					color: #bb86fc !important;
+					color: #bb86fc;
 				}
 
 				p {
-					color: #bb86fc !important;
+					color: #bb86fc;
+				}
+			}
+
+			#logout {
+				display: flex;
+				align-items: center;
+				margin-bottom: 2rem;
+			}
+
+			#logout:hover {
+				cursor: pointer;
+				.sidebar-icon {
+					font-size: 2.5rem;
+					color: #db4e3f !important;
+				}
+
+				p {
+					color: #db4e3f !important;
 				}
 			}
 

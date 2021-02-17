@@ -12,6 +12,8 @@ interface HomeViewProps {}
 const HomeView: React.FC<HomeViewProps> = () => {
 	const history = useHistory();
 
+	document.body.classList.remove('body-app');
+
 	return (
 		<>
 			<Navbar />
