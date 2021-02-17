@@ -1,7 +1,6 @@
 import FadeIn from 'react-fade-in';
 import AppsIcon from '@material-ui/icons/Apps';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -9,103 +8,45 @@ import PublicIcon from '@material-ui/icons/Public';
 //@ts-ignore
 import { useUserQuery } from '../@types/graphql/generated.d.ts';
 import { RootStateOrAny, useSelector } from 'react-redux';
-import { Avatar, SvgIconTypeMap, Tooltip } from '@material-ui/core';
+import {
+	Avatar,
+	CircularProgress,
+	SvgIconTypeMap,
+	Tooltip
+} from '@material-ui/core';
 import { useHistory } from 'react-router';
 import randomHex from 'random-hex';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useLogout } from '../redux/actions';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-const testGroups = [
-	{
-		id: 1,
-		name: 'Boys 1',
-		isPublic: true,
-		createdAt: new Date(),
-		chats: [
-			{
-				id: 1,
-				name: 'channel 1',
-				createdById: 1,
-				messages: [
-					{
-						id: 1,
-						body: 'Yo first message',
-						chatId: 1,
-						authorId: 1,
-						createdAt: new Date()
-					}
-				]
-			}
-		]
-	},
-	{
-		id: 2,
-		name: 'Group 2',
-		isPublic: true,
-		createdAt: new Date(),
-		chats: [
-			{
-				id: 1,
-				name: 'channel 1',
-				createdById: 1,
-				messages: [
-					{
-						id: 1,
-						body: 'Yo first message',
-						chatId: 1,
-						authorId: 1,
-						createdAt: new Date()
-					}
-				]
-			}
-		]
-	},
-	{
-		id: 3,
-		name: 'Lambda 3',
-		isPublic: true,
-		createdAt: new Date(),
-		chats: [
-			{
-				id: 1,
-				name: 'channel 1',
-				createdById: 1,
-				messages: [
-					{
-						id: 1,
-						body: 'Yo first message',
-						chatId: 1,
-						authorId: 1,
-						createdAt: new Date()
-					}
-				]
-			}
-		]
-	}
-];
-
 const NavComponent = ({
 	route,
 	pageState,
 	tooltip,
-	Icon
+	Icon,
+	history
 }: {
 	route: string;
-	pageState: string;
+	pageState: (path: string) => void;
 	tooltip: string;
 	Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+	history: any;
 }) => {
 	return (
 		<Tooltip placement="right" title={tooltip}>
 			<div
+				onClick={() => {
+					history.push(route);
+					pageState(route);
+				}}
 				className={`sidebar-section ${
-					pageState === route && 'sidebar-active'
+					window.location.pathname === route && 'sidebar-active'
 				}`}
 			>
 				<Icon
 					className={`sidebar-icon ${
-						pageState === route && 'active'
+						window.location.pathname === route && 'active'
 					}`}
 				/>
 			</div>
@@ -114,7 +55,6 @@ const NavComponent = ({
 };
 
 const Sidebar = () => {
-	const location = useLocation();
 	const history = useHistory();
 
 	const [pageState, setPageState] = useState('');
@@ -138,69 +78,81 @@ const Sidebar = () => {
 		{ Icon: PublicIcon, route: '/discover', tooltip: 'Discover' }
 	];
 
-	useEffect(() => {
-		setPageState(window.location.pathname);
-	}, [window.location.pathname]);
+	if (loading) return <CircularProgress color="primary" />;
 
-	return (
-		<div className="sidebar hide-scrollbar">
-			<FadeIn delay={100} className="sidebar-container">
-				{links.map(link => (
-					<NavComponent
-						Icon={link.Icon}
-						tooltip={link.tooltip}
-						route={link.route}
-						pageState={pageState}
-					/>
-				))}
-				<div
-					className="sidebar-section-logout"
-					id="logout"
-					onClick={() => logout()}
-				>
-					<ExitToAppIcon className="sidebar-icon" />
-				</div>
+	// TODO: Navigae to error screen
+	if (error) throw window.location.reload();
 
-				<h6 style={{ marginTop: '1.5rem' }}>Connect</h6>
+	if (!loading) {
+		let navLinks = links.map(link => (
+			<NavComponent
+				key={link.route}
+				history={history}
+				Icon={link.Icon}
+				tooltip={link.tooltip}
+				route={link.route}
+				pageState={(path: string) => setPageState(path)}
+			/>
+		));
+		return (
+			<div className="sidebar hide-scrollbar">
+				<FadeIn delay={100} className="sidebar-container">
+					{navLinks}
+					<Tooltip placement="right" title="Logout">
+						<div
+							className="sidebar-section-logout"
+							id="logout"
+							onClick={() => logout()}
+						>
+							<ExitToAppIcon className="sidebar-icon" />
+						</div>
+					</Tooltip>
 
-				<>
-					{testGroups.map(group => (
-						<Tooltip title={group.name} placement="right">
-							<div
-								onClick={() =>
-									history.push('/group/' + group.id)
-								}
-								key={group.id}
-								className={`sidebar-avatar-section ${
-									pageState === `/group/${group.id}` &&
-									'sidebar-avatar-active'
-								}`}
-							>
-								<Avatar
-									alt={group.name}
-									className={`sidebar-avatar ${
-										pageState === `/group/${group.id}` &&
-										'avatar-active'
-									}`}
-									style={{
-										background: randomHex.generate()
+					<h6 style={{ marginTop: '1.5rem' }}>Connect</h6>
+
+					<>
+						{data.user.chatGroups.map(group => (
+							<Tooltip title={group.name} placement="right">
+								<div
+									onClick={() => {
+										history.push('/group/' + group.id);
+										setPageState('/group/' + group.id);
 									}}
+									key={group.id}
+									className={`sidebar-avatar-section ${
+										pageState === `/group/${group.id}` &&
+										'sidebar-avatar-active'
+									}`}
 								>
-									{group.name[0]}
-								</Avatar>
-							</div>
-						</Tooltip>
-					))}
-				</>
+									<Avatar
+										alt={group.name}
+										className={`sidebar-avatar ${
+											pageState ===
+												`/group/${group.id}` &&
+											'avatar-active'
+										}`}
+										style={{
+											background: randomHex.generate()
+										}}
+									>
+										{group.name[0]}
+									</Avatar>
+								</div>
+							</Tooltip>
+						))}
+					</>
 
-				<Tooltip title="Add Group" placement="right">
-					<div className="sidebar-section ">
-						<AddCircleIcon className="sidebar-icon" />
-					</div>
-				</Tooltip>
-			</FadeIn>
-		</div>
-	);
+					<Tooltip title="Add Group" placement="right">
+						<div className="sidebar-section ">
+							<AddCircleIcon className="sidebar-icon" />
+						</div>
+					</Tooltip>
+				</FadeIn>
+			</div>
+		);
+	}
+
+	return null;
 };
 
 export default Sidebar;
