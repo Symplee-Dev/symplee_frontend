@@ -58,7 +58,7 @@ const Register: React.FC<RegisterProps> = () => {
 				}, 2000);
 			}
 		}
-	});
+	}, [data, error, history, loading]);
 
 	return (
 		<>

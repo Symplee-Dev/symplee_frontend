@@ -1,6 +1,6 @@
 import FadeIn from 'react-fade-in';
 import AppsIcon from '@material-ui/icons/Apps';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
