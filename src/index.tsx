@@ -7,6 +7,8 @@ import App from './App';
 import './scss/indexStyle.scss';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/index';
+import LogRocket from 'logrocket';
+LogRocket.init('bolts-dev-team/bolt-chat');
 
 export const apolloClient = new ApolloClient({
 	uri:

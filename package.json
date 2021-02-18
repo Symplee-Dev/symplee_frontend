@@ -12,6 +12,7 @@
 		"framer-motion": "^3.3.0",
 		"graphql": "^15.5.0",
 		"jwt-decode": "^3.1.2",
+		"logrocket": "^1.0.14",
 		"moment": "^2.29.1",
 		"random-hex": "^1.0.2",
 		"react": "^17.0.1",
