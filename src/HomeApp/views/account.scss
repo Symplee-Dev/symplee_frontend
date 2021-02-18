@@ -1,0 +1,70 @@
+.account {
+	width: 100%;
+	.banner {
+		background-color: #1f2325;
+		width: 100%;
+		height: 200px;
+		box-sizing: border-box;
+		padding: 2.5rem;
+		display: flex;
+		flex-direction: column;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='200' preserveAspectRatio='none' viewBox='0 0 1440 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1123%26quot%3b)' fill='none'%3e%3crect width='1440' height='200' x='0' y='0' fill='rgba(0%2c 0%2c 0%2c 1)'%3e%3c/rect%3e%3cpath d='M157.62 147.52 a45.26 45.26 0 1 0 90.52 0 a45.26 45.26 0 1 0 -90.52 0z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M521.2898140844369 9.421016227752917L478.1649263821216 46.90890917718969 515.6528193315584 90.03379687950499 558.7777070338736 52.545903930068214z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M819.03 101.37 a60.23 60.23 0 1 0 120.46 0 a60.23 60.23 0 1 0 -120.46 0z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M-1.7040403921619003 50.22566342398621L24.6620324793336 74.81242413886066 22.882720322712554 23.85959055249071z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M275.11416456318824 141.5049997701546L328.24224118122777 138.72067525702386 272.3298400500575 88.37692315211507z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M1038.98 132.62 a57.31 57.31 0 1 0 114.62 0 a57.31 57.31 0 1 0 -114.62 0z' fill='rgba(187%2c 134%2c 252%2c 1)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1123'%3e%3crect width='1440' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		div {
+			display: flex;
+			align-items: center;
+		}
+
+		.icon {
+			font-size: 2rem;
+			margin-left: 1rem;
+		}
+
+		h2 {
+			font-size: 2.5rem;
+			letter-spacing: 3px;
+			text-transform: uppercase;
+		}
+	}
+	.body {
+		width: 80%;
+		margin: 0 auto;
+		margin-top: 1.2rem;
+
+		.top {
+			background-color: darken($color: gray, $amount: 25);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+			padding: 1.2rem;
+			border-radius: 1.2rem;
+
+			.top-top {
+				display: flex;
+				align-items: center;
+				.username {
+					margin-left: 1.2rem;
+					font-weight: 400;
+					letter-spacing: 2px;
+				}
+
+				.verified {
+					margin-left: 1.2rem;
+					color: #4fbe19;
+				}
+			}
+
+			.joined {
+				margin-top: 1.2rem;
+			}
+		}
+
+		.top-bottom {
+			margin-top: 1.2rem;
+			background-color: darken($color: gray, $amount: 25);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+			padding: 1.2rem;
+			border-radius: 0.4rem;
+		}
+	}
+}

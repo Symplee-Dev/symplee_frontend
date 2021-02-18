@@ -1,23 +1,44 @@
-import { TextField } from '@material-ui/core';
 import { motion } from 'framer-motion';
+import { User } from '../../@types/graphql/generated';
+import { useHistory } from 'react-router';
 
-const HomeAppRoot = () => {
+const HomeAppRoot = ({ user }: { user: User }) => {
+	const history = useHistory();
+
 	return (
 		<motion.div className="home-app-root" exit={{ opacity: 0 }}>
 			<div className="banner">
 				<h2>Dashboard</h2>
+				<p>
+					Welcome Back, {user.username}#{user.key}
+				</p>
 			</div>
 			<div className="body">
-				<div className="friends">
-					<h3>Friends - 0 friends online</h3>
+				<div
+					className="body-section"
+					id="a"
+					onClick={() => {
+						history.push('/news');
+					}}
+				>
+					<h3>News And Articles</h3>
+					<p>Your subscribed daily content</p>
 				</div>
-				<div className="right">
-					<div className="friends">
-						<h3>Bolt Rank</h3>
-					</div>
-					<div className="friends">
-						<h3>Global Bolt Rank</h3>
-					</div>
+				<div
+					className="body-section"
+					id="b"
+					onClick={() => history.push('/boltplus')}
+				>
+					<h3>Bolt Plus+</h3>
+					<p>Learn more about features included with Bolt+</p>
+				</div>
+				<div
+					className="body-section"
+					id="c"
+					onClick={() => history.push('/community')}
+				>
+					<h3>Community</h3>
+					<p>Top posts curated by the Bolt community</p>
 				</div>
 			</div>
 		</motion.div>

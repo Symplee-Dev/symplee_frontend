@@ -75,6 +75,7 @@ export type User = {
 	username: Scalars['String'];
 	key: Scalars['String'];
 	chatGroups: Array<Maybe<ChatGroup>>;
+	createdAt: Scalars['String'];
 };
 
 export type ChatGroup = {
@@ -146,7 +147,7 @@ export type UserQuery = { __typename?: 'Query' } & {
 	user?: Maybe<
 		{ __typename?: 'User' } & Pick<
 			User,
-			'username' | 'id' | 'email' | 'key'
+			'username' | 'name' | 'id' | 'email' | 'key' | 'createdAt'
 		> & {
 				chatGroups: Array<
 					Maybe<{ __typename?: 'ChatGroup' } & Pick<ChatGroup, 'id'>>
@@ -278,9 +279,11 @@ export const UserDocument = gql`
 	query User($id: Int!) {
 		user(id: $id) {
 			username
+			name
 			id
 			email
 			key
+			createdAt
 			chatGroups {
 				id
 			}

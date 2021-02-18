@@ -1,9 +1,11 @@
 query User($id: Int!) {
 	user(id: $id) {
 		username
+		name
 		id
 		email
 		key
+		createdAt
 		chatGroups {
 			id
 		}
