@@ -128,7 +128,10 @@ const Sidebar = ({
 				</>
 
 				<Tooltip title="Add Group" placement="right">
-					<div className="sidebar-section ">
+					<div
+						className="sidebar-section"
+						onClick={() => history.push('/group/create')}
+					>
 						<AddCircleIcon className="sidebar-icon" />
 					</div>
 				</Tooltip>
