@@ -7,6 +7,7 @@ import { RootStateOrAny, useSelector } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
 import { useUserQuery } from '../graphql';
+import CreateGroup from './views/CreateGroup';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
@@ -15,9 +16,19 @@ const HomeApp = () => {
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
-	const { data, loading } = useUserQuery({
+	const { data, loading, error } = useUserQuery({
 		variables: { id: userId }
 	});
+
+	if (error) {
+		return (
+			<div>
+				<button onClick={() => window.location.reload()}>
+					Reload. Error
+				</button>
+			</div>
+		);
+	}
 
 	if (loading) return <CircularProgress color="primary" />;
 
@@ -28,6 +39,9 @@ const HomeApp = () => {
 				<Switch location={location}>
 					<Route exact path="/you">
 						<Account user={data.user} />
+					</Route>
+					<Route exact path="/group/create">
+						<CreateGroup />
 					</Route>
 					<Route path="/">
 						<HomeAppRoot user={data.user} />

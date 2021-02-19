@@ -30,6 +30,7 @@ export type Mutation = {
   signup: User;
   login?: Maybe<LoginReturn>;
   verifyEmail: Scalars['Boolean'];
+  createChatGroup: ChatGroup;
 };
 
 
@@ -45,6 +46,17 @@ export type MutationLoginArgs = {
 
 export type MutationVerifyEmailArgs = {
   token: Scalars['String'];
+};
+
+
+export type MutationCreateChatGroupArgs = {
+  chatGroup: CreateChatGroupInput;
+};
+
+export type CreateChatGroupInput = {
+  name: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+  userId: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -86,6 +98,7 @@ export type ChatGroup = {
   isPublic: Scalars['Boolean'];
   createdAt: Scalars['String'];
   chats: Array<Maybe<Chat>>;
+  createdBy: Scalars['Int'];
 };
 
 export type Chat = {
@@ -108,6 +121,13 @@ export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
 
+
+export type CreateChatGroupMutationVariables = Exact<{
+  chatGroup: CreateChatGroupInput;
+}>;
+
+
+export type CreateChatGroupMutation = { createChatGroup: { id: number } };
 
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
@@ -143,6 +163,38 @@ export type VerifyEmailMutationVariables = Exact<{
 export type VerifyEmailMutation = { verifyEmail: boolean };
 
 
+export const CreateChatGroupDocument = gql`
+    mutation CreateChatGroup($chatGroup: CreateChatGroupInput!) {
+  createChatGroup(chatGroup: $chatGroup) {
+    id
+  }
+}
+    `;
+export type CreateChatGroupMutationFn = Apollo.MutationFunction<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
+
+/**
+ * __useCreateChatGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateChatGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChatGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChatGroupMutation, { data, loading, error }] = useCreateChatGroupMutation({
+ *   variables: {
+ *      chatGroup: // value for 'chatGroup'
+ *   },
+ * });
+ */
+export function useCreateChatGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>) {
+        return Apollo.useMutation<CreateChatGroupMutation, CreateChatGroupMutationVariables>(CreateChatGroupDocument, baseOptions);
+      }
+export type CreateChatGroupMutationHookResult = ReturnType<typeof useCreateChatGroupMutation>;
+export type CreateChatGroupMutationResult = Apollo.MutationResult<CreateChatGroupMutation>;
+export type CreateChatGroupMutationOptions = Apollo.BaseMutationOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String, $email: String, $password: String!) {
   login(credentials: {email: $email, password: $password, username: $username}) {

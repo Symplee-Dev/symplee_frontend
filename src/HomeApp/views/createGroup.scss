@@ -1,0 +1,141 @@
+.create-group {
+	width: 100%;
+
+	.banner {
+		background-color: #1f2325;
+		width: 100%;
+		height: 200px;
+		box-sizing: border-box;
+		padding: 2.5rem;
+		display: flex;
+		flex-direction: column;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1920' height='200' preserveAspectRatio='none' viewBox='0 0 1920 200'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1507%26quot%3b)' fill='none'%3e%3crect width='1920' height='200' x='0' y='0' fill='rgba(31%2c 35%2c 37%2c 1)'%3e%3c/rect%3e%3cpath d='M0 0L791.84 0L0 43.02z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M0 43.02L791.84 0L1295.14 0L0 90.96000000000001z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M0 90.96000000000001L1295.14 0L1458.0800000000002 0L0 152.36z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M0 152.36L1458.0800000000002 0L1758.7500000000002 0L0 162.36z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M1920 200L1517.42 200L1920 148.86z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M1920 148.86L1517.42 200L1155.3300000000002 200L1920 147.19000000000003z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M1920 147.19L1155.33 200L595.92 200L1920 127.17999999999999z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M1920 127.17999999999999L595.9200000000001 200L413.8900000000001 200L1920 121.41999999999999z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1507'%3e%3crect width='1920' height='200' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		div {
+			display: flex;
+			align-items: center;
+		}
+
+		.icon {
+			font-size: 2rem;
+			margin-left: 1rem;
+		}
+
+		h2 {
+			font-size: 2.5rem;
+			letter-spacing: 3px;
+			text-transform: uppercase;
+		}
+	}
+
+	form {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		margin-top: 5rem;
+		justify-content: center;
+
+		.create-btn {
+			display: block;
+			margin-top: 2rem;
+			width: 100%;
+			background-color: #bb86fc;
+			color: white;
+			height: 50px;
+			border-radius: 1rem;
+			border: none;
+			outline: none;
+			transition: 0.3s;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 300;
+			font-size: 1.2rem;
+		}
+
+		.create-btn:hover {
+			cursor: pointer;
+			background: white;
+			color: #23272a;
+		}
+
+		.body {
+			width: 50%;
+			margin-left: 1.2rem;
+
+			background-color: darken($color: gray, $amount: 25);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+			padding: 1.2rem;
+			height: 50%;
+			box-sizing: border-box;
+
+			border-radius: 0.5rem;
+		}
+
+		.body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+
+			.name-field {
+				color: white !important;
+				text-align: center;
+				font-size: 1.3rem;
+			}
+
+			.top-body {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+
+				.avatar {
+					width: 5rem;
+					height: 5rem;
+				}
+
+				h2 {
+					margin-top: 2rem;
+					font-size: 2.5rem;
+					letter-spacing: 3px;
+					text-transform: uppercase;
+				}
+			}
+		}
+
+		.settings {
+			width: 20%;
+			margin-left: 3rem;
+			background-color: darken($color: gray, $amount: 25);
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+			padding: 1.2rem;
+			height: 40%;
+			border-radius: 0.5rem;
+			box-sizing: border-box;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			p {
+				margin-top: 1.2rem;
+				margin-bottom: 1.2rem;
+				font-weight: 300;
+				color: #f2a813;
+			}
+
+			button {
+				height: 35px;
+			}
+
+			.MuiToggleButton-root {
+				border: 1px solid gray;
+				color: white;
+			}
+
+			.Mui-selected {
+				background: cornflowerblue;
+			}
+		}
+	}
+}
