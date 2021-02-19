@@ -10,7 +10,7 @@ import { useCreateChatGroupMutation } from '../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { useHistory } from 'react-router';
 
-const CreateGroup = () => {
+const CreateGroup = ({ refetch }: { refetch: () => void }) => {
 	const [newGroup, setNewGroup] = useState({
 		isPublic: false,
 		name: ''
@@ -24,9 +24,10 @@ const CreateGroup = () => {
 
 	useEffect(() => {
 		if (data && !loading && !error) {
+			refetch();
 			history.push('/group/' + data.createChatGroup.id);
 		}
-	}, [data, error, history, loading]);
+	}, [data, error, history, loading, refetch]);
 
 	const handleSubmit = e => {
 		e.preventDefault();
