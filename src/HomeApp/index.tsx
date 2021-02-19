@@ -15,7 +15,7 @@ const HomeApp = () => {
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
-	const { data, loading, error } = useUserQuery({
+	const { data, loading } = useUserQuery({
 		variables: { id: userId }
 	});
 
