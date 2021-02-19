@@ -6,7 +6,9 @@ query User($id: Int!) {
 		email
 		key
 		createdAt
+		verified
 		chatGroups {
+			name
 			id
 		}
 	}

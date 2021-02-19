@@ -15,6 +15,7 @@ import { useSelectAuth } from './redux/selectors';
 import HomeApp from './HomeApp/index';
 import decode from 'jwt-decode';
 import { SET_USER_ID, SET_LOGGED_IN } from './redux/actions/index';
+import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
 
 interface AppProps {}
 
@@ -57,6 +58,10 @@ const App: React.FC<AppProps> = () => {
 					</Route>
 					<Route exact path="/chat">
 						<UserUi />
+					</Route>
+
+					<Route exact path="/auth/verify/:token">
+						<EmailVerificationScreen />
 					</Route>
 
 					<Route path="/">

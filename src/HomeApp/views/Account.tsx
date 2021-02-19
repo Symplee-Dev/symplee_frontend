@@ -1,4 +1,3 @@
-import { User } from '../../@types/graphql/generated';
 import { motion } from 'framer-motion';
 import './account.scss';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
@@ -9,7 +8,17 @@ import Moment from 'react-moment';
 import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
 
-const Account = ({ user }: { user: User }) => {
+const Account = ({
+	user
+}: {
+	user: {
+		name: string;
+		username: string;
+		email: string;
+		key: string;
+		createdAt: string;
+	};
+}) => {
 	const [formState, setFormState] = useState<{
 		name: string;
 		username: string;

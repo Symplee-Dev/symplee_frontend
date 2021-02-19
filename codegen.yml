@@ -2,9 +2,15 @@ overwrite: true
 schema: 'http://localhost:5000/graphql'
 documents: 'src/**/*.graphql'
 generates:
-    src/@types/graphql/generated.d.ts:
+    src/graphql.tsx:
         plugins:
             - 'typescript'
             - 'typescript-operations'
             - 'typescript-react-apollo'
-            - 'typescript-graphql-files-modules'
+        config:
+            enumsAsTypes: true
+            maybeValue: 'T | undefined'
+            skipTypename: true
+            reactApolloVersion: 3
+            exportFragmentSpreadSubTypes: true
+            preResolveTypes: true

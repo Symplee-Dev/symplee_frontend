@@ -5,10 +5,9 @@ import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
 import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
-//@ts-ignore
-import { useLoginMutation } from '../../@types/graphql/generated.d.ts';
 import { useHistory } from 'react-router';
 import { useLogin } from '../../redux/actions/index';
+import { useLoginMutation } from '../../graphql';
 
 interface LoginProps {}
 
@@ -43,7 +42,7 @@ const Login: React.FC<LoginProps> = () => {
 				setErrorState(error.message);
 			}
 
-			if (!error && data) {
+			if (!error && data && data.login) {
 				setAuth(data.login.token);
 				localStorage.setItem('bolttoken', data.login.token);
 				history.push('/');

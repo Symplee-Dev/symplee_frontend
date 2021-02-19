@@ -12,7 +12,6 @@ import randomHex from 'random-hex';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useLogout } from '../redux/actions';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
-import { ChatGroup } from '../@types/graphql/generated';
 
 const NavComponent = ({
 	route,
@@ -48,7 +47,11 @@ const NavComponent = ({
 	);
 };
 
-const Sidebar = ({ chatGroups }: { chatGroups: ChatGroup[] }) => {
+const Sidebar = ({
+	chatGroups
+}: {
+	chatGroups: { name: string; id: number }[];
+}) => {
 	const history = useHistory();
 
 	const [pageState, setPageState] = useState('');
@@ -76,6 +79,7 @@ const Sidebar = ({ chatGroups }: { chatGroups: ChatGroup[] }) => {
 			pageState={(path: string) => setPageState(path)}
 		/>
 	));
+
 	return (
 		<div className="sidebar hide-scrollbar">
 			<FadeIn delay={100} className="sidebar-container">

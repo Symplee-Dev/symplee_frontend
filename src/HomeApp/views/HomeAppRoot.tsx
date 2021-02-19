@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { User } from '../../@types/graphql/generated';
 import { useHistory } from 'react-router';
 
-const HomeAppRoot = ({ user }: { user: User }) => {
+const HomeAppRoot = ({ user }: { user: { username: string; key: string } }) => {
 	const history = useHistory();
 
 	return (

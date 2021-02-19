@@ -5,10 +5,9 @@ import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { TextField, LinearProgress, Snackbar } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-//@ts-ignore
-import { useSignupMutation } from '../../@types/graphql/generated.d.ts';
 import { useHistory } from 'react-router';
 import Alert from '@material-ui/lab/Alert';
+import { useSignupMutation } from '../../graphql';
 
 interface RegisterProps {}
 

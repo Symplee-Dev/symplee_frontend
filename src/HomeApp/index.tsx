@@ -3,11 +3,10 @@ import './index.scss';
 import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 
-//@ts-ignore
-import { useUserQuery } from '../@types/graphql/generated.d.ts';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
+import { useUserQuery } from '../graphql';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
@@ -20,12 +19,9 @@ const HomeApp = () => {
 		variables: { id: userId }
 	});
 
-	// TODO: Navigae to error screen
-	if (error) throw window.location.reload();
-
 	if (loading) return <CircularProgress color="primary" />;
 
-	if (!loading) {
+	if (!loading && data && data.user) {
 		return (
 			<div className="home-app">
 				<Sidebar chatGroups={data.user.chatGroups} />
