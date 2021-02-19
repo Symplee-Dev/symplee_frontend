@@ -3,32 +3,44 @@ import './index.scss';
 import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { RootStateOrAny, useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
 import { useUserQuery } from '../graphql';
 import CreateGroup from './views/CreateGroup';
+import { useEffect } from 'react';
+import decode from 'jwt-decode';
+import { SET_USER_ID, SET_LOGGED_IN } from '../redux/actions/index';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
 
 	const location = useLocation();
 
+	const dispatch = useDispatch();
+
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
-	const { data, loading, error } = useUserQuery({
+	const { data, loading, error, refetch } = useUserQuery({
 		variables: { id: userId }
 	});
 
 	if (error) {
-		return (
-			<div>
-				<button onClick={() => window.location.reload()}>
-					Reload. Error
-				</button>
-			</div>
-		);
+		refetch({ id: userId });
 	}
+
+	useEffect(() => {
+		const token = localStorage.getItem('bolttoken');
+
+		if (token && token.length > 0) {
+			const user: { userId: number; username: string } = decode(
+				token ?? ''
+			);
+			console.log(user);
+			dispatch({ type: SET_USER_ID, payload: { userId: user.userId } });
+			dispatch({ type: SET_LOGGED_IN, payload: token });
+		}
+	}, [dispatch]);
 
 	if (loading) return <CircularProgress color="primary" />;
 
@@ -41,7 +53,7 @@ const HomeApp = () => {
 						<Account user={data.user} />
 					</Route>
 					<Route exact path="/group/create">
-						<CreateGroup />
+						<CreateGroup refetch={refetch} />
 					</Route>
 					<Route path="/">
 						<HomeAppRoot user={data.user} />
