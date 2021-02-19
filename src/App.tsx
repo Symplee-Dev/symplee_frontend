@@ -34,17 +34,22 @@ const App: React.FC<AppProps> = () => {
 	});
 
 	useEffect(() => {
-		const token = localStorage.getItem('bolttoken');
+		if (authenticated !== undefined && authenticated === false) {
+			const token = localStorage.getItem('bolttoken');
 
-		if (token && token.length > 0) {
-			const user: { userId: number; username: string } = decode(
-				token ?? ''
-			);
-			console.log(user);
-			dispatch({ type: SET_USER_ID, payload: { userId: user.userId } });
-			dispatch({ type: SET_LOGGED_IN, payload: token });
+			if (token && token.length > 0) {
+				const user: { userId: number; username: string } = decode(
+					token ?? ''
+				);
+				console.log(user);
+				dispatch({
+					type: SET_USER_ID,
+					payload: { userId: user.userId }
+				});
+				dispatch({ type: SET_LOGGED_IN, payload: token });
+			}
 		}
-	}, [dispatch]);
+	}, [dispatch, authenticated]);
 
 	return (
 		<ThemeProvider theme={theme}>

@@ -6,11 +6,26 @@ import CheckIcon from '@material-ui/icons/Check';
 import './createGroup.scss';
 import { useState, useEffect } from 'react';
 import { Avatar, LinearProgress, TextField } from '@material-ui/core';
-import { useCreateChatGroupMutation } from '../../graphql';
+import { Exact, useCreateChatGroupMutation, UserQuery } from '../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { useHistory } from 'react-router';
+import { ApolloQueryResult } from '@apollo/client';
 
-const CreateGroup = ({ refetch }: { refetch: () => void }) => {
+const CreateGroup = ({
+	refetch
+}: {
+	refetch:
+		| ((
+				variables?:
+					| Partial<
+							Exact<{
+								id: number;
+							}>
+					  >
+					| undefined
+		  ) => Promise<ApolloQueryResult<UserQuery>>)
+		| undefined;
+}) => {
 	const [newGroup, setNewGroup] = useState({
 		isPublic: false,
 		name: ''
@@ -24,7 +39,8 @@ const CreateGroup = ({ refetch }: { refetch: () => void }) => {
 
 	useEffect(() => {
 		if (data && !loading && !error) {
-			refetch();
+			//@ts-ignore
+			refetch({ fetchPolicy: 'network-only' });
 			history.push('/group/' + data.createChatGroup.id);
 		}
 	}, [data, error, history, loading, refetch]);

@@ -11,7 +11,11 @@ export const userReducer = (state = initialState, action) => {
 			return { ...state, authenticated: true, token: action.payload };
 		}
 		case SET_USER_ID: {
-			return { ...state, userId: action.payload.userId };
+			return {
+				...state,
+				userId: action.payload.userId,
+				authenticated: true
+			};
 		}
 		case SET_LOGGED_OUT: {
 			return { ...initialState };

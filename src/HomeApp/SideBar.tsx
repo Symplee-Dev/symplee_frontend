@@ -1,6 +1,5 @@
-import FadeIn from 'react-fade-in';
 import AppsIcon from '@material-ui/icons/Apps';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -12,6 +11,17 @@ import randomHex from 'random-hex';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useLogout } from '../redux/actions';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+
+const links: {
+	route: string;
+	tooltip: string;
+	Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
+}[] = [
+	{ Icon: AppsIcon, route: '/', tooltip: 'Dashboard' },
+	{ Icon: SettingsIcon, route: '/settings', tooltip: 'Settings' },
+	{ Icon: AccountBoxIcon, route: '/you', tooltip: 'Your Account' },
+	{ Icon: PublicIcon, route: '/discover', tooltip: 'Discover' }
+];
 
 const NavComponent = ({
 	route,
@@ -58,32 +68,25 @@ const Sidebar = ({
 
 	const logout = useLogout();
 
-	const links: {
-		route: string;
-		tooltip: string;
-		Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
-	}[] = [
-		{ Icon: AppsIcon, route: '/', tooltip: 'Dashboard' },
-		{ Icon: SettingsIcon, route: '/settings', tooltip: 'Settings' },
-		{ Icon: AccountBoxIcon, route: '/you', tooltip: 'Your Account' },
-		{ Icon: PublicIcon, route: '/discover', tooltip: 'Discover' }
-	];
-
-	let navLinks = links.map(link => (
-		<NavComponent
-			key={link.route}
-			history={history}
-			Icon={link.Icon}
-			tooltip={link.tooltip}
-			route={link.route}
-			pageState={(path: string) => setPageState(path)}
-		/>
-	));
+	let navLinks = useCallback(
+		() =>
+			links.map(link => (
+				<NavComponent
+					key={link.route}
+					history={history}
+					Icon={link.Icon}
+					tooltip={link.tooltip}
+					route={link.route}
+					pageState={(path: string) => setPageState(path)}
+				/>
+			)),
+		[history]
+	);
 
 	return (
 		<div className="sidebar hide-scrollbar">
-			<FadeIn delay={100} className="sidebar-container">
-				{navLinks}
+			<div className="sidebar-container">
+				{navLinks()}
 				<Tooltip placement="right" title="Logout">
 					<div
 						className="sidebar-section-logout"
@@ -98,7 +101,11 @@ const Sidebar = ({
 
 				<>
 					{chatGroups.map(group => (
-						<Tooltip title={group.name} placement="right">
+						<Tooltip
+							title={group.name}
+							placement="right"
+							key={group.id}
+						>
 							<div
 								onClick={() => {
 									history.push('/group/' + group.id);
@@ -135,7 +142,7 @@ const Sidebar = ({
 						<AddCircleIcon className="sidebar-icon" />
 					</div>
 				</Tooltip>
-			</FadeIn>
+			</div>
 		</div>
 	);
 };
