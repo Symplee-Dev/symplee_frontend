@@ -1,0 +1,5 @@
+mutation CreateChatGroup($chatGroup: CreateChatGroupInput!) {
+	createChatGroup(chatGroup: $chatGroup) {
+		id
+	}
+}
