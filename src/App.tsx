@@ -41,12 +41,13 @@ const App: React.FC<AppProps> = () => {
 				const user: { userId: number; username: string } = decode(
 					token ?? ''
 				);
-				console.log(user);
-				dispatch({
-					type: SET_USER_ID,
-					payload: { userId: user.userId }
-				});
-				dispatch({ type: SET_LOGGED_IN, payload: token });
+
+				if (user.userId !== undefined) {
+					dispatch({
+						type: SET_USER_ID,
+						payload: { userId: user.userId }
+					});
+				}
 			}
 		}
 	}, [dispatch, authenticated]);

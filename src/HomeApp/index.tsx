@@ -8,10 +8,9 @@ import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
 import { useUserLazyQuery } from '../graphql';
 import CreateGroup from './views/CreateGroup';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import decode from 'jwt-decode';
-import { SET_USER_ID, SET_LOGGED_IN } from '../redux/actions/index';
-import { useSelectAuth } from '../redux/selectors';
+import { SET_USER_ID } from '../redux/actions/index';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
@@ -19,8 +18,6 @@ const HomeApp = () => {
 	const location = useLocation();
 
 	const dispatch = useDispatch();
-
-	const authenticated = useSelectAuth();
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
@@ -40,13 +37,7 @@ const HomeApp = () => {
 		fetchPolicy: 'cache-first'
 	});
 
-	if (error) {
-		if (refetch) {
-			refetch({ id: userId });
-		}
-	}
-
-	useEffect(() => {
+	useMemo(() => {
 		if (!user) {
 			fetchUser();
 			setUser(data?.user);
@@ -54,22 +45,32 @@ const HomeApp = () => {
 	}, [data, fetchUser, user]);
 
 	useEffect(() => {
-		if (authenticated !== undefined && authenticated === false) {
+		if (error) {
+			if (refetch) {
+				refetch({ id: user?.id });
+			}
+		}
+	}, [error, refetch, user?.id]);
+
+	useMemo(() => {
+		console.log(data, user);
+		if (!user && !data) {
 			const token = localStorage.getItem('bolttoken');
 
 			if (token && token.length > 0) {
-				const user: { userId: number; username: string } = decode(
+				const tokenUser: { userId: number; username: string } = decode(
 					token ?? ''
 				);
-				console.log(user);
-				dispatch({
-					type: SET_USER_ID,
-					payload: { userId: user.userId }
-				});
-				dispatch({ type: SET_LOGGED_IN, payload: token });
+
+				if (tokenUser.userId) {
+					dispatch({
+						type: SET_USER_ID,
+						payload: { userId: tokenUser.userId }
+					});
+				}
 			}
 		}
-	}, [dispatch, data, user, authenticated]);
+	}, [dispatch, user, data]);
 
 	if (loading) return <CircularProgress color="primary" />;
 

@@ -29,6 +29,7 @@ export const editUser = (state, action) => {
 };
 
 export const useLogin = () => {
+	console.log('USE_LOGIN');
 	const dispatch = useDispatch();
 	return (token: string) => {
 		const action = {
