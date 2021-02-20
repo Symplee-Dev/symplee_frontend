@@ -21,6 +21,7 @@ export type Query = {
   user: User;
   changeLogById: ChangeLog;
   changeLogs: Array<Maybe<ChangeLog>>;
+  serverStatus: Scalars['Boolean'];
   chatGroup: ChatGroup;
   hasChat: Scalars['Boolean'];
 };
@@ -54,6 +55,7 @@ export type Mutation = {
   createChatGroup: ChatGroup;
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
+  sendFeedback: AppFeedback;
 };
 
 
@@ -83,13 +85,39 @@ export type MutationCreateChatGroupArgs = {
 
 
 export type MutationAddNewChangeLogArgs = {
-  newChangeLog: NewChangeLog;
+  newChangeLog: NewChangeLogInput;
 };
 
 
 export type MutationEditChangeLogArgs = {
   id: Scalars['Int'];
-  editChangeLog?: Maybe<NewChangeLog>;
+  changeLogEdit: NewChangeLogInput;
+};
+
+
+export type MutationSendFeedbackArgs = {
+  feedback: SendAppFeedbackInput;
+};
+
+export type AppFeedback = {
+  id: Scalars['Int'];
+  createdAt: Scalars['String'];
+  userName?: Maybe<Scalars['String']>;
+  userEmail: Scalars['String'];
+  resolved: Scalars['Boolean'];
+  body: Scalars['String'];
+  error?: Maybe<Scalars['String']>;
+  sentryErrorUrl?: Maybe<Scalars['String']>;
+  logRocketErrorUrl?: Maybe<Scalars['String']>;
+};
+
+export type SendAppFeedbackInput = {
+  userName?: Maybe<Scalars['String']>;
+  userEmail: Scalars['String'];
+  body: Scalars['String'];
+  error?: Maybe<Scalars['String']>;
+  sentryErrorUrl?: Maybe<Scalars['String']>;
+  logRocketErrorUrl?: Maybe<Scalars['String']>;
 };
 
 export type CreateChatInput = {
@@ -126,7 +154,7 @@ export type LoginReturn = {
   token: Scalars['String'];
 };
 
-export type NewChangeLog = {
+export type NewChangeLogInput = {
   body: Scalars['String'];
   changes: Array<Scalars['String']>;
   version: Scalars['String'];
@@ -214,6 +242,13 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { login?: Maybe<{ authenticated: boolean, token: string }> };
+
+export type SendFeedbackMutationVariables = Exact<{
+  feedback: SendAppFeedbackInput;
+}>;
+
+
+export type SendFeedbackMutation = { sendFeedback: { id: number } };
 
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
@@ -382,6 +417,38 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const SendFeedbackDocument = gql`
+    mutation SendFeedback($feedback: SendAppFeedbackInput!) {
+  sendFeedback(feedback: $feedback) {
+    id
+  }
+}
+    `;
+export type SendFeedbackMutationFn = Apollo.MutationFunction<SendFeedbackMutation, SendFeedbackMutationVariables>;
+
+/**
+ * __useSendFeedbackMutation__
+ *
+ * To run a mutation, you first call `useSendFeedbackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendFeedbackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendFeedbackMutation, { data, loading, error }] = useSendFeedbackMutation({
+ *   variables: {
+ *      feedback: // value for 'feedback'
+ *   },
+ * });
+ */
+export function useSendFeedbackMutation(baseOptions?: Apollo.MutationHookOptions<SendFeedbackMutation, SendFeedbackMutationVariables>) {
+        return Apollo.useMutation<SendFeedbackMutation, SendFeedbackMutationVariables>(SendFeedbackDocument, baseOptions);
+      }
+export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
+export type SendFeedbackMutationResult = Apollo.MutationResult<SendFeedbackMutation>;
+export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<SendFeedbackMutation, SendFeedbackMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $name: String!, $username: String!, $password: String!) {
   signup(

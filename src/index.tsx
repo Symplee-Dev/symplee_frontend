@@ -7,8 +7,20 @@ import App from './App';
 import './scss/indexStyle.scss';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/index';
+
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import setupLogRocketReact from 'logrocket-react';
 import LogRocket from 'logrocket';
-LogRocket.init('bolts-dev-team/bolt-chat');
+
+Sentry.init({
+	dsn: process.env.REACT_APP_SENTRY_DSN,
+	integrations: [new Integrations.BrowserTracing()],
+	tracesSampleRate: 1.0
+});
+
+LogRocket.init(process.env.REACT_APP_LOG_ROCKET_ORG_ID!);
+setupLogRocketReact(LogRocket);
 
 export const apolloClient = new ApolloClient({
 	uri:

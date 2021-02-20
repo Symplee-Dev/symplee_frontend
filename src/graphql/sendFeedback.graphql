@@ -1,0 +1,5 @@
+mutation SendFeedback($feedback: SendAppFeedbackInput!) {
+	sendFeedback(feedback: $feedback) {
+		id
+	}
+}
