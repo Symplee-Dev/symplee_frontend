@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useSelectAuth } from './redux/selectors';
 import HomeApp from './HomeApp/index';
 import decode from 'jwt-decode';
-import { SET_USER_ID, SET_LOGGED_IN } from './redux/actions/index';
+import { SET_USER_ID } from './redux/actions/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
 
 interface AppProps {}

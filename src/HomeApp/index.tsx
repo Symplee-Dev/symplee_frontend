@@ -11,6 +11,7 @@ import CreateGroup from './views/CreateGroup';
 import { useEffect, useState, useMemo } from 'react';
 import decode from 'jwt-decode';
 import { SET_USER_ID } from '../redux/actions/index';
+import ChatGroupIndex from './views/ChatGroupView/index';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
@@ -85,7 +86,10 @@ const HomeApp = () => {
 					<Route exact path="/group/create">
 						<CreateGroup refetch={refetch} />
 					</Route>
-					<Route path="/">
+					<Route exact path="/group/:id">
+						<ChatGroupIndex authorId={data.user.id} />
+					</Route>
+					<Route exact path="/">
 						<HomeAppRoot user={data.user} />
 					</Route>
 				</Switch>
