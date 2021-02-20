@@ -80,3 +80,27 @@
 		}
 	}
 }
+
+.create-chat-form {
+	display: flex;
+	flex-direction: column;
+	.name-field {
+		color: white;
+	}
+
+	p {
+		margin-top: 2rem;
+		font-size: 1.3rem;
+	}
+
+	.MuiToggleButton-root {
+		margin-top: 1rem;
+		width: 50px;
+		border: 1px solid gray;
+		color: white;
+	}
+
+	.Mui-selected {
+		background: cornflowerblue !important;
+	}
+}

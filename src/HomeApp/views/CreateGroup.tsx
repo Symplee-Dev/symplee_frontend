@@ -78,6 +78,7 @@ const CreateGroup = ({
 						</div>
 						<TextField
 							fullWidth
+							required
 							variant="filled"
 							placeholder="Group Name"
 							color="primary"

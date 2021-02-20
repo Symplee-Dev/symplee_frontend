@@ -1,7 +1,8 @@
 import { Tooltip } from '@material-ui/core';
 import { Maybe } from '../../../graphql';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import { useHistory } from 'react-router';
+import CreateChatModal from './CreateChatModal';
+import { useState } from 'react';
 
 const ChatGroupsList = ({
 	chats,
@@ -15,7 +16,7 @@ const ChatGroupsList = ({
 		| undefined;
 	isAuthor: boolean;
 }) => {
-	const history = useHistory();
+	const [createChatModal, setCreateChatModal] = useState(false);
 
 	return (
 		<div className="chat-group-list">
@@ -36,12 +37,16 @@ const ChatGroupsList = ({
 				<Tooltip title="Create a new chat">
 					<div
 						className="chat-div create-chat"
-						onClick={() => history.push('/createChat')}
+						onClick={() => setCreateChatModal(true)}
 					>
 						+
 					</div>
 				</Tooltip>
 			)}
+			<CreateChatModal
+				open={createChatModal}
+				setOpen={setCreateChatModal}
+			/>
 		</div>
 	);
 };
