@@ -1,13 +1,17 @@
 import { Tooltip } from '@material-ui/core';
-import { Maybe } from '../../../graphql';
+import { ChatGroupQuery, Exact, Maybe } from '../../../graphql';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import CreateChatModal from './CreateChatModal';
 import { useState } from 'react';
+import { ApolloQueryResult } from '@apollo/client';
 
 const ChatGroupsList = ({
 	chats,
-	isAuthor
+	isAuthor,
+	refetch,
+	id
 }: {
+	id: number;
 	chats:
 		| Maybe<{
 				id: number;
@@ -15,6 +19,15 @@ const ChatGroupsList = ({
 		  }>[]
 		| undefined;
 	isAuthor: boolean;
+	refetch: (
+		variables?:
+			| Partial<
+					Exact<{
+						id: number;
+					}>
+			  >
+			| undefined
+	) => Promise<ApolloQueryResult<ChatGroupQuery>>;
 }) => {
 	const [createChatModal, setCreateChatModal] = useState(false);
 
@@ -44,8 +57,10 @@ const ChatGroupsList = ({
 				</Tooltip>
 			)}
 			<CreateChatModal
+				chatGroupId={id}
 				open={createChatModal}
 				setOpen={setCreateChatModal}
+				refetch={refetch}
 			/>
 		</div>
 	);

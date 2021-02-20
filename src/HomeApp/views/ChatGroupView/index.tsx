@@ -30,8 +30,10 @@ const ChatGroupIndex = ({ authorId }: { authorId: number }) => {
 		<motion.div exit={{ opacity: 0 }} className="chat-group-root">
 			<Header name={data?.chatGroup.name ?? ''} />
 			<ChatGroupsList
+				id={parseInt(id)}
 				chats={data?.chatGroup.chats ?? []}
 				isAuthor={isAuthor}
+				refetch={refetch}
 			/>
 		</motion.div>
 	);

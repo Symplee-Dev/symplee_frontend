@@ -3,6 +3,7 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	LinearProgress,
 	TextField
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,22 +12,48 @@ import CheckIcon from '@material-ui/icons/Check';
 import { useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import Picker from 'emoji-picker-react';
+import { Exact, useCreateChatMutation, ChatGroupQuery } from '../../../graphql';
+import { ApolloQueryResult } from '@apollo/client';
 
 const CreateChatModal = ({
 	open,
-	setOpen
+	setOpen,
+	refetch,
+	chatGroupId
 }: {
+	chatGroupId: number;
 	open: boolean;
 	setOpen: (set: boolean) => void;
+	refetch: (
+		variables?:
+			| Partial<
+					Exact<{
+						id: number;
+					}>
+			  >
+			| undefined
+	) => Promise<ApolloQueryResult<ChatGroupQuery>>;
 }) => {
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
+
+	const [createChat, { loading }] = useCreateChatMutation();
 
 	const [newChat, setNewChat] = useState({
 		name: '',
 		isPublic: false,
 		userId: userId,
-		icon: ''
+		icon: '🌏',
+		chatGroupId: chatGroupId
 	});
+
+	const handleSubmit = e => {
+		e.preventDefault();
+
+		createChat({ variables: { chat: newChat } });
+		//@ts-ignore
+		refetch({ fetchPolicy: 'network-only' });
+		setOpen(false);
+	};
 
 	return (
 		<Dialog
@@ -44,7 +71,7 @@ const CreateChatModal = ({
 			<DialogTitle>Create a new chat </DialogTitle>
 
 			<DialogContent>
-				<form className="create-chat-form">
+				<form className="create-chat-form" onSubmit={handleSubmit}>
 					<TextField
 						color="primary"
 						placeholder="Name"
@@ -119,9 +146,17 @@ const CreateChatModal = ({
 						}) ${newChat.icon}`}
 					</p>
 				)}
-				<Button type="submit" color="primary">
-					Create
-				</Button>
+				{!loading ? (
+					<Button
+						type="submit"
+						color="primary"
+						onClick={handleSubmit}
+					>
+						Create
+					</Button>
+				) : (
+					<LinearProgress color="primary" />
+				)}
 			</DialogActions>
 		</Dialog>
 	);

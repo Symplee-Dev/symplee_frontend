@@ -22,6 +22,7 @@ export type Query = {
   changeLogById: ChangeLog;
   changeLogs: Array<Maybe<ChangeLog>>;
   chatGroup: ChatGroup;
+  hasChat: Scalars['Boolean'];
 };
 
 
@@ -39,10 +40,17 @@ export type QueryChatGroupArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryHasChatArgs = {
+  userId: Scalars['Int'];
+  chatId: Scalars['Int'];
+};
+
 export type Mutation = {
   signup: User;
   login?: Maybe<LoginReturn>;
   verifyEmail: Scalars['Boolean'];
+  createChat: Chat;
   createChatGroup: ChatGroup;
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
@@ -64,6 +72,11 @@ export type MutationVerifyEmailArgs = {
 };
 
 
+export type MutationCreateChatArgs = {
+  chat: CreateChatInput;
+};
+
+
 export type MutationCreateChatGroupArgs = {
   chatGroup: CreateChatGroupInput;
 };
@@ -77,6 +90,14 @@ export type MutationAddNewChangeLogArgs = {
 export type MutationEditChangeLogArgs = {
   id: Scalars['Int'];
   editChangeLog?: Maybe<NewChangeLog>;
+};
+
+export type CreateChatInput = {
+  name: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+  userId: Scalars['Int'];
+  icon: Scalars['String'];
+  chatGroupId: Scalars['Int'];
 };
 
 export type CreateChatGroupInput = {
@@ -148,6 +169,7 @@ export type Chat = {
   isPublic: Scalars['Boolean'];
   createdById: Scalars['Int'];
   messages: Array<Maybe<Message>>;
+  icon: Scalars['String'];
 };
 
 export type Message = {
@@ -168,7 +190,14 @@ export type ChatGroupQueryVariables = Exact<{
 }>;
 
 
-export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, createdBy: number, chats: Array<Maybe<{ id: number, name: string }>> } };
+export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean }>> } };
+
+export type CreateChatMutationVariables = Exact<{
+  chat: CreateChatInput;
+}>;
+
+
+export type CreateChatMutation = { createChat: { id: number } };
 
 export type CreateChatGroupMutationVariables = Exact<{
   chatGroup: CreateChatGroupInput;
@@ -221,6 +250,8 @@ export const ChatGroupDocument = gql`
     chats {
       id
       name
+      icon
+      isPublic
     }
     createdBy
   }
@@ -252,6 +283,38 @@ export function useChatGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type ChatGroupQueryHookResult = ReturnType<typeof useChatGroupQuery>;
 export type ChatGroupLazyQueryHookResult = ReturnType<typeof useChatGroupLazyQuery>;
 export type ChatGroupQueryResult = Apollo.QueryResult<ChatGroupQuery, ChatGroupQueryVariables>;
+export const CreateChatDocument = gql`
+    mutation CreateChat($chat: CreateChatInput!) {
+  createChat(chat: $chat) {
+    id
+  }
+}
+    `;
+export type CreateChatMutationFn = Apollo.MutationFunction<CreateChatMutation, CreateChatMutationVariables>;
+
+/**
+ * __useCreateChatMutation__
+ *
+ * To run a mutation, you first call `useCreateChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChatMutation, { data, loading, error }] = useCreateChatMutation({
+ *   variables: {
+ *      chat: // value for 'chat'
+ *   },
+ * });
+ */
+export function useCreateChatMutation(baseOptions?: Apollo.MutationHookOptions<CreateChatMutation, CreateChatMutationVariables>) {
+        return Apollo.useMutation<CreateChatMutation, CreateChatMutationVariables>(CreateChatDocument, baseOptions);
+      }
+export type CreateChatMutationHookResult = ReturnType<typeof useCreateChatMutation>;
+export type CreateChatMutationResult = Apollo.MutationResult<CreateChatMutation>;
+export type CreateChatMutationOptions = Apollo.BaseMutationOptions<CreateChatMutation, CreateChatMutationVariables>;
 export const CreateChatGroupDocument = gql`
     mutation CreateChatGroup($chatGroup: CreateChatGroupInput!) {
   createChatGroup(chatGroup: $chatGroup) {

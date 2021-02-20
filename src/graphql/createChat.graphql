@@ -1,0 +1,5 @@
+mutation CreateChat($chat: CreateChatInput!) {
+	createChat(chat: $chat) {
+		id
+	}
+}
