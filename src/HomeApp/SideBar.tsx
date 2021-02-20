@@ -1,5 +1,5 @@
 import AppsIcon from '@material-ui/icons/Apps';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -68,25 +68,21 @@ const Sidebar = ({
 
 	const logout = useLogout();
 
-	let navLinks = useCallback(
-		() =>
-			links.map(link => (
-				<NavComponent
-					key={link.route}
-					history={history}
-					Icon={link.Icon}
-					tooltip={link.tooltip}
-					route={link.route}
-					pageState={(path: string) => setPageState(path)}
-				/>
-			)),
-		[history]
-	);
+	let navLinks = links.map(link => (
+		<NavComponent
+			key={link.route}
+			history={history}
+			Icon={link.Icon}
+			tooltip={link.tooltip}
+			route={link.route}
+			pageState={(path: string) => setPageState(path)}
+		/>
+	));
 
 	return (
 		<div className="sidebar hide-scrollbar">
 			<div className="sidebar-container">
-				{navLinks()}
+				{navLinks}
 				<Tooltip placement="right" title="Logout">
 					<div
 						className="sidebar-section-logout"

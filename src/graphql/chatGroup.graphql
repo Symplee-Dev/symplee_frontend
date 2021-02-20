@@ -1,0 +1,13 @@
+query ChatGroup($id: Int!) {
+	chatGroup(id: $id) {
+		id
+		name
+		isPublic
+		createdAt
+		chats {
+			id
+			name
+		}
+		createdBy
+	}
+}
