@@ -57,6 +57,7 @@ export type Mutation = {
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
   updateUser: User;
+  updateChatGroup: ChatGroup;
 };
 
 
@@ -106,6 +107,18 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type MutationUpdateChatGroupArgs = {
+  group?: Maybe<UpdateChatGroupInput>;
+  chatGroupId: Scalars['Int'];
+};
+
+export type UpdateChatGroupInput = {
+  name?: Maybe<Scalars['String']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  avatar?: Maybe<Scalars['String']>;
+};
+
 export type AppFeedback = {
   id: Scalars['Int'];
   createdAt: Scalars['String'];
@@ -139,6 +152,7 @@ export type CreateChatGroupInput = {
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
   userId: Scalars['Int'];
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type LoginInput = {
@@ -235,7 +249,7 @@ export type ChatGroupQueryVariables = Exact<{
 }>;
 
 
-export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean }>> } };
+export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, avatar?: Maybe<string>, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean }>> } };
 
 export type CreateChatMutationVariables = Exact<{
   chat: CreateChatInput;
@@ -290,7 +304,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { user: { username: string, name: string, id: number, email: string, key: string, createdAt: string, verified: boolean, avatar?: Maybe<string>, chatGroups: Array<{ name: string, id: number }> } };
+export type UserQuery = { user: { username: string, name: string, id: number, email: string, key: string, createdAt: string, verified: boolean, avatar?: Maybe<string>, chatGroups: Array<{ name: string, id: number, avatar?: Maybe<string> }> } };
 
 export type VerifyEmailMutationVariables = Exact<{
   token: Scalars['String'];
@@ -307,6 +321,7 @@ export const ChatGroupDocument = gql`
     name
     isPublic
     createdAt
+    avatar
     chats {
       id
       name
@@ -561,6 +576,7 @@ export const UserDocument = gql`
     chatGroups {
       name
       id
+      avatar
     }
   }
 }

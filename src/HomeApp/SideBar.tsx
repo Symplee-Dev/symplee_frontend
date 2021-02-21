@@ -60,7 +60,7 @@ const NavComponent = ({
 const Sidebar = ({
 	chatGroups
 }: {
-	chatGroups: { name: string; id: number }[];
+	chatGroups: { name: string; id: number; avatar?: string }[];
 }) => {
 	const history = useHistory();
 
@@ -113,18 +113,31 @@ const Sidebar = ({
 									'sidebar-avatar-active'
 								}`}
 							>
-								<Avatar
-									alt={group.name}
-									className={`sidebar-avatar ${
-										pageState === `/group/${group.id}` &&
-										'avatar-active'
-									}`}
-									style={{
-										background: randomHex.generate()
-									}}
-								>
-									{group.name[0]}
-								</Avatar>
+								{!group.avatar ? (
+									<Avatar
+										alt={group.name}
+										className={`sidebar-avatar ${
+											pageState ===
+												`/group/${group.id}` &&
+											'avatar-active'
+										}`}
+										style={{
+											background: randomHex.generate()
+										}}
+									>
+										{group.name[0]}
+									</Avatar>
+								) : (
+									<Avatar
+										alt={group.name}
+										className={`sidebar-avatar ${
+											pageState ===
+												`/group/${group.id}` &&
+											'avatar-active'
+										}`}
+										src={group.avatar}
+									/>
+								)}
 							</div>
 						</Tooltip>
 					))}

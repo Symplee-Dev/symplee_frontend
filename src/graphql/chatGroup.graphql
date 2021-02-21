@@ -4,6 +4,7 @@ query ChatGroup($id: Int!) {
 		name
 		isPublic
 		createdAt
+		avatar
 		chats {
 			id
 			name
