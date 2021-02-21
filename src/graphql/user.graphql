@@ -11,6 +11,7 @@ query User($id: Int!) {
 		chatGroups {
 			name
 			id
+			avatar
 		}
 	}
 }
