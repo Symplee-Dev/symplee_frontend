@@ -39,6 +39,25 @@
 			padding: 1.2rem;
 			border-radius: 1.2rem;
 
+			.change-avatar-root {
+				.file-upload-root {
+					transition: 0.3s;
+					margin-top: 1.2rem;
+					font-size: 1rem;
+					display: flex;
+					align-items: center;
+
+					input {
+						display: none;
+					}
+				}
+
+				.file-upload-root:hover {
+					cursor: pointer;
+					color: #bb86fc;
+				}
+			}
+
 			.top-top {
 				display: flex;
 				align-items: center;

@@ -1,15 +1,28 @@
 import { motion } from 'framer-motion';
 import './account.scss';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import { Avatar, Tooltip, TextField } from '@material-ui/core';
+import {
+	Avatar,
+	Tooltip,
+	TextField,
+	LinearProgress,
+	Snackbar
+} from '@material-ui/core';
 import randomHex from 'random-hex';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import Moment from 'react-moment';
 import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import axios from 'axios';
+import { useUpdateUserMutation, Exact, UserQuery } from '../../graphql';
+import { useSelector, RootStateOrAny } from 'react-redux';
+import { Alert } from '@material-ui/lab';
+import { ApolloQueryResult } from '@apollo/client';
 
 const Account = ({
-	user
+	user,
+	refetch
 }: {
 	user: {
 		name: string;
@@ -17,21 +30,73 @@ const Account = ({
 		email: string;
 		key: string;
 		createdAt: string;
+		avatar?: string;
 	};
+	refetch: (
+		variables?:
+			| Partial<
+					Exact<{
+						id: number;
+					}>
+			  >
+			| undefined
+	) => Promise<ApolloQueryResult<UserQuery>>;
 }) => {
 	const [formState, setFormState] = useState<{
 		name: string;
 		username: string;
 		email: string;
-	}>({ name: '', username: '', email: '' });
+		avatar: string | undefined;
+	}>({ name: '', username: '', email: '', avatar: undefined });
+
+	const [imageLoading, setImageLoading] = useState(false);
+
+	const [updateUser] = useUpdateUserMutation();
+
+	const [notifState, setNotifState] = useState<{
+		title: string;
+		value: boolean;
+	}>({ title: '', value: false });
+
+	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
 	useEffect(() => {
 		setFormState({
 			name: user.name,
 			username: user.username,
-			email: user.email
+			email: user.email,
+			avatar: user.avatar
 		});
 	}, [user]);
+
+	const handleSubmit = () => {
+		updateUser({ variables: { user: formState, userId } }).then(() => {
+			setNotifState({ title: 'User Updated Successfully', value: true });
+			//@ts-ignore
+			refetch({ fetchPolicy: 'network-only' });
+		});
+	};
+
+	const handleImageUpload = async e => {
+		const files = e.target.files;
+		const data = new FormData();
+
+		data.append('file', files[0]);
+		data.append(
+			'upload_preset',
+			process.env.REACT_APP_CLOUDINARY_UPLOAD_TARGET ?? ''
+		);
+		data.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY ?? '');
+		data.append('timestamp', Date.now().toString());
+		setImageLoading(true);
+		const res = await axios.post(
+			'https://api.cloudinary.com/v1_1/boltchat/image/upload',
+			data
+		);
+
+		setFormState({ ...formState, avatar: res.data.url });
+		setImageLoading(false);
+	};
 
 	return (
 		<motion.div exit={{ opacity: 0 }} className="account">
@@ -44,9 +109,15 @@ const Account = ({
 			<div className="body">
 				<div className="top">
 					<div className="top-top">
-						<Avatar style={{ background: randomHex.generate() }}>
-							{user.username[0]}
-						</Avatar>
+						{!formState.avatar ? (
+							<Avatar
+								style={{ background: randomHex.generate() }}
+							>
+								{user.username[0]}
+							</Avatar>
+						) : (
+							<Avatar src={formState.avatar} />
+						)}
 						<h2 className="username">
 							{user.username}#{user.key}
 						</h2>
@@ -65,6 +136,33 @@ const Account = ({
 							{new Date(user.createdAt)}
 						</Moment>{' '}
 						ago
+					</div>
+					<div className="change-avatar-root">
+						{!imageLoading ? (
+							<label className="file-upload-root">
+								<input
+									onChange={handleImageUpload}
+									type="file"
+									accept="image/*"
+									style={{ border: 'none' }}
+								/>
+								Change Avatar{' '}
+								<CloudUploadIcon
+									style={{ marginLeft: '0.5rem' }}
+								/>
+							</label>
+						) : (
+							<>
+								<LinearProgress
+									color="primary"
+									style={{
+										marginTop: '1rem',
+										marginBottom: '0.5rem'
+									}}
+								/>
+								<p>Uploading Image...</p>
+							</>
+						)}
 					</div>
 				</div>
 
@@ -174,10 +272,21 @@ const Account = ({
 						/>
 					</div>
 					<div className="row">
-						<button>Save</button>
+						<button onClick={handleSubmit}>Save</button>
 					</div>
 				</div>
 			</div>
+			<Snackbar
+				open={notifState.value}
+				autoHideDuration={3000}
+				onClose={() => setNotifState({ title: '', value: false })}
+			>
+				<Alert
+					onClose={() => setNotifState({ title: '', value: false })}
+				>
+					{notifState.title}
+				</Alert>
+			</Snackbar>
 		</motion.div>
 	);
 };

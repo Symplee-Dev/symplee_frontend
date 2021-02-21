@@ -56,6 +56,7 @@ export type Mutation = {
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
+  updateUser: User;
 };
 
 
@@ -97,6 +98,12 @@ export type MutationEditChangeLogArgs = {
 
 export type MutationSendFeedbackArgs = {
   feedback: SendAppFeedbackInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  user: UpdateUserInput;
+  userId: Scalars['Int'];
 };
 
 export type AppFeedback = {
@@ -165,6 +172,14 @@ export type UserInput = {
   name: Scalars['String'];
   username: Scalars['String'];
   password: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
+};
+
+export type UpdateUserInput = {
+  email?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type Schema = {
@@ -180,6 +195,7 @@ export type User = {
   chatGroups: Array<ChatGroup>;
   createdAt: Scalars['String'];
   verified: Scalars['Boolean'];
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type ChatGroup = {
@@ -189,6 +205,7 @@ export type ChatGroup = {
   createdAt: Scalars['String'];
   chats: Array<Maybe<Chat>>;
   createdBy: Scalars['Int'];
+  avatar?: Maybe<Scalars['String']>;
 };
 
 export type Chat = {
@@ -260,12 +277,20 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = { signup: { id: number, email: string, key: string, username: string } };
 
+export type UpdateUserMutationVariables = Exact<{
+  user: UpdateUserInput;
+  userId: Scalars['Int'];
+}>;
+
+
+export type UpdateUserMutation = { updateUser: { id: number } };
+
 export type UserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type UserQuery = { user: { username: string, name: string, id: number, email: string, key: string, createdAt: string, verified: boolean, chatGroups: Array<{ name: string, id: number }> } };
+export type UserQuery = { user: { username: string, name: string, id: number, email: string, key: string, createdAt: string, verified: boolean, avatar?: Maybe<string>, chatGroups: Array<{ name: string, id: number }> } };
 
 export type VerifyEmailMutationVariables = Exact<{
   token: Scalars['String'];
@@ -489,6 +514,39 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($user: UpdateUserInput!, $userId: Int!) {
+  updateUser(user: $user, userId: $userId) {
+    id
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {
@@ -499,6 +557,7 @@ export const UserDocument = gql`
     key
     createdAt
     verified
+    avatar
     chatGroups {
       name
       id

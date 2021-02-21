@@ -27,6 +27,7 @@ const HomeApp = () => {
 		name: string;
 		id: number;
 		email: string;
+		avatar?: string;
 		key: string;
 		createdAt: string;
 		verified: boolean;
@@ -81,7 +82,7 @@ const HomeApp = () => {
 				<Sidebar chatGroups={user.chatGroups} />
 				<Switch location={location}>
 					<Route exact path="/you">
-						<Account user={data.user} />
+						<Account user={data.user} refetch={refetch} />
 					</Route>
 					<Route exact path="/group/create">
 						<CreateGroup refetch={refetch} />
