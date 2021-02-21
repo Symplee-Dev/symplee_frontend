@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, useLocation, Switch } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // views
 import Login from '../src/views/Login';
@@ -53,29 +55,34 @@ const App: React.FC<AppProps> = () => {
 	}, [dispatch, authenticated]);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<AnimatePresence exitBeforeEnter>
-				<Switch location={location} key={location.pathname}>
-					<Route exact path="/login">
-						<Login />
-					</Route>
-					<Route exact path="/signup">
-						<Register />
-					</Route>
-					<Route exact path="/chat">
-						<UserUi />
-					</Route>
+		<ErrorBoundary
+			FallbackComponent={ErrorPage}
+			onReset={() => window.location.reload()}
+		>
+			<ThemeProvider theme={theme}>
+				<AnimatePresence exitBeforeEnter>
+					<Switch location={location} key={location.pathname}>
+						<Route exact path="/login">
+							<Login />
+						</Route>
+						<Route exact path="/signup">
+							<Register />
+						</Route>
+						<Route exact path="/chat">
+							<UserUi />
+						</Route>
 
-					<Route exact path="/auth/verify/:token">
-						<EmailVerificationScreen />
-					</Route>
+						<Route exact path="/auth/verify/:token">
+							<EmailVerificationScreen />
+						</Route>
 
-					<Route path="/">
-						{authenticated ? <HomeApp /> : <Home />}
-					</Route>
-				</Switch>
-			</AnimatePresence>
-		</ThemeProvider>
+						<Route path="/">
+							{authenticated ? <HomeApp /> : <Home />}
+						</Route>
+					</Switch>
+				</AnimatePresence>
+			</ThemeProvider>
+		</ErrorBoundary>
 	);
 };
 
