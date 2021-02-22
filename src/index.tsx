@@ -13,14 +13,15 @@ import { Integrations } from '@sentry/tracing';
 import setupLogRocketReact from 'logrocket-react';
 import LogRocket from 'logrocket';
 
-Sentry.init({
-	dsn: process.env.REACT_APP_SENTRY_DSN,
-	integrations: [new Integrations.BrowserTracing()],
-	tracesSampleRate: 1.0
-});
-
-LogRocket.init(process.env.REACT_APP_LOG_ROCKET_ORG_ID!);
-setupLogRocketReact(LogRocket);
+if (process.env.NODE_ENV === 'production') {
+	Sentry.init({
+		dsn: process.env.REACT_APP_SENTRY_DSN,
+		integrations: [new Integrations.BrowserTracing()],
+		tracesSampleRate: 1.0
+	});
+	LogRocket.init(process.env.REACT_APP_LOG_ROCKET_ORG_ID!);
+	setupLogRocketReact(LogRocket);
+}
 
 export const apolloClient = new ApolloClient({
 	uri:
