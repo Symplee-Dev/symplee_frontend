@@ -20,10 +20,12 @@ export type Query = {
   test: Scalars['String'];
   user: User;
   changeLogById: ChangeLog;
-  changeLogs: Array<Maybe<ChangeLog>>;
+  changeLogs: Array<ChangeLog>;
   serverStatus: Scalars['Boolean'];
   chatGroup: ChatGroup;
   hasChat: Scalars['Boolean'];
+  getFeedback: Array<AppFeedback>;
+  feedbackById: AppFeedback;
 };
 
 
@@ -47,6 +49,11 @@ export type QueryHasChatArgs = {
   chatId: Scalars['Int'];
 };
 
+
+export type QueryFeedbackByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type Mutation = {
   signup: User;
   login?: Maybe<LoginReturn>;
@@ -56,6 +63,7 @@ export type Mutation = {
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
+  toggleFeedbackResolved: AppFeedback;
   updateUser: User;
   updateChatGroup: ChatGroup;
 };
@@ -99,6 +107,12 @@ export type MutationEditChangeLogArgs = {
 
 export type MutationSendFeedbackArgs = {
   feedback: SendAppFeedbackInput;
+};
+
+
+export type MutationToggleFeedbackResolvedArgs = {
+  id: Scalars['Int'];
+  status: Scalars['Boolean'];
 };
 
 
@@ -244,6 +258,11 @@ export type CacheControlScope =
   | 'PRIVATE';
 
 
+export type ChangeLogsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChangeLogsQuery = { changeLogs: Array<{ id: number, body: string, changes: Array<string>, version: string }> };
+
 export type ChatGroupQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -314,6 +333,41 @@ export type VerifyEmailMutationVariables = Exact<{
 export type VerifyEmailMutation = { verifyEmail: boolean };
 
 
+export const ChangeLogsDocument = gql`
+    query ChangeLogs {
+  changeLogs {
+    id
+    body
+    changes
+    version
+  }
+}
+    `;
+
+/**
+ * __useChangeLogsQuery__
+ *
+ * To run a query within a React component, call `useChangeLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChangeLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChangeLogsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useChangeLogsQuery(baseOptions?: Apollo.QueryHookOptions<ChangeLogsQuery, ChangeLogsQueryVariables>) {
+        return Apollo.useQuery<ChangeLogsQuery, ChangeLogsQueryVariables>(ChangeLogsDocument, baseOptions);
+      }
+export function useChangeLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChangeLogsQuery, ChangeLogsQueryVariables>) {
+          return Apollo.useLazyQuery<ChangeLogsQuery, ChangeLogsQueryVariables>(ChangeLogsDocument, baseOptions);
+        }
+export type ChangeLogsQueryHookResult = ReturnType<typeof useChangeLogsQuery>;
+export type ChangeLogsLazyQueryHookResult = ReturnType<typeof useChangeLogsLazyQuery>;
+export type ChangeLogsQueryResult = Apollo.QueryResult<ChangeLogsQuery, ChangeLogsQueryVariables>;
 export const ChatGroupDocument = gql`
     query ChatGroup($id: Int!) {
   chatGroup(id: $id) {
