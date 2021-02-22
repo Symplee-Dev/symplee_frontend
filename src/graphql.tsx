@@ -57,6 +57,8 @@ export type QueryFeedbackByIdArgs = {
 export type Mutation = {
   signup: User;
   login?: Maybe<LoginReturn>;
+  createAdmin: Admin;
+  adminLogin?: Maybe<LoginReturn>;
   verifyEmail: Scalars['Boolean'];
   createChat: Chat;
   createChatGroup: ChatGroup;
@@ -76,6 +78,16 @@ export type MutationSignupArgs = {
 
 export type MutationLoginArgs = {
   credentials: LoginInput;
+};
+
+
+export type MutationCreateAdminArgs = {
+  admin: AdminInput;
+};
+
+
+export type MutationAdminLoginArgs = {
+  credentials: AdminLoginInput;
 };
 
 
@@ -175,6 +187,25 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
+export type AdminLoginInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password: Scalars['String'];
+  pin: Scalars['Int'];
+};
+
+export type Admin = {
+  id: Scalars['Int'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  pin: Scalars['Int'];
+  created_at: Scalars['String'];
+  verified: Scalars['Boolean'];
+  key: Scalars['String'];
+};
+
 export type ChangeLog = {
   id: Scalars['Int'];
   body: Scalars['String'];
@@ -208,6 +239,14 @@ export type UpdateUserInput = {
   name?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
+};
+
+export type AdminInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
+  pin: Scalars['Int'];
 };
 
 export type Schema = {
@@ -309,6 +348,14 @@ export type SignupMutationVariables = Exact<{
 
 
 export type SignupMutation = { signup: { id: number, email: string, key: string, username: string } };
+
+export type UpdateChatGroupMutationVariables = Exact<{
+  group?: Maybe<UpdateChatGroupInput>;
+  chatGroupId: Scalars['Int'];
+}>;
+
+
+export type UpdateChatGroupMutation = { updateChatGroup: { id: number } };
 
 export type UpdateUserMutationVariables = Exact<{
   user: UpdateUserInput;
@@ -583,6 +630,39 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const UpdateChatGroupDocument = gql`
+    mutation UpdateChatGroup($group: UpdateChatGroupInput, $chatGroupId: Int!) {
+  updateChatGroup(group: $group, chatGroupId: $chatGroupId) {
+    id
+  }
+}
+    `;
+export type UpdateChatGroupMutationFn = Apollo.MutationFunction<UpdateChatGroupMutation, UpdateChatGroupMutationVariables>;
+
+/**
+ * __useUpdateChatGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateChatGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateChatGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateChatGroupMutation, { data, loading, error }] = useUpdateChatGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *      chatGroupId: // value for 'chatGroupId'
+ *   },
+ * });
+ */
+export function useUpdateChatGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateChatGroupMutation, UpdateChatGroupMutationVariables>) {
+        return Apollo.useMutation<UpdateChatGroupMutation, UpdateChatGroupMutationVariables>(UpdateChatGroupDocument, baseOptions);
+      }
+export type UpdateChatGroupMutationHookResult = ReturnType<typeof useUpdateChatGroupMutation>;
+export type UpdateChatGroupMutationResult = Apollo.MutationResult<UpdateChatGroupMutation>;
+export type UpdateChatGroupMutationOptions = Apollo.BaseMutationOptions<UpdateChatGroupMutation, UpdateChatGroupMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($user: UpdateUserInput!, $userId: Int!) {
   updateUser(user: $user, userId: $userId) {
