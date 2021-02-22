@@ -14,6 +14,7 @@ import setupLogRocketReact from 'logrocket-react';
 import LogRocket from 'logrocket';
 
 if (process.env.NODE_ENV === 'production') {
+	console.log('Setting up reports');
 	Sentry.init({
 		dsn: process.env.REACT_APP_SENTRY_DSN,
 		integrations: [new Integrations.BrowserTracing()],
