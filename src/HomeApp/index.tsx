@@ -63,7 +63,6 @@ const HomeApp = () => {
 
 	// Todo: extract into util
 	useEffect(() => {
-		console.log(changeLog);
 		if (!hasLatestChangeLog.value && !changeLogLoading) {
 			if (changeLog) {
 				const storedChangelog = window.localStorage.getItem(
@@ -96,6 +95,7 @@ const HomeApp = () => {
 						});
 						setCurrentLog(newest);
 					} else {
+						console.log('Has latest');
 						setHasLatestChangelog({
 							value: true,
 							dateSet: new Date().toString()
@@ -103,6 +103,7 @@ const HomeApp = () => {
 						const newest = changeLog.changeLogs.find(
 							log => log.id === parsed.id
 						);
+						setChangeLogOpened(true);
 
 						setCurrentLog(newest);
 					}
@@ -148,7 +149,13 @@ const HomeApp = () => {
 			setChangeLogOpen(true);
 			setChangeLogOpened(true);
 		}
-	}, [changeLog, getChangeLog, hasLatestChangeLog, changeLogOpened]);
+	}, [
+		changeLog,
+		getChangeLog,
+		hasLatestChangeLog,
+		changeLogOpened,
+		changeLogLoading
+	]);
 
 	useMemo(() => {
 		if (!user) {

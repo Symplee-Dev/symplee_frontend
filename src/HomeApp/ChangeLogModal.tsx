@@ -16,7 +16,7 @@ const ChangeLogModal = ({
 			fullWidth
 			maxWidth="sm"
 			className="changelog-modal"
-			open={true}
+			open={open}
 			onClose={() => setOpen(false)}
 		>
 			<h2>Latest Updates</h2>
