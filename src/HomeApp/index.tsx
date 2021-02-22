@@ -6,12 +6,13 @@ import HomeAppRoot from './views/HomeAppRoot';
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
-import { useUserLazyQuery } from '../graphql';
+import { useChangeLogsLazyQuery, useUserLazyQuery } from '../graphql';
 import CreateGroup from './views/CreateGroup';
 import { useEffect, useState, useMemo } from 'react';
 import decode from 'jwt-decode';
 import { SET_USER_ID } from '../redux/actions/index';
 import ChatGroupIndex from './views/ChatGroupView/index';
+import ChangeLogModal from './ChangeLogModal';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
@@ -21,6 +22,24 @@ const HomeApp = () => {
 	const dispatch = useDispatch();
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
+
+	// todo: extract to redux value
+	const [hasLatestChangeLog, setHasLatestChangelog] = useState({
+		value: false,
+		dateSet: new Date().toString()
+	});
+
+	const [
+		getChangeLog,
+		{ data: changeLog, loading: changeLogLoading }
+	] = useChangeLogsLazyQuery({
+		fetchPolicy: 'cache-first'
+	});
+
+	const [currentLog, setCurrentLog] = useState<
+		| { id: number; body: string; changes: string[]; version: string }
+		| undefined
+	>();
 
 	const [user, setUser] = useState<{
 		username: string;
@@ -38,6 +57,105 @@ const HomeApp = () => {
 		variables: { id: userId },
 		fetchPolicy: 'cache-first'
 	});
+
+	const [changeLogOpen, setChangeLogOpen] = useState(false);
+	const [changeLogOpened, setChangeLogOpened] = useState(false);
+
+	// Todo: extract into util
+	useEffect(() => {
+		if (!hasLatestChangeLog.value && !changeLogLoading) {
+			if (changeLog) {
+				const storedChangelog = window.localStorage.getItem(
+					'bolt_changelog'
+				);
+
+				if (storedChangelog) {
+					// parse the stored changelog
+					const parsed: { id: number; version: string } = JSON.parse(
+						storedChangelog
+					);
+
+					// find one with a newer id if any
+					const newest = changeLog.changeLogs.find(
+						log => log.id === parsed.id + 1
+					);
+
+					if (newest) {
+						// if new version set new changelog to local storage
+						localStorage.setItem(
+							'bolt_changelog',
+							JSON.stringify({
+								id: newest.id,
+								version: newest.version
+							})
+						);
+						setHasLatestChangelog({
+							value: true,
+							dateSet: new Date().toString()
+						});
+						setCurrentLog(newest);
+					} else {
+						console.log('Has latest');
+						setHasLatestChangelog({
+							value: true,
+							dateSet: new Date().toString()
+						});
+						const newest = changeLog.changeLogs.find(
+							log => log.id === parsed.id
+						);
+						setChangeLogOpened(true);
+
+						setCurrentLog(newest);
+					}
+				} else {
+					const newest = changeLog.changeLogs.reduce(function (
+						prev,
+						current
+					) {
+						if (+current.id > +prev.id) {
+							return current;
+						} else {
+							return prev;
+						}
+					});
+
+					// fetch because none exists yet
+					localStorage.setItem(
+						'bolt_changelog',
+						JSON.stringify({
+							id: newest.id,
+							version: newest.version
+						})
+					);
+
+					setCurrentLog(newest);
+				}
+				setHasLatestChangelog({
+					value: true,
+					dateSet: new Date().toString()
+				});
+			} else {
+				// fetch data because no data yet
+				getChangeLog();
+			}
+		}
+
+		if (
+			hasLatestChangeLog.value === true &&
+			hasLatestChangeLog.dateSet === new Date().toString() &&
+			!changeLogOpened
+		) {
+			// set modal open
+			setChangeLogOpen(true);
+			setChangeLogOpened(true);
+		}
+	}, [
+		changeLog,
+		getChangeLog,
+		hasLatestChangeLog,
+		changeLogOpened,
+		changeLogLoading
+	]);
 
 	useMemo(() => {
 		if (!user) {
@@ -94,6 +212,13 @@ const HomeApp = () => {
 						<HomeAppRoot user={data.user} />
 					</Route>
 				</Switch>
+				{changeLogOpen && currentLog && (
+					<ChangeLogModal
+						open={changeLogOpen}
+						setOpen={setChangeLogOpen}
+						changeLog={currentLog}
+					/>
+				)}
 			</div>
 		);
 	}

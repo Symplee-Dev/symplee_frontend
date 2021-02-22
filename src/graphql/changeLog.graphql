@@ -1,0 +1,8 @@
+query ChangeLogs {
+	changeLogs {
+		id
+		body
+		changes
+		version
+	}
+}
