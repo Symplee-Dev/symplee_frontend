@@ -5,10 +5,13 @@ import { LinearProgress } from '@material-ui/core';
 import Header from './Header';
 import ChatGroupsList from './ChatGroupsList';
 import { useState, useEffect } from 'react';
+import EditModal from './EditModal';
 
 const ChatGroupIndex = ({ authorId }: { authorId: number }) => {
 	const { id }: { id: string } = useParams();
 	const [isAuthor, setIsAuthor] = useState(false);
+
+	const [editing, setEditing] = useState(false);
 
 	const { data, loading, error, refetch } = useChatGroupQuery({
 		variables: { id: parseInt(id) }
@@ -28,13 +31,25 @@ const ChatGroupIndex = ({ authorId }: { authorId: number }) => {
 
 	return (
 		<motion.div exit={{ opacity: 0 }} className="chat-group-root">
-			<Header name={data?.chatGroup.name ?? ''} />
+			<Header
+				name={data?.chatGroup.name ?? ''}
+				isAuthor={isAuthor}
+				openEdit={setEditing}
+			/>
 			<ChatGroupsList
 				id={parseInt(id)}
 				chats={data?.chatGroup.chats ?? []}
 				isAuthor={isAuthor}
 				refetch={refetch}
 			/>
+			{editing && data?.chatGroup && (
+				<EditModal
+					group={{ ...data.chatGroup }}
+					open={editing}
+					setOpen={setEditing}
+					refetch={refetch}
+				/>
+			)}
 		</motion.div>
 	);
 };

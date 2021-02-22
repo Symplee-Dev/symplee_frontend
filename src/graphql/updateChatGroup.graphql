@@ -1,0 +1,5 @@
+mutation UpdateChatGroup($group: UpdateChatGroupInput, $chatGroupId: Int!) {
+	updateChatGroup(group: $group, chatGroupId: $chatGroupId) {
+		id
+	}
+}
