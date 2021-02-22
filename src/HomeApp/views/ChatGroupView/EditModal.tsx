@@ -158,7 +158,7 @@ const EditModal = ({
 					/>
 
 					<p className="label">
-						Access ({group.isPublic ? 'Public' : 'Private'})
+						Access ({changes.isPublic ? 'Public' : 'Private'})
 					</p>
 					<ToggleButton
 						value={changes.isPublic}

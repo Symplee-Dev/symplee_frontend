@@ -198,12 +198,14 @@ const Account = ({
 									name: e.target.value
 								})
 							}
+							type="text"
 							variant="filled"
 							value={formState?.name}
 							inputProps={{ className: 'input-field' }}
 						/>
 					</div>
-					<div className="row">
+					{/* Can uncomment when mutation is fixed, handle email in use */}
+					{/* <div className="row">
 						<div>
 							<p>Email</p>
 							{user.email === formState.email ? (
@@ -226,6 +228,7 @@ const Account = ({
 						<TextField
 							color="primary"
 							style={{ width: '100%' }}
+							type="email"
 							variant="filled"
 							value={formState?.email}
 							onChange={e =>
@@ -236,7 +239,7 @@ const Account = ({
 							}
 							inputProps={{ className: 'input-field' }}
 						/>
-					</div>
+					</div> */}
 					<div className="row">
 						<div>
 							<p>Username</p>
@@ -267,6 +270,7 @@ const Account = ({
 							}
 							color="primary"
 							variant="filled"
+							type="text"
 							value={formState?.username}
 							inputProps={{ className: 'input-field' }}
 						/>
