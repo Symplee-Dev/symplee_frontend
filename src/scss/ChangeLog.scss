@@ -1,0 +1,35 @@
+.changelog-modal {
+	.title-div {
+		.title {
+			font-family: 'Poppins', sans-serif;
+			font-weight: 400;
+			letter-spacing: 2px;
+			font-size: 1.3rem;
+		}
+
+		.sub-title {
+			font-family: 'Poppins', sans-serif;
+			font-size: 1rem;
+			font-weight: 300;
+		}
+	}
+
+	.changelog-paper {
+		height: 50vh;
+		background: #212121;
+		color: white;
+	}
+
+	.content-div {
+		h3 {
+			font-family: 'Poppins', sans-serif;
+			font-size: 1.3rem;
+			font-weight: 300;
+		}
+
+		ul {
+			margin-top: 1rem;
+			padding-left: 2rem;
+		}
+	}
+}
