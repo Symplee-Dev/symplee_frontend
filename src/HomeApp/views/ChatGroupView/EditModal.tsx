@@ -55,10 +55,7 @@ const EditModal = ({
 
 	const [imageLoading, setImageLoading] = useState(false);
 
-	const [
-		updateGroup,
-		{ data, loading, error }
-	] = useUpdateChatGroupMutation();
+	const [updateGroup, { loading }] = useUpdateChatGroupMutation();
 
 	const handleImageUpload = async e => {
 		const files = e.target.files;
