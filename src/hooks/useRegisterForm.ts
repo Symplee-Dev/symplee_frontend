@@ -33,22 +33,28 @@ export const useRegister = (
 		name: ''
 	});
 
+	const [errorState, setErrorState] = useState('');
+
 	useEffect(() => {
 		if (!loading) {
 			if (error) {
-				addNotication({
-					title: error.message,
-					id,
-					type: 'danger',
-					autoDismiss: true,
-					autoTimeoutTime: 3000
-				});
+				if (errorState !== error.message) {
+					setErrorState(error.message);
+					addNotication({
+						title: error.message,
+						id,
+						type: 'error',
+						autoDismiss: true,
+						autoTimeoutTime: 3000
+					});
+				}
 			}
 
-			if (!error && data) {
+			if (!error && data && errorState !== 'Almost There! Please Login') {
+				setErrorState('Almost There! Please Login');
 				addNotication({
 					title: 'Almost There! Please Login',
-					id: id + 1,
+					id: id,
 					type: 'success',
 					autoDismiss: true,
 					autoTimeoutTime: 3000
@@ -56,7 +62,7 @@ export const useRegister = (
 				history.push('/login');
 			}
 		}
-	}, [data, error, history, loading, addNotication, id]);
+	}, [data, error, history, loading, addNotication, id, errorState]);
 
 	return {
 		registerCredentials,

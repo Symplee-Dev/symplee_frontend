@@ -12,6 +12,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import HomeApp from './views/HomeApp/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
 import { useLocalToken } from './hooks/useLocalToken';
+import Notifications from './components/Notifications';
 
 const theme = createMuiTheme({
 	palette: {
@@ -25,8 +26,6 @@ const App = () => {
 	const location = useLocation();
 	const authenticated = useLocalToken();
 
-	console.log(authenticated);
-
 	return (
 		<ErrorBoundary
 			FallbackComponent={ErrorPage}
@@ -34,6 +33,7 @@ const App = () => {
 		>
 			<ThemeProvider theme={theme}>
 				<AnimatePresence exitBeforeEnter>
+					<Notifications />
 					<Switch location={location} key={location.pathname}>
 						<Route exact path="/login">
 							<Login />

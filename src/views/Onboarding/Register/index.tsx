@@ -82,15 +82,6 @@ const Register = () => {
 							/>
 						)}
 					</form>
-					{/* <Snackbar
-						open={notifState}
-						autoHideDuration={3000}
-						onClose={() => setNotifState(false)}
-					>
-						<Alert onClose={() => setNotifState(false)}>
-							You're almost there! Please sign in.
-						</Alert>
-					</Snackbar> */}
 				</FadeIn>
 			</motion.div>
 		</>

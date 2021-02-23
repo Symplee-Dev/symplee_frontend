@@ -92,7 +92,6 @@ const HomeApp = () => {
 						});
 						setCurrentLog(newest);
 					} else {
-						console.log('Has latest');
 						setHasLatestChangelog({
 							value: true,
 							dateSet: new Date().toString()
@@ -170,7 +169,6 @@ const HomeApp = () => {
 	}, [error, refetch, user?.id]);
 
 	useMemo(() => {
-		console.log(data, user);
 		if (!user && !data) {
 			const token = localStorage.getItem('bolttoken');
 

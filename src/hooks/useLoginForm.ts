@@ -1,8 +1,10 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { UserActions } from '../redux/actions/index';
+import { UserActions, UIActions } from '../redux/actions/index';
 import { Maybe, LoginMutation, Exact } from '../graphql';
 import { ApolloError, MutationFunctionOptions } from '@apollo/client';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/types/state-types';
 
 export type UsernameType = 'USERNAME' | 'EMAIL';
 
@@ -68,19 +70,47 @@ export const useLogin = (
 
 	const history = useHistory();
 
+	const addNotication = UIActions.useAddNotification();
+
+	const id = useSelector(
+		(state: RootState) => state.ui.notifications.length + 1
+	);
+
 	useEffect(() => {
 		if (!loading) {
 			if (error) {
-				setErrorState(error.message);
+				if (errorState !== error.message) {
+					setErrorState(error.message);
+					addNotication({
+						title: error.message,
+						id,
+						type: 'error',
+						autoDismiss: true,
+						autoTimeoutTime: 3000
+					});
+				}
 			}
 
-			if (!error && data && data.login) {
+			if (
+				!error &&
+				data &&
+				data.login &&
+				errorState !== 'Logging you In!'
+			) {
+				setErrorState('Logging you In!');
+				addNotication({
+					title: 'Logging you In!',
+					id: id,
+					type: 'success',
+					autoDismiss: true,
+					autoTimeoutTime: 2000
+				});
 				setAuth(data.login.token);
 				localStorage.setItem('bolttoken', data.login.token);
 				history.push('/');
 			}
 		}
-	}, [data, loading, error, errorState, history, setAuth]);
+	}, [data, loading, error, errorState, history, setAuth, addNotication, id]);
 
 	return {
 		errorState,
