@@ -1,4 +1,4 @@
-import { UserState } from './state-types';
+import { UserState, Notification } from './state-types';
 
 export enum UserActionConstants {
 	SET_LOGGED_IN = 'SET_LOGGED_IN',
@@ -26,10 +26,35 @@ export interface SetUser {
 	payload: UserState['user'];
 }
 
+export enum UIActionConstants {
+	CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION',
+	CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS',
+	ADD_NOTIFICATION = 'ADD_NOTIFICATION'
+}
+
+export interface ClearNotifications {
+	type: UIActionConstants.CLEAR_NOTIFICATIONS;
+}
+
+export interface ClearNotification {
+	type: UIActionConstants.CLEAR_NOTIFICATION;
+	payload: Notification[];
+}
+
+export interface AddNotification {
+	type: UIActionConstants.ADD_NOTIFICATION;
+	payload: Notification;
+}
+
 export type RootActions = {
 	user: {
 		useLogin(): (token: string) => void;
 		useLogout(): () => void;
 		useSetUserId(): (id: number) => void;
+	};
+	ui: {
+		useClearNotifications(): () => void;
+		useClearNotification(): (notificationId: number) => void;
+		useAddNotification(): (params: Notification) => void;
 	};
 };

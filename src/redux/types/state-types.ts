@@ -7,6 +7,19 @@ export type UserState = {
 	user: User | undefined;
 };
 
+export type Notification = {
+	id: number;
+	title: string;
+	autoDismiss?: boolean;
+	autoTimeoutTime?: number;
+	type: string;
+};
+
+export type UIState = {
+	notifications: Notification[];
+};
+
 export interface RootState {
 	user: UserState;
+	ui: UIState;
 }

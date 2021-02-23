@@ -3,10 +3,9 @@ import { ToggleButton } from '@material-ui/lab';
 import { motion } from 'framer-motion';
 import CheckIcon from '@material-ui/icons/Check';
 
-import './createGroup.scss';
 import { useState, useEffect } from 'react';
 import { Avatar, LinearProgress, TextField } from '@material-ui/core';
-import { Exact, useCreateChatGroupMutation, UserQuery } from '../../graphql';
+import { Exact, useCreateChatGroupMutation, UserQuery } from '../../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { useHistory } from 'react-router';
 import { ApolloQueryResult } from '@apollo/client';

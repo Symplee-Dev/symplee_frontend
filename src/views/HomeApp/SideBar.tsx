@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 import randomHex from 'random-hex';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
-import { UserActions } from '../redux/actions/index';
+import { UserActions } from '../../redux/actions/index';
 
 const links: {
 	route: string;

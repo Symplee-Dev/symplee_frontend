@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router';
-import { useChatGroupQuery } from '../../../graphql';
+import { useChatGroupQuery } from '../../../../graphql';
 import { LinearProgress } from '@material-ui/core';
 import Header from './Header';
 import ChatGroupsList from './ChatGroupsList';

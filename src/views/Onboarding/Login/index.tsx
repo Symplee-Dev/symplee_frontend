@@ -1,11 +1,10 @@
-import './style.scss';
 import { motion } from 'framer-motion';
-import NavBar from '../../components/NavBar';
+import NavBar from '../../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
 import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
-import { useLogin, onLoginSubmit } from '../../hooks/useLoginForm';
-import { useLoginMutation } from '../../graphql';
+import { useLogin, onLoginSubmit } from '../../../hooks/useLoginForm';
+import { useLoginMutation } from '../../../graphql';
 
 const createTextField = (
 	onChange: (

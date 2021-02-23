@@ -3,14 +3,13 @@ import ErrorPage from './ErrorPage';
 import { ErrorBoundary } from 'react-error-boundary';
 
 // views
-import Login from '../src/views/Login';
+import Login from './views/Onboarding/Login';
 import Home from '../src/views/Home';
-import Register from './views/Register';
-import UserUi from './views/UserUI';
+import Register from './views/Onboarding/Register';
 
 import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import HomeApp from './HomeApp/index';
+import HomeApp from './views/HomeApp/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
 import { useLocalToken } from './hooks/useLocalToken';
 
@@ -41,9 +40,6 @@ const App = () => {
 						</Route>
 						<Route exact path="/signup">
 							<Register />
-						</Route>
-						<Route exact path="/chat">
-							<UserUi />
 						</Route>
 
 						<Route exact path="/auth/verify/:token">

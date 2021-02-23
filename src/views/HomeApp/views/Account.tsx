@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import './account.scss';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import {
 	Avatar,
@@ -15,7 +14,7 @@ import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
-import { useUpdateUserMutation, Exact, UserQuery } from '../../graphql';
+import { useUpdateUserMutation, Exact, UserQuery } from '../../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { Alert } from '@material-ui/lab';
 import { ApolloQueryResult } from '@apollo/client';

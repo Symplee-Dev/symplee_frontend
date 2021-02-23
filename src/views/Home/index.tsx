@@ -1,4 +1,3 @@
-import './style.scss';
 import Navbar from '../../components/NavBar';
 import heroimg from '../../assets/hero.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

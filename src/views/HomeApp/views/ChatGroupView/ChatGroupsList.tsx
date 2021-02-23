@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-ui/core';
-import { ChatGroupQuery, Exact, Maybe } from '../../../graphql';
+import { ChatGroupQuery, Exact, Maybe } from '../../../../graphql';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import CreateChatModal from './CreateChatModal';
 import { useState } from 'react';

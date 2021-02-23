@@ -1,18 +1,16 @@
 import Sidebar from './SideBar';
-import './index.scss';
 import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
-
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
-import { useChangeLogsLazyQuery, useUserLazyQuery } from '../graphql';
+import { useChangeLogsLazyQuery, useUserLazyQuery } from '../../graphql';
 import CreateGroup from './views/CreateGroup';
 import { useEffect, useState, useMemo } from 'react';
 import decode from 'jwt-decode';
 import ChatGroupIndex from './views/ChatGroupView/index';
 import ChangeLogModal from './ChangeLogModal';
-import { UserSelectors } from '../redux/selectors';
-import { UserActions } from '../redux/actions/index';
+import { UserSelectors } from '../../redux/selectors';
+import { UserActions } from '../../redux/actions/index';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');

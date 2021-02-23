@@ -1,17 +1,14 @@
 import React, { FormEvent, useState, useEffect } from 'react';
-import './style.scss';
 import { motion } from 'framer-motion';
-import NavBar from '../../components/NavBar';
+import NavBar from '../../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { TextField, LinearProgress, Snackbar } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import Alert from '@material-ui/lab/Alert';
-import { useSignupMutation } from '../../graphql';
+import { useSignupMutation } from '../../../graphql';
 
-interface RegisterProps {}
-
-const Register: React.FC<RegisterProps> = () => {
+const Register = () => {
 	const history = useHistory();
 
 	const [registerCredentials, setRegisterCredentials] = useState({
