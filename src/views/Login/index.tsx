@@ -6,8 +6,8 @@ import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
 import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useLogin } from '../../redux/actions/index';
 import { useLoginMutation } from '../../graphql';
+import { UserActions } from '../../redux/actions/index';
 
 interface LoginProps {}
 
@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = () => {
 
 	const [login, { data, loading, error }] = useLoginMutation();
 
-	const setAuth = useLogin();
+	const setAuth = UserActions.useLogin();
 
 	const onChange = event => {
 		setLoginCredentials({

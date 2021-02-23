@@ -25,7 +25,8 @@
 			"./src/domains/",
 			"../@types",
 			"./src/@types/graphql/generated.d.ts",
-			"./src/graphql.tsx"
+			"./src/graphql.tsx",
+			"./src/redux/types/"
 		]
 	},
 	"include": ["./src/*/", "src/@types"]

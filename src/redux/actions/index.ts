@@ -1,58 +1,47 @@
 import { useDispatch } from 'react-redux';
+import { SetLoggedOut, SetUserId } from '../types/action-types';
+import {
+	RootActions,
+	SetLoggedIn,
+	UserActionConstants
+} from '../types/action-types';
 
-export const ADD_USER = 'ADD_USER';
-export const FETCH_USER = 'FETCH_USER';
-export const EDIT_USER = 'EDIT_USER';
-export const SET_LOGGED_IN = 'SET_LOGGED_IN';
-export const SET_USER_ID = 'SET_USER_ID';
-export const SET_LOGGED_OUT = 'SET_LOGGED_OUT';
+export const UserActions: RootActions['user'] = {
+	useLogin() {
+		const dispatch = useDispatch();
 
-export const addUser = (state, action) => {
-	return {
-		type: ADD_USER,
-		payload: action.payload
-	};
-};
+		return token => {
+			const action: SetLoggedIn = {
+				type: UserActionConstants.SET_LOGGED_IN,
+				payload: token
+			};
 
-export const fetchUser = (state, action) => {
-	return {
-		type: FETCH_USER,
-		payload: action.payload
-	};
-};
-
-export const editUser = (state, action) => {
-	return {
-		type: EDIT_USER,
-		payload: action.payload
-	};
-};
-
-export const useLogin = () => {
-	console.log('USE_LOGIN');
-	const dispatch = useDispatch();
-	return (token: string) => {
-		const action = {
-			type: SET_LOGGED_IN,
-			payload: token
+			dispatch(action);
 		};
+	},
+	useLogout() {
+		const dispatch = useDispatch();
 
-		dispatch(action);
-	};
-};
-
-export const useLogout = () => {
-	const dispatch = useDispatch();
-
-	return () => {
 		localStorage.removeItem('bolttoken');
 
-		window.location.reload();
+		return () => {
+			const action: SetLoggedOut = {
+				type: UserActionConstants.SET_LOGGED_OUT
+			};
 
-		const action = {
-			type: SET_LOGGED_OUT
+			dispatch(action);
 		};
+	},
+	useSetUserId() {
+		const dispatch = useDispatch();
 
-		dispatch(action);
-	};
+		return userId => {
+			const action: SetUserId = {
+				type: UserActionConstants.SET_USER_ID,
+				payload: userId
+			};
+
+			dispatch(action);
+		};
+	}
 };

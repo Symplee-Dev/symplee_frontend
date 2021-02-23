@@ -3,25 +3,24 @@ import './index.scss';
 import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 
-import { RootStateOrAny, useSelector, useDispatch } from 'react-redux';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
 import { useChangeLogsLazyQuery, useUserLazyQuery } from '../graphql';
 import CreateGroup from './views/CreateGroup';
 import { useEffect, useState, useMemo } from 'react';
 import decode from 'jwt-decode';
-import { SET_USER_ID } from '../redux/actions/index';
 import ChatGroupIndex from './views/ChatGroupView/index';
 import ChangeLogModal from './ChangeLogModal';
+import { UserSelectors } from '../redux/selectors';
+import { UserActions } from '../redux/actions/index';
 
 const HomeApp = () => {
 	document.body.classList.add('body-app');
 
 	const location = useLocation();
 
-	const dispatch = useDispatch();
-
-	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
+	const userId = UserSelectors.useSelectUserId();
+	const setUserId = UserActions.useSetUserId();
 
 	// todo: extract to redux value
 	const [hasLatestChangeLog, setHasLatestChangelog] = useState({
@@ -54,7 +53,7 @@ const HomeApp = () => {
 	}>();
 
 	const [fetchUser, { data, loading, error, refetch }] = useUserLazyQuery({
-		variables: { id: userId },
+		variables: { id: userId! },
 		fetchPolicy: 'cache-first'
 	});
 
@@ -183,14 +182,11 @@ const HomeApp = () => {
 				);
 
 				if (tokenUser.userId) {
-					dispatch({
-						type: SET_USER_ID,
-						payload: { userId: tokenUser.userId }
-					});
+					setUserId(tokenUser.userId);
 				}
 			}
 		}
-	}, [dispatch, user, data]);
+	}, [user, data, setUserId]);
 
 	if (loading) return <CircularProgress color="primary" />;
 

@@ -1,8 +1,17 @@
 import { useSelector } from 'react-redux';
-import { Rstate } from '../types';
+import { RootState } from './types/state-types';
+import { RootSelectors } from './types/selector-types';
 
-export const useSelectAuth = () => {
-	const auth = useSelector((state: Rstate) => state.user.authenticated);
+export const UserSelectors: RootSelectors['user'] = {
+	useSelectAuth: () => {
+		const authenticated = useSelector(
+			(state: RootState) => state.user.authenticated
+		);
+		return authenticated;
+	},
+	useSelectUserId: () => {
+		const userId = useSelector((state: RootState) => state.user.userId);
 
-	return auth;
+		return userId;
+	}
 };

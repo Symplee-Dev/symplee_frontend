@@ -13,19 +13,23 @@ import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { useSelectAuth } from './redux/selectors';
 import HomeApp from './HomeApp/index';
 import decode from 'jwt-decode';
-import { SET_USER_ID } from './redux/actions/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
+import { UserSelectors } from './redux/selectors';
+import { UserActions } from './redux/actions/index';
 
-interface AppProps {}
+interface DecodedToken {
+	userId: number;
+	username: string;
+}
 
-const App: React.FC<AppProps> = () => {
+const App = () => {
 	const location = useLocation();
 
 	const dispatch = useDispatch();
-	const authenticated = useSelectAuth();
+	const authenticated = UserSelectors.useSelectAuth();
+	const setUserId = UserActions.useSetUserId();
 
 	const theme = createMuiTheme({
 		palette: {
@@ -40,19 +44,14 @@ const App: React.FC<AppProps> = () => {
 			const token = localStorage.getItem('bolttoken');
 
 			if (token && token.length > 0) {
-				const user: { userId: number; username: string } = decode(
-					token ?? ''
-				);
+				const user: DecodedToken = decode(token ?? '');
 
 				if (user.userId !== undefined) {
-					dispatch({
-						type: SET_USER_ID,
-						payload: { userId: user.userId }
-					});
+					setUserId(user.userId);
 				}
 			}
 		}
-	}, [dispatch, authenticated]);
+	}, [dispatch, authenticated, setUserId]);
 
 	return (
 		<ErrorBoundary
