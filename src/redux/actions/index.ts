@@ -1,5 +1,12 @@
-import { useDispatch } from 'react-redux';
-import { SetLoggedOut, SetUserId } from '../types/action-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { ClearNotification, ClearNotifications } from '../types/action-types';
+import { RootState } from '../types/state-types';
+import {
+	SetLoggedOut,
+	SetUserId,
+	AddNotification,
+	UIActionConstants
+} from '../types/action-types';
 import {
 	RootActions,
 	SetLoggedIn,
@@ -41,6 +48,49 @@ export const UserActions: RootActions['user'] = {
 				payload: userId
 			};
 
+			dispatch(action);
+		};
+	}
+};
+
+export const UIActions: RootActions['ui'] = {
+	useAddNotification() {
+		const dispatch = useDispatch();
+
+		return notification => {
+			const action: AddNotification = {
+				type: UIActionConstants.ADD_NOTIFICATION,
+				payload: notification
+			};
+			dispatch(action);
+		};
+	},
+	useClearNotification() {
+		const dispatch = useDispatch();
+
+		const notifications = useSelector(
+			(state: RootState) => state.ui.notifications
+		);
+
+		return notificationId => {
+			const filtered = notifications.filter(
+				notif => notif.id !== notificationId
+			);
+
+			const action: ClearNotification = {
+				type: UIActionConstants.CLEAR_NOTIFICATION,
+				payload: filtered
+			};
+			dispatch(action);
+		};
+	},
+	useClearNotifications() {
+		const dispatch = useDispatch();
+
+		return () => {
+			const action: ClearNotifications = {
+				type: UIActionConstants.CLEAR_NOTIFICATIONS
+			};
 			dispatch(action);
 		};
 	}
