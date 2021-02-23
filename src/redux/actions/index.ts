@@ -22,9 +22,9 @@ export const UserActions: RootActions['user'] = {
 	useLogout() {
 		const dispatch = useDispatch();
 
-		localStorage.removeItem('bolttoken');
-
 		return () => {
+			localStorage.removeItem('bolttoken');
+
 			const action: SetLoggedOut = {
 				type: UserActionConstants.SET_LOGGED_OUT
 			};

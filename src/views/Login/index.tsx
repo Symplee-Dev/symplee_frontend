@@ -1,74 +1,65 @@
-import React, { FormEvent, useEffect, useState } from 'react';
 import './style.scss';
 import { motion } from 'framer-motion';
 import NavBar from '../../components/NavBar';
 import FadeIn from 'react-fade-in';
 import { Link } from 'react-router-dom';
 import { LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
-import { useHistory } from 'react-router';
+import { useLogin, onLoginSubmit } from '../../hooks/useLoginForm';
 import { useLoginMutation } from '../../graphql';
-import { UserActions } from '../../redux/actions/index';
 
-interface LoginProps {}
-
-const Login: React.FC<LoginProps> = () => {
-	const history = useHistory();
-
-	const [loginCredentials, setLoginCredentials] = useState({
-		username: '',
-		password: '',
-		key: ''
-	});
-	const [errorState, setErrorState] = useState('');
-
-	const [usernameType, setUsernameType] = useState<'USERNAME' | 'EMAIL'>(
-		'EMAIL'
+const createTextField = (
+	onChange: (
+		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+	) => void,
+	name: string,
+	value: string,
+	labelTitle: string,
+	type: string = 'text',
+	withLabel: boolean = true,
+	className: string = 'input-field'
+) => {
+	return (
+		<>
+			{withLabel && <p className="input-title">{labelTitle}</p>}
+			<TextField
+				required
+				color="primary"
+				name={name}
+				variant="filled"
+				className={className}
+				type={type}
+				value={value}
+				onChange={e => onChange(e)}
+				inputProps={{
+					className: 'input-field'
+				}}
+			/>
+		</>
 	);
+};
 
+const Login = () => {
 	const [login, { data, loading, error }] = useLoginMutation();
 
-	const setAuth = UserActions.useLogin();
+	const {
+		errorState,
+		loginCredentials,
+		setLoginCredentials,
+		setUsernameType,
+		usernameType
+	} = useLogin(loading, error, data);
 
-	const onChange = event => {
+	const onChange = (
+		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+	) => {
 		setLoginCredentials({
 			...loginCredentials,
 			[event.target.name]: event.target.value
 		});
 	};
 
-	useEffect(() => {
-		if (!loading) {
-			if (error) {
-				setErrorState(error.message);
-			}
-
-			if (!error && data && data.login) {
-				setAuth(data.login.token);
-				localStorage.setItem('bolttoken', data.login.token);
-				history.push('/');
-			}
-		}
-	}, [data, loading, error, errorState, history, setAuth]);
-
-	const onSubmit = (e: FormEvent) => {
-		e.preventDefault();
-
-		if (usernameType === 'USERNAME') {
-			login({
-				variables: {
-					username:
-						loginCredentials.username + '#' + loginCredentials.key,
-					password: loginCredentials.password
-				}
-			});
-		} else {
-			login({
-				variables: {
-					email: loginCredentials.username,
-					password: loginCredentials.password
-				}
-			});
-		}
+	const onSubmit = e => {
+		onLoginSubmit(e, usernameType, loginCredentials, login);
 	};
 
 	return (
@@ -97,24 +88,14 @@ const Login: React.FC<LoginProps> = () => {
 								<MenuItem value="EMAIL">Email</MenuItem>
 								<MenuItem value="USERNAME">Username</MenuItem>
 							</Select>
-							{usernameType === 'EMAIL' && (
-								<>
-									<p className="input-title">Email</p>
-									<TextField
-										required
-										color="primary"
-										name="username"
-										variant="filled"
-										className="input-field"
-										type="email"
-										value={loginCredentials.username}
-										onChange={onChange}
-										inputProps={{
-											className: 'input-field'
-										}}
-									/>
-								</>
-							)}
+							{usernameType === 'EMAIL' &&
+								createTextField(
+									onChange,
+									'username',
+									loginCredentials.username,
+									'Email',
+									'text'
+								)}
 
 							{usernameType === 'USERNAME' && (
 								<>
@@ -123,49 +104,35 @@ const Login: React.FC<LoginProps> = () => {
 									</p>
 
 									<div className="username-input-group">
-										<TextField
-											required
-											name="username"
-											color="primary"
-											variant="filled"
-											className="input-field"
-											type="text"
-											value={loginCredentials.username}
-											onChange={onChange}
-											inputProps={{
-												className: 'input-field'
-											}}
-										/>
-										<TextField
-											required
-											color="primary"
-											name="key"
-											className="key-field"
-											variant="filled"
-											value={loginCredentials.key}
-											onChange={onChange}
-											inputProps={{
-												className: 'input-field'
-											}}
-										/>
+										{createTextField(
+											onChange,
+											'username',
+											loginCredentials.username,
+											'',
+											'text',
+											false
+										)}
+
+										{createTextField(
+											onChange,
+											'key',
+											loginCredentials.key,
+											'',
+											'text',
+											false,
+											'key-field'
+										)}
 									</div>
 								</>
 							)}
 
-							<p className="input-title">Password</p>
-							<TextField
-								required
-								name="password"
-								variant="filled"
-								color="primary"
-								className="input-field"
-								type="password"
-								value={loginCredentials.password}
-								onChange={onChange}
-								inputProps={{
-									className: 'input-field'
-								}}
-							/>
+							{createTextField(
+								onChange,
+								'password',
+								loginCredentials.password,
+								'Password',
+								'password'
+							)}
 							<Link to="/signup">Don't have an account?</Link>
 							{errorState.length > 0 && (
 								<p className="input-title error">

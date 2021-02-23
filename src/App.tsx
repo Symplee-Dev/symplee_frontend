@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, useLocation, Switch } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -11,47 +10,23 @@ import UserUi from './views/UserUI';
 
 import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import HomeApp from './HomeApp/index';
-import decode from 'jwt-decode';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
-import { UserSelectors } from './redux/selectors';
-import { UserActions } from './redux/actions/index';
+import { useLocalToken } from './hooks/useLocalToken';
 
-interface DecodedToken {
-	userId: number;
-	username: string;
-}
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#BB86FC'
+		}
+	}
+});
 
 const App = () => {
 	const location = useLocation();
+	const authenticated = useLocalToken();
 
-	const dispatch = useDispatch();
-	const authenticated = UserSelectors.useSelectAuth();
-	const setUserId = UserActions.useSetUserId();
-
-	const theme = createMuiTheme({
-		palette: {
-			primary: {
-				main: '#BB86FC'
-			}
-		}
-	});
-
-	useEffect(() => {
-		if (authenticated !== undefined && authenticated === false) {
-			const token = localStorage.getItem('bolttoken');
-
-			if (token && token.length > 0) {
-				const user: DecodedToken = decode(token ?? '');
-
-				if (user.userId !== undefined) {
-					setUserId(user.userId);
-				}
-			}
-		}
-	}, [dispatch, authenticated, setUserId]);
+	console.log(authenticated);
 
 	return (
 		<ErrorBoundary

@@ -1,15 +1,12 @@
-import React from 'react';
 import './style.scss';
 import Navbar from '../../components/NavBar';
-import heroimg from './hero.svg';
+import heroimg from '../../assets/hero.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import FadeIn from 'react-fade-in';
 import { useHistory } from 'react-router';
 
-interface HomeViewProps {}
-
-const HomeView: React.FC<HomeViewProps> = () => {
+const HomeView = () => {
 	const history = useHistory();
 
 	document.body.classList.remove('body-app');
