@@ -15,6 +15,7 @@ const Notifications = () => {
 		<>
 			{notifications.map(n => (
 				<Snackbar
+					key={n.id}
 					open={true}
 					autoHideDuration={n.autoTimeoutTime ?? 3000}
 					onClose={() => clearNotification(n.id)}

@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './App';
@@ -13,26 +13,22 @@ import { Integrations } from '@sentry/tracing';
 import setupLogRocketReact from 'logrocket-react';
 import LogRocket from 'logrocket';
 
-Sentry.init({
-	dsn: process.env.REACT_APP_SENTRY_DSN,
-	integrations: [new Integrations.BrowserTracing()],
-	tracesSampleRate: 1.0
-});
+import * as offlineWorker from './serviceWorkerRegistration';
+import { apolloClient } from './client';
 
-LogRocket.init(process.env.REACT_APP_LOG_ROCKET_ORG_ID!);
-setupLogRocketReact(LogRocket);
+// Cache Worker
+offlineWorker.register();
 
-export const apolloClient = new ApolloClient({
-	uri:
-		process.env.NODE_ENV === 'production'
-			? 'https://bolt--backend.herokuapp.com/graphql'
-			: 'http://localhost:5000/graphql',
-	cache: new InMemoryCache(),
-	defaultOptions: {
-		mutate: { errorPolicy: 'all' },
-		query: { errorPolicy: 'all' }
-	}
-});
+if (process.env.NODE_ENV === 'production') {
+	Sentry.init({
+		dsn: process.env.REACT_APP_SENTRY_DSN,
+		integrations: [new Integrations.BrowserTracing()],
+		tracesSampleRate: 1.0
+	});
+
+	LogRocket.init(process.env.REACT_APP_LOG_ROCKET_ORG_ID!);
+	setupLogRocketReact(LogRocket);
+}
 
 ReactDOM.render(
 	<Provider store={store}>
