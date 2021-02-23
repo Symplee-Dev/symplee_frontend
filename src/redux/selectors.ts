@@ -15,3 +15,18 @@ export const UserSelectors: RootSelectors['user'] = {
 		return userId;
 	}
 };
+
+export const UISelectors: RootSelectors['ui'] = {
+	useSelectChangeLog(id) {
+		const logs = useSelector((state: RootState) => state.ui.changelogs);
+
+		return logs.find(log => log.id === id);
+	},
+	useSelectHasLatestChangeLog() {
+		const hasLatest = useSelector(
+			(state: RootState) => state.ui.hasLatestChangeLog
+		);
+
+		return hasLatest;
+	}
+};

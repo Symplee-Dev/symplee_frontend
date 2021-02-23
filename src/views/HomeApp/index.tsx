@@ -11,20 +11,16 @@ import ChatGroupIndex from './views/ChatGroupView/index';
 import ChangeLogModal from './ChangeLogModal';
 import { UserSelectors } from '../../redux/selectors';
 import { UserActions } from '../../redux/actions/index';
+import { useChangeLog } from '../../hooks/useChangeLog';
 
 const HomeApp = () => {
+	// remove padding for home app
 	document.body.classList.add('body-app');
 
 	const location = useLocation();
 
 	const userId = UserSelectors.useSelectUserId();
 	const setUserId = UserActions.useSetUserId();
-
-	// todo: extract to redux value
-	const [hasLatestChangeLog, setHasLatestChangelog] = useState({
-		value: false,
-		dateSet: new Date().toString()
-	});
 
 	const [
 		getChangeLog,
@@ -33,10 +29,11 @@ const HomeApp = () => {
 		fetchPolicy: 'cache-first'
 	});
 
-	const [currentLog, setCurrentLog] = useState<
-		| { id: number; body: string; changes: string[]; version: string }
-		| undefined
-	>();
+	const { changeLogOpen, currentLog, setChangeLogOpen } = useChangeLog({
+		getChangeLog,
+		changeLog,
+		changeLogLoading
+	});
 
 	const [user, setUser] = useState<{
 		username: string;
@@ -54,104 +51,6 @@ const HomeApp = () => {
 		variables: { id: userId! },
 		fetchPolicy: 'cache-first'
 	});
-
-	const [changeLogOpen, setChangeLogOpen] = useState(false);
-	const [changeLogOpened, setChangeLogOpened] = useState(false);
-
-	// Todo: extract into util
-	useEffect(() => {
-		if (!hasLatestChangeLog.value && !changeLogLoading) {
-			if (changeLog) {
-				const storedChangelog = window.localStorage.getItem(
-					'bolt_changelog'
-				);
-
-				if (storedChangelog) {
-					// parse the stored changelog
-					const parsed: { id: number; version: string } = JSON.parse(
-						storedChangelog
-					);
-
-					// find one with a newer id if any
-					const newest = changeLog.changeLogs.find(
-						log => log.id === parsed.id + 1
-					);
-
-					if (newest) {
-						// if new version set new changelog to local storage
-						localStorage.setItem(
-							'bolt_changelog',
-							JSON.stringify({
-								id: newest.id,
-								version: newest.version
-							})
-						);
-						setHasLatestChangelog({
-							value: true,
-							dateSet: new Date().toString()
-						});
-						setCurrentLog(newest);
-					} else {
-						setHasLatestChangelog({
-							value: true,
-							dateSet: new Date().toString()
-						});
-						const newest = changeLog.changeLogs.find(
-							log => log.id === parsed.id
-						);
-						setChangeLogOpened(true);
-
-						setCurrentLog(newest);
-					}
-				} else {
-					const newest = changeLog.changeLogs.reduce(function (
-						prev,
-						current
-					) {
-						if (+current.id > +prev.id) {
-							return current;
-						} else {
-							return prev;
-						}
-					});
-
-					// fetch because none exists yet
-					localStorage.setItem(
-						'bolt_changelog',
-						JSON.stringify({
-							id: newest.id,
-							version: newest.version
-						})
-					);
-
-					setCurrentLog(newest);
-				}
-				setHasLatestChangelog({
-					value: true,
-					dateSet: new Date().toString()
-				});
-			} else {
-				// fetch data because no data yet
-				getChangeLog();
-			}
-		}
-
-		if (
-			hasLatestChangeLog.value === true &&
-			hasLatestChangeLog.dateSet === new Date().toString() &&
-			!changeLogOpened
-		) {
-			// set modal open
-			setChangeLogOpen(true);
-			setChangeLogOpened(true);
-		}
-	}, [
-		changeLog,
-		getChangeLog,
-		hasLatestChangeLog,
-		changeLogOpened,
-		changeLogLoading
-	]);
 
 	useMemo(() => {
 		if (!user) {

@@ -1,4 +1,4 @@
-import { User } from '../../graphql';
+import { User, ChangeLog } from '../../graphql';
 
 export type UserState = {
 	authenticated: boolean;
@@ -17,6 +17,8 @@ export type Notification = {
 
 export type UIState = {
 	notifications: Notification[];
+	hasLatestChangeLog: { value: boolean; dateSet: string };
+	changelogs: ChangeLog[];
 };
 
 export interface RootState {

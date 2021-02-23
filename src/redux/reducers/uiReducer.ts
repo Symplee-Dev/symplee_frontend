@@ -2,7 +2,9 @@ import { UIState } from '../types/state-types';
 import { UIActionConstants } from '../types/action-types';
 
 export const initialUIState: UIState = {
-	notifications: []
+	notifications: [],
+	hasLatestChangeLog: { value: false, dateSet: new Date().toString() },
+	changelogs: []
 };
 
 export const uiReducer = (
@@ -21,6 +23,12 @@ export const uiReducer = (
 		}
 		case UIActionConstants.CLEAR_NOTIFICATION: {
 			return { ...state, notifications: action.payload };
+		}
+		case UIActionConstants.SET_CHANGELOGS: {
+			return { ...state, changelogs: action.payload };
+		}
+		case UIActionConstants.SET_HAS_LATEST_CHANGELOG: {
+			return { ...state, hasLatestChangeLog: action.payload };
 		}
 		default:
 			return state;

@@ -1,4 +1,5 @@
 import { UserState, Notification } from './state-types';
+import { ChangeLog } from '../../graphql';
 
 export enum UserActionConstants {
 	SET_LOGGED_IN = 'SET_LOGGED_IN',
@@ -29,9 +30,20 @@ export interface SetUser {
 export enum UIActionConstants {
 	CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION',
 	CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS',
-	ADD_NOTIFICATION = 'ADD_NOTIFICATION'
+	ADD_NOTIFICATION = 'ADD_NOTIFICATION',
+	SET_CHANGELOGS = 'SET_CHANGELOGS',
+	SET_HAS_LATEST_CHANGELOG = 'SET_HAS_LATEST_CHANGELOG'
 }
 
+export interface SetHasLatestChangelog {
+	type: UIActionConstants.SET_HAS_LATEST_CHANGELOG;
+	payload: { value: boolean; dateSet: string };
+}
+
+export interface SetChangeLogs {
+	type: UIActionConstants.SET_CHANGELOGS;
+	payload: ChangeLog[];
+}
 export interface ClearNotifications {
 	type: UIActionConstants.CLEAR_NOTIFICATIONS;
 }
@@ -56,5 +68,7 @@ export type RootActions = {
 		useClearNotifications(): () => void;
 		useClearNotification(): (notificationId: number) => void;
 		useAddNotification(): (params: Notification) => void;
+		useSetChangeLogs(): (changelog: ChangeLog[]) => void;
+		useSetHasLatestChangeLog(): ({ value: boolean }) => void;
 	};
 };

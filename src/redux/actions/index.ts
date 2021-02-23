@@ -1,6 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { ClearNotification, ClearNotifications } from '../types/action-types';
+import {
+	ClearNotification,
+	ClearNotifications,
+	SetChangeLogs
+} from '../types/action-types';
 import { RootState } from '../types/state-types';
+import { SetHasLatestChangelog } from '../types/action-types';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -91,6 +96,30 @@ export const UIActions: RootActions['ui'] = {
 			const action: ClearNotifications = {
 				type: UIActionConstants.CLEAR_NOTIFICATIONS
 			};
+			dispatch(action);
+		};
+	},
+	useSetChangeLogs() {
+		const dispatch = useDispatch();
+
+		return changelogs => {
+			const action: SetChangeLogs = {
+				type: UIActionConstants.SET_CHANGELOGS,
+				payload: changelogs
+			};
+
+			dispatch(action);
+		};
+	},
+	useSetHasLatestChangeLog() {
+		const dispatch = useDispatch();
+
+		return val => {
+			const action: SetHasLatestChangelog = {
+				type: UIActionConstants.SET_HAS_LATEST_CHANGELOG,
+				payload: { value: val.value, dateSet: new Date().toString() }
+			};
+
 			dispatch(action);
 		};
 	}

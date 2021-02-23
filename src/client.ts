@@ -13,14 +13,10 @@ const httpLink = new HttpLink({
 			: 'http://localhost:5000/graphql'
 });
 
-console.log(localStorage.getItem('bolttoken'));
-
 const authMiddleware = new ApolloLink((operation, forward) => {
 	// add the authorization to the headers
 
 	const token = localStorage.getItem('bolttoken');
-
-	console.log('token', token);
 
 	if (token !== null && token !== undefined && token.length > 0) {
 		operation.setContext({
