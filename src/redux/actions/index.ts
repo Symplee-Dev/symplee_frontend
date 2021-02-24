@@ -6,10 +6,11 @@ import {
 } from '../types/action-types';
 import { RootState } from '../types/state-types';
 import { SetHasLatestChangelog, SetUser } from '../types/action-types';
-import { useUserLazyQuery } from '../../graphql';
-import { useEffect } from 'react';
+import { useUserLazyQuery, useUserQuery } from '../../graphql';
+import { useEffect, useMemo } from 'react';
 import { logger } from '../../utils/logger';
 import { UserSelectors } from '../selectors';
+import decode from 'jwt-decode';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -65,43 +66,25 @@ export const UserActions: RootActions['user'] = {
 
 		const dispatch = useDispatch();
 
-		const userReduxId = UserSelectors.useSelectUserId();
+		const token = useSelector((state: RootState) => state.user.token);
 
-		const [
-			fetchUser,
-			{ data, loading, error, refetch }
-		] = useUserLazyQuery();
+		const userReduxId: { userId: number } = decode(token);
 
-		useEffect(() => {
-			if (!data && !error && userReduxId) {
-				fetchUser({ variables: { id: userReduxId } });
+		const { data, loading, error, refetch } = useUserQuery({
+			variables: { id: userReduxId.userId },
+			onCompleted: data => {
+				const action: SetUser = {
+					type: UserActionConstants.SET_USER,
+					payload: data.user
+				};
+
+				dispatch(action);
+			},
+			onError: error => {
+				logger.error(error.message);
+				refetch({ id: userReduxId.userId });
 			}
-
-			if (!loading && !hasUser) {
-				if (error && refetch) {
-					logger.error(error.message);
-					refetch({ id: userReduxId });
-				}
-
-				if (data && !error) {
-					const action: SetUser = {
-						type: UserActionConstants.SET_USER,
-						payload: data.user
-					};
-
-					dispatch(action);
-				}
-			}
-		}, [
-			error,
-			loading,
-			refetch,
-			data,
-			dispatch,
-			hasUser,
-			userReduxId,
-			fetchUser
-		]);
+		});
 	}
 };
 
