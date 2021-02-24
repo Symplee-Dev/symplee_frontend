@@ -5,27 +5,12 @@ import CheckIcon from '@material-ui/icons/Check';
 
 import { useState, useEffect } from 'react';
 import { Avatar, LinearProgress, TextField } from '@material-ui/core';
-import { Exact, useCreateChatGroupMutation, UserQuery } from '../../../graphql';
+import { useCreateChatGroupMutation } from '../../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { useHistory } from 'react-router';
-import { ApolloQueryResult } from '@apollo/client';
 import axios from 'axios';
 
-const CreateGroup = ({
-	refetch
-}: {
-	refetch:
-		| ((
-				variables?:
-					| Partial<
-							Exact<{
-								id: number;
-							}>
-					  >
-					| undefined
-		  ) => Promise<ApolloQueryResult<UserQuery>>)
-		| undefined;
-}) => {
+const CreateGroup = () => {
 	const [newGroup, setNewGroup] = useState({
 		isPublic: false,
 		name: '',
@@ -63,11 +48,9 @@ const CreateGroup = ({
 
 	useEffect(() => {
 		if (data && !loading && !error) {
-			//@ts-ignore
-			refetch({ fetchPolicy: 'network-only' });
 			history.push('/group/' + data.createChatGroup.id);
 		}
-	}, [data, error, history, loading, refetch]);
+	}, [data, error, history, loading]);
 
 	const handleSubmit = e => {
 		e.preventDefault();

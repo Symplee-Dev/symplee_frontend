@@ -63,17 +63,19 @@ export const useChangeLog = ({
 						});
 						setCurrentLog(newest);
 					} else {
-						setHasLatestChangeLog({
-							value: true
-						});
+						if (!hasLatestChangeLog) {
+							setHasLatestChangeLog({
+								value: true
+							});
 
-						const newest = changeLog.changeLogs.find(
-							log => log.id === parsed.id
-						);
+							const newest = changeLog.changeLogs.find(
+								log => log.id === parsed.id
+							);
 
-						setChangeLogOpened(true);
+							setChangeLogOpened(true);
 
-						setCurrentLog(newest);
+							setCurrentLog(newest);
+						}
 					}
 				} else {
 					const newest = changeLog.changeLogs.reduce(function (

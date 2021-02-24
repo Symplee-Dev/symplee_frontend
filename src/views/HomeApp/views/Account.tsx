@@ -14,14 +14,12 @@ import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
-import { useUpdateUserMutation, Exact, UserQuery } from '../../../graphql';
+import { useUpdateUserMutation } from '../../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { Alert } from '@material-ui/lab';
-import { ApolloQueryResult } from '@apollo/client';
 
 const Account = ({
-	user,
-	refetch
+	user
 }: {
 	user: {
 		name: string;
@@ -31,15 +29,6 @@ const Account = ({
 		createdAt: string;
 		avatar?: string;
 	};
-	refetch: (
-		variables?:
-			| Partial<
-					Exact<{
-						id: number;
-					}>
-			  >
-			| undefined
-	) => Promise<ApolloQueryResult<UserQuery>>;
 }) => {
 	const [formState, setFormState] = useState<{
 		name: string;
@@ -72,7 +61,6 @@ const Account = ({
 		updateUser({ variables: { user: formState, userId } }).then(() => {
 			setNotifState({ title: 'User Updated Successfully', value: true });
 			//@ts-ignore
-			refetch({ fetchPolicy: 'network-only' });
 		});
 	};
 

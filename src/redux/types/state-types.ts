@@ -1,10 +1,26 @@
-import { User, ChangeLog } from '../../graphql';
+import { ChangeLog, Maybe } from '../../graphql';
+
+type UserFromQuery = {
+	username: string;
+	name: string;
+	id: number;
+	email: string;
+	key: string;
+	createdAt: string;
+	verified: boolean;
+	avatar?: Maybe<string>;
+	chatGroups: {
+		name: string;
+		id: number;
+		avatar?: Maybe<string>;
+	}[];
+};
 
 export type UserState = {
 	authenticated: boolean;
 	token: string;
 	userId: number | undefined;
-	user: User | undefined;
+	user: UserFromQuery | undefined;
 };
 
 export type Notification = {

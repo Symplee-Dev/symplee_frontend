@@ -5,7 +5,12 @@ import {
 	SetChangeLogs
 } from '../types/action-types';
 import { RootState } from '../types/state-types';
-import { SetHasLatestChangelog } from '../types/action-types';
+import { SetHasLatestChangelog, SetUser } from '../types/action-types';
+import { useUserLazyQuery, useUserQuery } from '../../graphql';
+import { useEffect, useMemo, useState } from 'react';
+import { logger } from '../../utils/logger';
+import decode from 'jwt-decode';
+import { UserSelectors } from '../selectors';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -17,6 +22,7 @@ import {
 	SetLoggedIn,
 	UserActionConstants
 } from '../types/action-types';
+import { useLazyQuery } from '@apollo/client';
 
 export const UserActions: RootActions['user'] = {
 	useLogin() {
@@ -55,6 +61,49 @@ export const UserActions: RootActions['user'] = {
 
 			dispatch(action);
 		};
+	},
+	useGetUser() {
+		const hasUser = useSelector((state: RootState) => state.user.user);
+
+		const dispatch = useDispatch();
+
+		const userReduxId = UserSelectors.useSelectUserId();
+
+		const [
+			fetchUser,
+			{ data, loading, error, refetch }
+		] = useUserLazyQuery();
+
+		useEffect(() => {
+			if (!data && !error && userReduxId) {
+				fetchUser({ variables: { id: userReduxId } });
+			}
+
+			if (!loading && !hasUser) {
+				if (error && refetch) {
+					logger.error(error.message);
+					refetch({ id: userReduxId });
+				}
+
+				if (data && !error) {
+					const action: SetUser = {
+						type: UserActionConstants.SET_USER,
+						payload: data.user
+					};
+
+					dispatch(action);
+				}
+			}
+		}, [
+			error,
+			loading,
+			refetch,
+			data,
+			dispatch,
+			hasUser,
+			userReduxId,
+			fetchUser
+		]);
 	}
 };
 

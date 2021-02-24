@@ -1,5 +1,5 @@
 import { UserState, Notification } from './state-types';
-import { ChangeLog } from '../../graphql';
+import { ChangeLog, User } from '../../graphql';
 
 export enum UserActionConstants {
 	SET_LOGGED_IN = 'SET_LOGGED_IN',
@@ -63,6 +63,7 @@ export type RootActions = {
 		useLogin(): (token: string) => void;
 		useLogout(): () => void;
 		useSetUserId(): (id: number) => void;
+		useGetUser(): void;
 	};
 	ui: {
 		useClearNotifications(): () => void;

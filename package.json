@@ -21,6 +21,7 @@
 		"moment": "^2.29.1",
 		"random-hex": "^1.0.2",
 		"react": "^17.0.1",
+		"react-color-log": "^1.0.4",
 		"react-dom": "^17.0.1",
 		"react-error-boundary": "^3.1.0",
 		"react-fade-in": "^2.0.1",
