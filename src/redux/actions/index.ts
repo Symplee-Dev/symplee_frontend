@@ -6,10 +6,8 @@ import {
 } from '../types/action-types';
 import { RootState } from '../types/state-types';
 import { SetHasLatestChangelog, SetUser } from '../types/action-types';
-import { useUserLazyQuery, useUserQuery } from '../../graphql';
-import { useEffect, useMemo } from 'react';
+import { useUserQuery } from '../../graphql';
 import { logger } from '../../utils/logger';
-import { UserSelectors } from '../selectors';
 import decode from 'jwt-decode';
 import {
 	SetLoggedOut,
