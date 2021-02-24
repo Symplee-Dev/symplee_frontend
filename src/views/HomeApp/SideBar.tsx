@@ -9,8 +9,8 @@ import { Avatar, SvgIconTypeMap, Tooltip } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import randomHex from 'random-hex';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useLogout } from '../redux/actions';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import { UserActions } from '../../redux/actions/index';
 
 const links: {
 	route: string;
@@ -66,7 +66,7 @@ const Sidebar = ({
 
 	const [pageState, setPageState] = useState('');
 
-	const logout = useLogout();
+	const logout = UserActions.useLogout();
 
 	let navLinks = links.map(link => (
 		<NavComponent

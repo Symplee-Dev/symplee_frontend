@@ -12,7 +12,11 @@ import CheckIcon from '@material-ui/icons/Check';
 import { useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import Picker from 'emoji-picker-react';
-import { Exact, useCreateChatMutation, ChatGroupQuery } from '../../../graphql';
+import {
+	Exact,
+	useCreateChatMutation,
+	ChatGroupQuery
+} from '../../../../graphql';
 import { ApolloQueryResult } from '@apollo/client';
 
 const CreateChatModal = ({

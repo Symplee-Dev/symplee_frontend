@@ -11,7 +11,7 @@ import {
 	useUpdateChatGroupMutation,
 	Exact,
 	ChatGroupQuery
-} from '../../../graphql';
+} from '../../../../graphql';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { useState } from 'react';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';

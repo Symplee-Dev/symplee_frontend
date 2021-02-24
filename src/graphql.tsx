@@ -19,6 +19,7 @@ export type Scalars = {
 export type Query = {
   test: Scalars['String'];
   user: User;
+  admin: Admin;
   changeLogById: ChangeLog;
   changeLogs: Array<ChangeLog>;
   serverStatus: Scalars['Boolean'];
@@ -65,6 +66,7 @@ export type Mutation = {
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
+  deleteFeedback: Scalars['Boolean'];
   toggleFeedbackResolved: AppFeedback;
   updateUser: User;
   updateChatGroup: ChatGroup;
@@ -119,6 +121,11 @@ export type MutationEditChangeLogArgs = {
 
 export type MutationSendFeedbackArgs = {
   feedback: SendAppFeedbackInput;
+};
+
+
+export type MutationDeleteFeedbackArgs = {
+  id: Scalars['Int'];
 };
 
 

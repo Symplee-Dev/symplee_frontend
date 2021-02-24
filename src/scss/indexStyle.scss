@@ -3,6 +3,13 @@
 @import './ChatGroup.scss';
 @import './ErrorPage.scss';
 @import './ChangeLog.scss';
+@import './Home.scss';
+
+@import './HomeApp/Account.scss';
+@import './HomeApp/HomeApp.scss';
+@import './Onboarding/Login.scss';
+@import './Onboarding/Register.scss';
+@import './HomeApp/CreateGroup.scss';
 
 * {
 	margin: 0;

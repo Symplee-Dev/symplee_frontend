@@ -17,7 +17,6 @@ const theme = createMuiTheme({
 });
 
 const ErrorPage = ({ error, resetErrorBoundary }) => {
-	console.log(error);
 	document.body.classList.add('body-app');
 
 	const [formState, setFormState] = useState({
