@@ -60,7 +60,7 @@ export const UserActions: RootActions['user'] = {
 		};
 	},
 	useGetUser() {
-		const hasUser = useSelector((state: RootState) => state.user.user);
+		// const hasUser = useSelector((state: RootState) => state.user.user);
 
 		const dispatch = useDispatch();
 
@@ -68,7 +68,7 @@ export const UserActions: RootActions['user'] = {
 
 		const userReduxId: { userId: number } = decode(token);
 
-		const { data, loading, error, refetch } = useUserQuery({
+		const { refetch } = useUserQuery({
 			variables: { id: userReduxId.userId },
 			onCompleted: data => {
 				const action: SetUser = {
