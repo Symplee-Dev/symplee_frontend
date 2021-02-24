@@ -1,5 +1,5 @@
 import { UserState, Notification } from './state-types';
-import { ChangeLog, User } from '../../graphql';
+import { ChangeLog } from '../../graphql';
 
 export enum UserActionConstants {
 	SET_LOGGED_IN = 'SET_LOGGED_IN',

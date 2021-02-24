@@ -6,10 +6,9 @@ import {
 } from '../types/action-types';
 import { RootState } from '../types/state-types';
 import { SetHasLatestChangelog, SetUser } from '../types/action-types';
-import { useUserLazyQuery, useUserQuery } from '../../graphql';
-import { useEffect, useMemo, useState } from 'react';
+import { useUserLazyQuery } from '../../graphql';
+import { useEffect } from 'react';
 import { logger } from '../../utils/logger';
-import decode from 'jwt-decode';
 import { UserSelectors } from '../selectors';
 import {
 	SetLoggedOut,
@@ -22,7 +21,6 @@ import {
 	SetLoggedIn,
 	UserActionConstants
 } from '../types/action-types';
-import { useLazyQuery } from '@apollo/client';
 
 export const UserActions: RootActions['user'] = {
 	useLogin() {
