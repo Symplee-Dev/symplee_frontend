@@ -31,7 +31,7 @@ export const useLocalToken = () => {
 				}
 			}
 		}
-	}, [authenticated, setUserId]);
+	}, [authenticated, setUserId, dispatch]);
 
 	return authenticated;
 };
