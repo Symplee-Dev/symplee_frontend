@@ -16,6 +16,10 @@ import LogRocket from 'logrocket';
 import * as offlineWorker from './serviceWorkerRegistration';
 import { apolloClient } from './client';
 
+import appUtilities from './utils/app-utilities';
+
+appUtilities.test();
+
 // Cache Worker
 offlineWorker.register();
 

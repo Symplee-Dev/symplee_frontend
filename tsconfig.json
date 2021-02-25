@@ -21,7 +21,7 @@
 		"jsx": "react-jsx",
 		"typeRoots": [
 			"./node_modules/@types/",
-			"src/@types",
+			"./src/@types",
 			"./src/domains/",
 			"../@types",
 			"./src/@types/graphql/generated.d.ts",

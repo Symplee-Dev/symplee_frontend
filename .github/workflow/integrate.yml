@@ -16,6 +16,6 @@ jobs:
                   node-version: 14
             - name: setup
               run: |
-                  yarn install
+                  npm install
             - name: typecheck
               run: npm run typecheck
