@@ -144,15 +144,15 @@
 		display: flex;
 		flex-wrap: wrap;
 
-		padding: 1.2rem;
+		padding: 0.5rem;
 		overflow-y: hidden;
 		box-sizing: border-box;
 
 		.chat-div {
 			box-sizing: border-box;
 			background: #404040;
-			width: 20%;
-			height: 250px;
+			width: 90%;
+			height: 150px;
 			border-radius: 1rem;
 			display: flex;
 			flex-direction: column;
@@ -160,6 +160,9 @@
 			align-items: center;
 			transition: 0.3s;
 			margin-left: 1rem;
+			margin-bottom: 2rem;
+			padding: 0.5rem;
+			box-sizing: border-box;
 		}
 
 		.chat-div:hover {

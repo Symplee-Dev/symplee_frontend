@@ -17,14 +17,11 @@ const HomeView = () => {
 				<div className="left">
 					<FadeIn delay={300}>
 						<h2>
-							Say Hello To{' '}
-							<span className="logo">
-								BOLT <FontAwesomeIcon icon={faBolt} />
-							</span>
+							Say Hello To <span className="logo">Symplee</span>
 						</h2>
 						<hr />
 						<p>
-							Bolt is the all new chat app that brings together
+							Symplee is the all new chat app that brings together
 							both teams and communities. With bolt you can use it
 							however you like, whether it's managing a team, or
 							building a community. Bolt has the tools to help you
