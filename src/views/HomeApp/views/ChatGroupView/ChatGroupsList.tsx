@@ -4,6 +4,7 @@ import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissa
 import CreateChatModal from './CreateChatModal';
 import { useState } from 'react';
 import { ApolloQueryResult } from '@apollo/client';
+import MembersBar from './MembersBar';
 
 const ChatGroupsList = ({
 	chats,
@@ -32,36 +33,40 @@ const ChatGroupsList = ({
 	const [createChatModal, setCreateChatModal] = useState(false);
 
 	return (
-		<div className="chat-group-list">
-			{chats?.map(chat => {
-				return (
-					<div className="chat-div chat" key={chat?.id}>
-						{chat?.name}
+		<div className="chat-group-list-root">
+			<div className="chat-group-list">
+				{chats?.map(chat => {
+					return (
+						<div className="chat-div chat" key={chat?.id}>
+							#{chat?.name}
+						</div>
+					);
+				})}
+
+				{isAuthor && (
+					<Tooltip title="Create a new chat">
+						<div
+							className="chat-div create-chat"
+							onClick={() => setCreateChatModal(true)}
+						>
+							+
+						</div>
+					</Tooltip>
+				)}
+				{chats && chats.length <= 0 && (
+					<div className="no-chats">
+						<p>0 chats available</p>
+						<SentimentVeryDissatisfiedIcon className="icon" />
 					</div>
-				);
-			})}
-			{chats && chats.length <= 0 && (
-				<div className="no-chats">
-					<p>0 chats available</p>
-					<SentimentVeryDissatisfiedIcon className="icon" />
-				</div>
-			)}
-			{isAuthor && (
-				<Tooltip title="Create a new chat">
-					<div
-						className="chat-div create-chat"
-						onClick={() => setCreateChatModal(true)}
-					>
-						+
-					</div>
-				</Tooltip>
-			)}
-			<CreateChatModal
-				chatGroupId={id}
-				open={createChatModal}
-				setOpen={setCreateChatModal}
-				refetch={refetch}
-			/>
+				)}
+				<CreateChatModal
+					chatGroupId={id}
+					open={createChatModal}
+					setOpen={setCreateChatModal}
+					refetch={refetch}
+				/>
+			</div>
+			<MembersBar chatGroupId={id} />
 		</div>
 	);
 };

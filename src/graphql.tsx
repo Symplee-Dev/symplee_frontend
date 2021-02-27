@@ -22,11 +22,13 @@ export type Query = {
   admin: Admin;
   changeLogById: ChangeLog;
   changeLogs: Array<ChangeLog>;
+  latestChangeLog: ChangeLog;
   serverStatus: Scalars['Boolean'];
   chatGroup: ChatGroup;
   hasChat: Scalars['Boolean'];
   getFeedback: Array<AppFeedback>;
   feedbackById: AppFeedback;
+  getMembers: Array<User>;
 };
 
 
@@ -55,10 +57,16 @@ export type QueryFeedbackByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryGetMembersArgs = {
+  chatId: Scalars['Int'];
+};
+
 export type Mutation = {
   signup: User;
   login?: Maybe<LoginReturn>;
-  createAdmin: Admin;
+  sendAdminInvite: Scalars['Boolean'];
+  createAdmin: NewAdmin;
   adminLogin?: Maybe<LoginReturn>;
   verifyEmail: Scalars['Boolean'];
   createChat: Chat;
@@ -80,6 +88,11 @@ export type MutationSignupArgs = {
 
 export type MutationLoginArgs = {
   credentials: LoginInput;
+};
+
+
+export type MutationSendAdminInviteArgs = {
+  admin: AdminInviteInput;
 };
 
 
@@ -144,6 +157,11 @@ export type MutationUpdateUserArgs = {
 export type MutationUpdateChatGroupArgs = {
   group?: Maybe<UpdateChatGroupInput>;
   chatGroupId: Scalars['Int'];
+};
+
+export type AdminInviteInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type UpdateChatGroupInput = {
@@ -213,6 +231,19 @@ export type Admin = {
   key: Scalars['String'];
 };
 
+export type NewAdmin = {
+  id: Scalars['Int'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  pin: Scalars['Int'];
+  created_at: Scalars['String'];
+  verified: Scalars['Boolean'];
+  key: Scalars['String'];
+  token: Scalars['String'];
+};
+
 export type ChangeLog = {
   id: Scalars['Int'];
   body: Scalars['String'];
@@ -249,6 +280,7 @@ export type UpdateUserInput = {
 };
 
 export type AdminInput = {
+  token: Scalars['String'];
   email: Scalars['String'];
   name: Scalars['String'];
   username: Scalars['String'];
@@ -280,6 +312,7 @@ export type ChatGroup = {
   chats: Array<Maybe<Chat>>;
   createdBy: Scalars['Int'];
   avatar?: Maybe<Scalars['String']>;
+  members: Array<User>;
 };
 
 export type Chat = {
@@ -329,6 +362,13 @@ export type CreateChatGroupMutationVariables = Exact<{
 
 
 export type CreateChatGroupMutation = { createChatGroup: { id: number } };
+
+export type GetMembersQueryVariables = Exact<{
+  chatId: Scalars['Int'];
+}>;
+
+
+export type GetMembersQuery = { getMembers: Array<{ id: number, username: string, avatar?: Maybe<string>, key: string }> };
 
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
@@ -530,6 +570,42 @@ export function useCreateChatGroupMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateChatGroupMutationHookResult = ReturnType<typeof useCreateChatGroupMutation>;
 export type CreateChatGroupMutationResult = Apollo.MutationResult<CreateChatGroupMutation>;
 export type CreateChatGroupMutationOptions = Apollo.BaseMutationOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
+export const GetMembersDocument = gql`
+    query GetMembers($chatId: Int!) {
+  getMembers(chatId: $chatId) {
+    id
+    username
+    avatar
+    key
+  }
+}
+    `;
+
+/**
+ * __useGetMembersQuery__
+ *
+ * To run a query within a React component, call `useGetMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMembersQuery({
+ *   variables: {
+ *      chatId: // value for 'chatId'
+ *   },
+ * });
+ */
+export function useGetMembersQuery(baseOptions: Apollo.QueryHookOptions<GetMembersQuery, GetMembersQueryVariables>) {
+        return Apollo.useQuery<GetMembersQuery, GetMembersQueryVariables>(GetMembersDocument, baseOptions);
+      }
+export function useGetMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMembersQuery, GetMembersQueryVariables>) {
+          return Apollo.useLazyQuery<GetMembersQuery, GetMembersQueryVariables>(GetMembersDocument, baseOptions);
+        }
+export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>;
+export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>;
+export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String, $email: String, $password: String!) {
   login(credentials: {email: $email, password: $password, username: $username}) {
