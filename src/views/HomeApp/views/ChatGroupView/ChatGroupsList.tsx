@@ -42,12 +42,7 @@ const ChatGroupsList = ({
 						</div>
 					);
 				})}
-				{chats && chats.length <= 0 && (
-					<div className="no-chats">
-						<p>0 chats available</p>
-						<SentimentVeryDissatisfiedIcon className="icon" />
-					</div>
-				)}
+
 				{isAuthor && (
 					<Tooltip title="Create a new chat">
 						<div
@@ -58,6 +53,12 @@ const ChatGroupsList = ({
 						</div>
 					</Tooltip>
 				)}
+				{chats && chats.length <= 0 && (
+					<div className="no-chats">
+						<p>0 chats available</p>
+						<SentimentVeryDissatisfiedIcon className="icon" />
+					</div>
+				)}
 				<CreateChatModal
 					chatGroupId={id}
 					open={createChatModal}
@@ -65,7 +66,7 @@ const ChatGroupsList = ({
 					refetch={refetch}
 				/>
 			</div>
-			<MembersBar />
+			<MembersBar chatGroupId={id} />
 		</div>
 	);
 };

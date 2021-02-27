@@ -3,7 +3,7 @@ import { Avatar } from '@material-ui/core';
 const MemberCard = ({
 	user
 }: {
-	user: { username: string; key: string; avatar: string };
+	user: { username: string; key: string; avatar?: string };
 }) => {
 	return (
 		<div className="member-card">

@@ -1,0 +1,8 @@
+query GetMembers($chatId: Int!) {
+	getMembers(chatId: $chatId) {
+		id
+		username
+		avatar
+		key
+	}
+}
