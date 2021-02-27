@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Login from './views/Onboarding/Login';
 import Home from '../src/views/Home';
 import Register from './views/Onboarding/Register';
+import ForgotPassword from './views/Onboarding/ForgotPassword';
 
 import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
@@ -40,6 +41,9 @@ const App = () => {
 						</Route>
 						<Route exact path="/signup">
 							<Register />
+						</Route>
+						<Route exact path="/forgot-password">
+							<ForgotPassword />
 						</Route>
 
 						<Route exact path="/auth/verify/:token">

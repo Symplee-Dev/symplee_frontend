@@ -9,11 +9,13 @@
 @import './HomeApp/HomeApp.scss';
 @import './Onboarding/Login.scss';
 @import './Onboarding/Register.scss';
+@import './Onboarding/ForgotPassword.scss';
 @import './HomeApp/CreateGroup.scss';
 
 * {
 	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
 
 body {

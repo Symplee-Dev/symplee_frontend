@@ -34,7 +34,7 @@ const Login = () => {
 	return (
 		<>
 			<NavBar />
-			<div className="login login__container">
+			<form className="login login__container">
 				<motion.div exit={{ opacity: 0 }}>
 					<FadeIn delay={300}>
 						<h3>Welcome Back!</h3>
@@ -72,7 +72,7 @@ const Login = () => {
 										Username And Key
 									</p>
 
-									<div className="username-input-group">
+									<form className="username-input-group">
 										{createTextField(
 											onChange,
 											'username',
@@ -91,7 +91,7 @@ const Login = () => {
 											false,
 											'key-field'
 										)}
-									</div>
+									</form>
 								</>
 							)}
 
@@ -102,7 +102,12 @@ const Login = () => {
 								'Password',
 								'password'
 							)}
-							<Link to="/signup">Don't have an account?</Link>
+							<form className="linkRow">
+								<Link to="/signup">Don't have an account?</Link>
+								<Link to="/forgot-password">
+									Forgot Password?
+								</Link>
+							</form>
 							{errorState.length > 0 && (
 								<p className="input-title error">
 									{errorState.toString()}
@@ -122,7 +127,7 @@ const Login = () => {
 						</form>
 					</FadeIn>
 				</motion.div>
-			</div>
+			</form>
 		</>
 	);
 };
