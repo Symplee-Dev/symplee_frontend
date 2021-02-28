@@ -1,0 +1,3 @@
+subscription MessageSent($chatGroupId: Int!) {
+	messageSent(chatGroupId: $chatGroupId)
+}

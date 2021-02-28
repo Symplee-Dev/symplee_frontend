@@ -140,19 +140,21 @@
 
 	.chat-group-list {
 		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-wrap: wrap;
-
-		padding: 0.5rem;
-		overflow-y: hidden;
+		height: 80vh;
 		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+
+		overflow-y: scroll;
+		box-sizing: border-box;
+		padding-top: 1rem;
+		padding-bottom: 5rem;
 
 		.chat-div {
 			box-sizing: border-box;
 			background: #404040;
 			width: 90%;
-			height: 150px;
+			min-height: 150px;
 			border-radius: 1rem;
 			display: flex;
 			flex-direction: column;
@@ -160,7 +162,7 @@
 			align-items: center;
 			transition: 0.3s;
 			margin-left: 1rem;
-			margin-bottom: 2rem;
+			margin-bottom: 1rem;
 			padding: 0.5rem;
 			box-sizing: border-box;
 		}

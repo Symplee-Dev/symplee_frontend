@@ -78,6 +78,7 @@ export type Mutation = {
   toggleFeedbackResolved: AppFeedback;
   updateUser: User;
   updateChatGroup: ChatGroup;
+  sendMessage: Scalars['Boolean'];
 };
 
 
@@ -156,6 +157,20 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateChatGroupArgs = {
   group?: Maybe<UpdateChatGroupInput>;
+  chatGroupId: Scalars['Int'];
+};
+
+
+export type MutationSendMessageArgs = {
+  message: Scalars['String'];
+};
+
+export type Subscription = {
+  messageSent: Scalars['String'];
+};
+
+
+export type SubscriptionMessageSentArgs = {
   chatGroupId: Scalars['Int'];
 };
 
@@ -362,6 +377,13 @@ export type CreateChatGroupMutationVariables = Exact<{
 
 
 export type CreateChatGroupMutation = { createChatGroup: { id: number } };
+
+export type MessageSentSubscriptionVariables = Exact<{
+  chatGroupId: Scalars['Int'];
+}>;
+
+
+export type MessageSentSubscription = { messageSent: string };
 
 export type GetMembersQueryVariables = Exact<{
   chatId: Scalars['Int'];
@@ -570,6 +592,33 @@ export function useCreateChatGroupMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateChatGroupMutationHookResult = ReturnType<typeof useCreateChatGroupMutation>;
 export type CreateChatGroupMutationResult = Apollo.MutationResult<CreateChatGroupMutation>;
 export type CreateChatGroupMutationOptions = Apollo.BaseMutationOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
+export const MessageSentDocument = gql`
+    subscription MessageSent($chatGroupId: Int!) {
+  messageSent(chatGroupId: $chatGroupId)
+}
+    `;
+
+/**
+ * __useMessageSentSubscription__
+ *
+ * To run a query within a React component, call `useMessageSentSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageSentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageSentSubscription({
+ *   variables: {
+ *      chatGroupId: // value for 'chatGroupId'
+ *   },
+ * });
+ */
+export function useMessageSentSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageSentSubscription, MessageSentSubscriptionVariables>) {
+        return Apollo.useSubscription<MessageSentSubscription, MessageSentSubscriptionVariables>(MessageSentDocument, baseOptions);
+      }
+export type MessageSentSubscriptionHookResult = ReturnType<typeof useMessageSentSubscription>;
+export type MessageSentSubscriptionResult = Apollo.SubscriptionResult<MessageSentSubscription>;
 export const GetMembersDocument = gql`
     query GetMembers($chatId: Int!) {
   getMembers(chatId: $chatId) {

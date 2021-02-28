@@ -5,6 +5,7 @@ import CreateChatModal from './CreateChatModal';
 import { useState } from 'react';
 import { ApolloQueryResult } from '@apollo/client';
 import MembersBar from './MembersBar';
+import { useHistory } from 'react-router';
 
 const ChatGroupsList = ({
 	chats,
@@ -17,6 +18,8 @@ const ChatGroupsList = ({
 		| Maybe<{
 				id: number;
 				name: string;
+				icon: string;
+				isPublic: boolean;
 		  }>[]
 		| undefined;
 	isAuthor: boolean;
@@ -32,13 +35,22 @@ const ChatGroupsList = ({
 }) => {
 	const [createChatModal, setCreateChatModal] = useState(false);
 
+	const history = useHistory();
+
 	return (
 		<div className="chat-group-list-root">
 			<div className="chat-group-list">
 				{chats?.map(chat => {
 					return (
-						<div className="chat-div chat" key={chat?.id}>
-							#{chat?.name}
+						<div
+							className="chat-div chat"
+							key={chat?.id}
+							onClick={() =>
+								history.push(`/group/${id}/chat/${chat?.id}`)
+							}
+						>
+							<p>#{chat?.name}</p>
+							<p>{chat?.icon}</p>
 						</div>
 					);
 				})}
