@@ -12,6 +12,7 @@ import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import HomeApp from './views/HomeApp/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
+import PasswordReset from './views/ResetPassword';
 import { useLocalToken } from './hooks/useLocalToken';
 import Notifications from './components/Notifications';
 
@@ -48,6 +49,9 @@ const App = () => {
 
 						<Route exact path="/auth/verify/:token">
 							<EmailVerificationScreen />
+						</Route>
+						<Route exact path="/reset/verify/:token">
+							<PasswordReset />
 						</Route>
 
 						<Route path="/">

@@ -22,6 +22,7 @@ export type Query = {
   admin: Admin;
   changeLogById: ChangeLog;
   changeLogs: Array<ChangeLog>;
+  latestChangeLog: ChangeLog;
   serverStatus: Scalars['Boolean'];
   chatGroup: ChatGroup;
   hasChat: Scalars['Boolean'];
@@ -56,9 +57,11 @@ export type QueryFeedbackByIdArgs = {
 };
 
 export type Mutation = {
+  sendForgotPasswordEmail: Scalars['Boolean'];
   signup: User;
   login?: Maybe<LoginReturn>;
-  createAdmin: Admin;
+  sendAdminInvite: Scalars['Boolean'];
+  createAdmin: NewAdmin;
   adminLogin?: Maybe<LoginReturn>;
   verifyEmail: Scalars['Boolean'];
   createChat: Chat;
@@ -73,6 +76,12 @@ export type Mutation = {
 };
 
 
+export type MutationSendForgotPasswordEmailArgs = {
+  email: Scalars['String'];
+  origin?: Maybe<Scalars['String']>;
+};
+
+
 export type MutationSignupArgs = {
   user: UserInput;
 };
@@ -80,6 +89,11 @@ export type MutationSignupArgs = {
 
 export type MutationLoginArgs = {
   credentials: LoginInput;
+};
+
+
+export type MutationSendAdminInviteArgs = {
+  admin: AdminInviteInput;
 };
 
 
@@ -137,13 +151,18 @@ export type MutationToggleFeedbackResolvedArgs = {
 
 export type MutationUpdateUserArgs = {
   user: UpdateUserInput;
-  userId: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
 };
 
 
 export type MutationUpdateChatGroupArgs = {
   group?: Maybe<UpdateChatGroupInput>;
   chatGroupId: Scalars['Int'];
+};
+
+export type AdminInviteInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type UpdateChatGroupInput = {
@@ -213,6 +232,19 @@ export type Admin = {
   key: Scalars['String'];
 };
 
+export type NewAdmin = {
+  id: Scalars['Int'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  pin: Scalars['Int'];
+  created_at: Scalars['String'];
+  verified: Scalars['Boolean'];
+  key: Scalars['String'];
+  token: Scalars['String'];
+};
+
 export type ChangeLog = {
   id: Scalars['Int'];
   body: Scalars['String'];
@@ -246,9 +278,11 @@ export type UpdateUserInput = {
   name?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
 };
 
 export type AdminInput = {
+  token: Scalars['String'];
   email: Scalars['String'];
   name: Scalars['String'];
   username: Scalars['String'];
@@ -346,6 +380,14 @@ export type SendFeedbackMutationVariables = Exact<{
 
 export type SendFeedbackMutation = { sendFeedback: { id: number } };
 
+export type SendForgotPasswordEmailMutationVariables = Exact<{
+  email: Scalars['String'];
+  origin?: Maybe<Scalars['String']>;
+}>;
+
+
+export type SendForgotPasswordEmailMutation = { sendForgotPasswordEmail: boolean };
+
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
   name: Scalars['String'];
@@ -366,7 +408,7 @@ export type UpdateChatGroupMutation = { updateChatGroup: { id: number } };
 
 export type UpdateUserMutationVariables = Exact<{
   user: UpdateUserInput;
-  userId: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -597,6 +639,37 @@ export function useSendFeedbackMutation(baseOptions?: Apollo.MutationHookOptions
 export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
 export type SendFeedbackMutationResult = Apollo.MutationResult<SendFeedbackMutation>;
 export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<SendFeedbackMutation, SendFeedbackMutationVariables>;
+export const SendForgotPasswordEmailDocument = gql`
+    mutation SendForgotPasswordEmail($email: String!, $origin: String = "user") {
+  sendForgotPasswordEmail(email: $email, origin: $origin)
+}
+    `;
+export type SendForgotPasswordEmailMutationFn = Apollo.MutationFunction<SendForgotPasswordEmailMutation, SendForgotPasswordEmailMutationVariables>;
+
+/**
+ * __useSendForgotPasswordEmailMutation__
+ *
+ * To run a mutation, you first call `useSendForgotPasswordEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendForgotPasswordEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendForgotPasswordEmailMutation, { data, loading, error }] = useSendForgotPasswordEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      origin: // value for 'origin'
+ *   },
+ * });
+ */
+export function useSendForgotPasswordEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendForgotPasswordEmailMutation, SendForgotPasswordEmailMutationVariables>) {
+        return Apollo.useMutation<SendForgotPasswordEmailMutation, SendForgotPasswordEmailMutationVariables>(SendForgotPasswordEmailDocument, baseOptions);
+      }
+export type SendForgotPasswordEmailMutationHookResult = ReturnType<typeof useSendForgotPasswordEmailMutation>;
+export type SendForgotPasswordEmailMutationResult = Apollo.MutationResult<SendForgotPasswordEmailMutation>;
+export type SendForgotPasswordEmailMutationOptions = Apollo.BaseMutationOptions<SendForgotPasswordEmailMutation, SendForgotPasswordEmailMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $name: String!, $username: String!, $password: String!) {
   signup(
@@ -671,7 +744,7 @@ export type UpdateChatGroupMutationHookResult = ReturnType<typeof useUpdateChatG
 export type UpdateChatGroupMutationResult = Apollo.MutationResult<UpdateChatGroupMutation>;
 export type UpdateChatGroupMutationOptions = Apollo.BaseMutationOptions<UpdateChatGroupMutation, UpdateChatGroupMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($user: UpdateUserInput!, $userId: Int!) {
+    mutation UpdateUser($user: UpdateUserInput!, $userId: Int) {
   updateUser(user: $user, userId: $userId) {
     id
   }
