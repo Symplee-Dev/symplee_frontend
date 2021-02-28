@@ -1,0 +1,11 @@
+query GetMessages($chatId: Int!) {
+	getMessages(chatId: $chatId) {
+		id
+		body
+		author {
+			id
+			username
+		}
+		createdAt
+	}
+}
