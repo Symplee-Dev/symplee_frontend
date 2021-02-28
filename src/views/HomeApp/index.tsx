@@ -11,6 +11,7 @@ import { useChangeLog } from '../../hooks/useChangeLog';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 import { UserActions } from '../../redux/actions/index';
+import ChatView from './views/ChatGroupView/ChatView';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -50,6 +51,10 @@ const HomeApp = () => {
 					</Route>
 					<Route exact path="/group/:id">
 						<ChatGroupIndex authorId={user.id} />
+					</Route>
+
+					<Route exact path="/group/:groupId/chat/:chatId">
+						<ChatView />
 					</Route>
 					<Route exact path="/">
 						<HomeAppRoot user={user} />
