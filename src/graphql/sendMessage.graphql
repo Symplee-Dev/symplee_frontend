@@ -1,0 +1,3 @@
+mutation SendMessage($message: NewMessage!) {
+	sendMessage(message: $message)
+}

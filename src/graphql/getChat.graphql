@@ -1,0 +1,12 @@
+subscription MessageSent($chatId: Int!) {
+	messageSent(chatId: $chatId) {
+		id
+		body
+		author {
+			id
+			username
+		}
+		chatId
+		createdAt
+	}
+}

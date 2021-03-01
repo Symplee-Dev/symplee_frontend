@@ -3,8 +3,11 @@ import {
 	ApolloLink,
 	concat,
 	HttpLink,
-	InMemoryCache
+	InMemoryCache,
+	split
 } from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 const httpLink = new HttpLink({
 	uri:
@@ -12,6 +15,28 @@ const httpLink = new HttpLink({
 			? 'https://bolt--backend.herokuapp.com/graphql'
 			: 'http://localhost:5000/graphql'
 });
+
+const wsLink = new WebSocketLink({
+	uri:
+		process.env.NODE_ENV === 'production'
+			? 'wss://bolt--backend.herokuapp.com/subscriptions'
+			: 'ws://localhost:5000/subscriptions',
+	options: {
+		reconnect: true
+	}
+});
+
+const splitLink = split(
+	({ query }) => {
+		const definition = getMainDefinition(query);
+		return (
+			definition.kind === 'OperationDefinition' &&
+			definition.operation === 'subscription'
+		);
+	},
+	wsLink,
+	httpLink
+);
 
 const authMiddleware = new ApolloLink((operation, forward) => {
 	// add the authorization to the headers
@@ -37,5 +62,5 @@ export const apolloClient = new ApolloClient({
 		mutate: { errorPolicy: 'all' },
 		query: { errorPolicy: 'all' }
 	},
-	link: concat(authMiddleware, httpLink)
+	link: concat(authMiddleware, splitLink)
 });
