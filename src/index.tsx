@@ -21,7 +21,7 @@ import appUtilities from './utils/app-utilities';
 appUtilities.test();
 
 // Cache Worker
-offlineWorker.register();
+offlineWorker.unregister();
 
 if (process.env.NODE_ENV === 'production') {
 	Sentry.init({

@@ -3,19 +3,10 @@ import {
 	useSendMessageMutation
 } from '../../../../graphql';
 import { LinearProgress, TextField } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import {
-	UserQuery,
-	useUserQuery,
-	useGetMessagesLazyQuery
-} from '../../../../graphql';
-import { UserSelectors } from '../../../../redux/selectors';
+import { useState } from 'react';
+import {} from '../../../../graphql';
 import { useParams } from 'react-router';
-import {
-	GetMessagesQueryResult,
-	Maybe,
-	useGetMessagesQuery
-} from '../../../../graphql';
+import { Maybe, useGetMessagesQuery } from '../../../../graphql';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
 const ChatView = () => {
@@ -24,6 +15,7 @@ const ChatView = () => {
 	useMessageSentSubscription({
 		variables: { chatId: Number(params.chatId) },
 		onSubscriptionData(data) {
+			console.log('received');
 			if (data.subscriptionData.data?.messageSent)
 				setMessages([
 					...messages,
@@ -64,6 +56,8 @@ const ChatView = () => {
 			variables: { message: chat }
 		});
 
+		console.log('sending');
+
 		setFormState('');
 	};
 
@@ -92,7 +86,14 @@ const ChatView = () => {
 				/>
 			</form>
 			<p>Chats</p>
-			<div style={{ overflowY: 'scroll', height: '100vh' }}>
+			<div
+				style={{
+					overflowY: 'scroll',
+					height: '80vh',
+					paddingBottom: '2rem',
+					paddingTop: '2rem'
+				}}
+			>
 				{messages.map((msg, key) => (
 					<div
 						style={{ marginTop: '1.2rem', marginBottom: '1.2rem' }}
