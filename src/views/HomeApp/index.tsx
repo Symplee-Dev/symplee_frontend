@@ -1,4 +1,5 @@
-import Sidebar from './SideBar';
+// import Sidebar from './SideBar';
+import Sidebar from './components/Sidebar/Sidebar';
 import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 import { CircularProgress } from '@material-ui/core';
@@ -41,9 +42,10 @@ const HomeApp = () => {
 	if (user) {
 		return (
 			<div className="home-app">
-				<Sidebar chatGroups={user.chatGroups} />
+				{/* <Sidebar chatGroups={user.chatGroups} /> */}
+				<Sidebar />
 				<Switch location={location}>
-					<Route exact path="/you">
+					{/* <Route exact path="/you">
 						<Account user={user} />
 					</Route>
 					<Route exact path="/group/create">
@@ -55,18 +57,18 @@ const HomeApp = () => {
 
 					<Route exact path="/group/:groupId/chat/:chatId">
 						<ChatView />
-					</Route>
+					</Route> */}
 					<Route exact path="/">
-						<HomeAppRoot user={user} />
+						{/* <HomeAppRoot user={user} /> */}
 					</Route>
 				</Switch>
-				{changeLogOpen && currentLog && (
+				{/* {changeLogOpen && currentLog && (
 					<ChangeLogModal
 						open={changeLogOpen}
 						setOpen={setChangeLogOpen}
 						changeLog={currentLog}
 					/>
-				)}
+				)} */}
 			</div>
 		);
 	}
