@@ -1,6 +1,11 @@
 import './styles.scss';
 import { UISelectors } from '../../../../redux/selectors';
 import { CircularProgress, Avatar } from '@material-ui/core';
+import ChatGroupSidebarChat from './ChatGroupSidebarChat';
+
+// Icons
+import CreateSharpIcon from '@material-ui/icons/CreateSharp';
+import HomeSharpIcon from '@material-ui/icons/HomeSharp';
 
 const ChatGroupSidebar = () => {
 	const group = UISelectors.useSelectCurrentChatGroup();
@@ -26,6 +31,20 @@ const ChatGroupSidebar = () => {
 			</div>
 			<div className="content">
 				<h4>Channels</h4>
+				<div className="sidebar-chats">
+					<div className="chats-actions">
+						<div className="sidebar-btn">
+							<CreateSharpIcon />
+						</div>
+						<div className="sidebar-btn">
+							<HomeSharpIcon />
+						</div>
+					</div>
+					<hr />
+					{group.chats.map((chat, key) => (
+						<ChatGroupSidebarChat chat={chat} key={key} />
+					))}
+				</div>
 			</div>
 		</div>
 	);
