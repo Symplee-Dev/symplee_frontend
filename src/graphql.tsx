@@ -69,6 +69,7 @@ export type QueryGetMessagesArgs = {
 };
 
 export type Mutation = {
+  sendForgotPasswordEmail: Scalars['Boolean'];
   signup: User;
   login?: Maybe<LoginReturn>;
   sendAdminInvite: Scalars['Boolean'];
@@ -85,6 +86,12 @@ export type Mutation = {
   updateUser: User;
   updateChatGroup: ChatGroup;
   sendMessage: Scalars['Boolean'];
+};
+
+
+export type MutationSendForgotPasswordEmailArgs = {
+  email: Scalars['String'];
+  origin?: Maybe<Scalars['String']>;
 };
 
 
@@ -157,7 +164,7 @@ export type MutationToggleFeedbackResolvedArgs = {
 
 export type MutationUpdateUserArgs = {
   user: UpdateUserInput;
-  userId: Scalars['Int'];
+  userId?: Maybe<Scalars['Int']>;
 };
 
 
@@ -305,6 +312,7 @@ export type UpdateUserInput = {
   name?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
 };
 
 export type AdminInput = {
@@ -398,7 +406,7 @@ export type MessageSentSubscriptionVariables = Exact<{
 }>;
 
 
-export type MessageSentSubscription = { messageSent: { id: number, body: string, chatId: number, createdAt: string, author: { id: number, username: string } } };
+export type MessageSentSubscription = { messageSent: { id: number, body: string, chatId: number, createdAt: string, author: { id: number, username: string, avatar?: Maybe<string> } } };
 
 export type GetMembersQueryVariables = Exact<{
   chatId: Scalars['Int'];
@@ -412,7 +420,7 @@ export type GetMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GetMessagesQuery = { getMessages: Array<Maybe<{ id: number, body: string, createdAt: string, author: { id: number, username: string } }>> };
+export type GetMessagesQuery = { getMessages: Array<Maybe<{ id: number, body: string, createdAt: string, author: { id: number, username: string, avatar?: Maybe<string> } }>> };
 
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
@@ -629,6 +637,7 @@ export const MessageSentDocument = gql`
     author {
       id
       username
+      avatar
     }
     chatId
     createdAt
@@ -701,6 +710,7 @@ export const GetMessagesDocument = gql`
     author {
       id
       username
+      avatar
     }
     createdAt
   }

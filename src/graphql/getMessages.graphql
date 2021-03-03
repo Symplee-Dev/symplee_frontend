@@ -5,6 +5,7 @@ query GetMessages($chatId: Int!) {
 		author {
 			id
 			username
+			avatar
 		}
 		createdAt
 	}

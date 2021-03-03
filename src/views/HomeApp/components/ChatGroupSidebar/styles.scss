@@ -90,6 +90,11 @@
 				transition: ease-in-out 0.2s;
 			}
 
+			.sidebar-chat-active {
+				opacity: 0.8;
+				transition: 0.2s;
+			}
+
 			.sidebar-chat:hover {
 				cursor: pointer;
 				opacity: 0.8;

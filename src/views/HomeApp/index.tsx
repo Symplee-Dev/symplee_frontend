@@ -11,11 +11,13 @@ import { useChangeLog } from '../../hooks/useChangeLog';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 import { UserActions } from '../../redux/actions/index';
-import ChatView from './views/ChatGroupView/ChatView';
 import ChatGroupSidebar from './components/ChatGroupSidebar/ChatGroupSidebar';
+import Chat from './views/Chat/Chat';
 import './index.scss';
 
 import ChatGroupIndex from './views/ChatGroup/index';
+import SidebarFooter from './components/SidebarFooter/SidebarFooter';
+import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -53,6 +55,7 @@ const HomeApp = () => {
 							<ChatGroupSidebar />
 						)}
 					</div>
+					<SidebarFooter />
 				</div>
 				<Switch location={location}>
 					<Route exact path="/group/:id">
@@ -69,6 +72,10 @@ const HomeApp = () => {
 					<Route exact path="/group/:groupId/chat/:chatId">
 						<ChatView />
 					</Route> */}
+					<Route exact path="/group/:groupId/chat/:chatId">
+						<Chat />
+						<ChatMembersBar />
+					</Route>
 					<Route exact path="/">
 						{/* <HomeAppRoot user={user} /> */}
 					</Route>
