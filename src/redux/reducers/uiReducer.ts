@@ -4,7 +4,8 @@ import { UIActionConstants } from '../types/action-types';
 export const initialUIState: UIState = {
 	notifications: [],
 	hasLatestChangeLog: { value: false, dateSet: new Date().toString() },
-	changelogs: []
+	changelogs: [],
+	currentChatGroup: undefined
 };
 
 export const uiReducer = (
@@ -29,6 +30,9 @@ export const uiReducer = (
 		}
 		case UIActionConstants.SET_HAS_LATEST_CHANGELOG: {
 			return { ...state, hasLatestChangeLog: action.payload };
+		}
+		case UIActionConstants.SET_CURRENT_CHATGROUP: {
+			return { ...state, currentChatGroup: action.payload };
 		}
 		default:
 			return state;

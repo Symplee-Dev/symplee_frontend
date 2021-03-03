@@ -28,5 +28,8 @@ export const UISelectors: RootSelectors['ui'] = {
 		);
 
 		return hasLatest;
+	},
+	useSelectCurrentChatGroup() {
+		return useSelector((state: RootState) => state.ui.currentChatGroup);
 	}
 };

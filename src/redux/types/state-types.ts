@@ -35,6 +35,20 @@ export type UIState = {
 	notifications: Notification[];
 	hasLatestChangeLog: { value: boolean; dateSet: string };
 	changelogs: ChangeLog[];
+	currentChatGroup?: {
+		id: number;
+		name: string;
+		isPublic: boolean;
+		createdAt: string;
+		avatar?: Maybe<string>;
+		createdBy: number;
+		chats: Maybe<{
+			id: number;
+			name: string;
+			icon: string;
+			isPublic: boolean;
+		}>[];
+	};
 };
 
 export interface RootState {

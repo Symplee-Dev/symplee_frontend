@@ -1,4 +1,4 @@
-import { UserState, Notification } from './state-types';
+import { UserState, Notification, UIState } from './state-types';
 import { ChangeLog } from '../../graphql';
 
 export enum UserActionConstants {
@@ -32,7 +32,8 @@ export enum UIActionConstants {
 	CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS',
 	ADD_NOTIFICATION = 'ADD_NOTIFICATION',
 	SET_CHANGELOGS = 'SET_CHANGELOGS',
-	SET_HAS_LATEST_CHANGELOG = 'SET_HAS_LATEST_CHANGELOG'
+	SET_HAS_LATEST_CHANGELOG = 'SET_HAS_LATEST_CHANGELOG',
+	SET_CURRENT_CHATGROUP = 'SET_CURRENT_CHATGROUP'
 }
 
 export interface SetHasLatestChangelog {
@@ -58,6 +59,11 @@ export interface AddNotification {
 	payload: Notification;
 }
 
+export interface SetCurrentChatGroup {
+	type: UIActionConstants.SET_CURRENT_CHATGROUP;
+	payload: UIState['currentChatGroup'];
+}
+
 export type RootActions = {
 	user: {
 		useLogin(): (token: string) => void;
@@ -71,5 +77,7 @@ export type RootActions = {
 		useAddNotification(): (params: Notification) => void;
 		useSetChangeLogs(): (changelog: ChangeLog[]) => void;
 		useSetHasLatestChangeLog(): ({ value: boolean }) => void;
+		useSetCurrentChatGroup(): (group: UIState['currentChatGroup']) => void;
+		useClearCurrentChatGroup(): () => void;
 	};
 };

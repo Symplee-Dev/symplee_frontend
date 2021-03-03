@@ -5,7 +5,11 @@ import {
 	SetChangeLogs
 } from '../types/action-types';
 import { RootState } from '../types/state-types';
-import { SetHasLatestChangelog, SetUser } from '../types/action-types';
+import {
+	SetHasLatestChangelog,
+	SetUser,
+	SetCurrentChatGroup
+} from '../types/action-types';
 import { useUserQuery } from '../../graphql';
 import { logger } from '../../utils/logger';
 import decode from 'jwt-decode';
@@ -146,6 +150,30 @@ export const UIActions: RootActions['ui'] = {
 			const action: SetHasLatestChangelog = {
 				type: UIActionConstants.SET_HAS_LATEST_CHANGELOG,
 				payload: { value: val.value, dateSet: new Date().toString() }
+			};
+
+			dispatch(action);
+		};
+	},
+	useClearCurrentChatGroup() {
+		const dispatch = useDispatch();
+
+		return () => {
+			const action: SetCurrentChatGroup = {
+				type: UIActionConstants.SET_CURRENT_CHATGROUP,
+				payload: undefined
+			};
+
+			dispatch(action);
+		};
+	},
+	useSetCurrentChatGroup() {
+		const dispatch = useDispatch();
+
+		return chatGroup => {
+			const action: SetCurrentChatGroup = {
+				type: UIActionConstants.SET_CURRENT_CHATGROUP,
+				payload: chatGroup
 			};
 
 			dispatch(action);
