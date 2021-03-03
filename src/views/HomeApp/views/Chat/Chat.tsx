@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
 import { useParams } from 'react-router-dom';
 import Message from './Message';
+import NewChatBar from './NewChatBar';
 
 const Chat = () => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
@@ -80,6 +81,7 @@ const Chat = () => {
 					<Message message={message} key={key} />
 				))}
 			</div>
+			<NewChatBar />
 		</div>
 	);
 };

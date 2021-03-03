@@ -4,20 +4,65 @@
 	height: 100vh;
 	box-sizing: border-box;
 	padding: 2rem;
-	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
 
 	.chats {
 		display: flex;
-		height: 100%;
-
+		overflow-y: scroll;
+		height: 90%;
 		flex-direction: column-reverse;
 		align-items: center;
 
 		.message-container {
+			box-sizing: border-box;
 			padding: 1rem;
 			width: 100%;
 			background: #eeeeee;
 			margin-top: 1rem;
+
+			.top {
+				display: flex;
+				align-items: center;
+			}
+		}
+	}
+
+	.new-chat-bar {
+		margin-top: 1rem;
+
+		.chat-bar {
+			width: 100%;
+			height: inherit;
+			padding: 0.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			background: #404040;
+			border-radius: 15px;
+
+			.text-area {
+				box-sizing: border-box;
+				color: white;
+				font-family: 'Poppins', sans-serif;
+
+				// outline: none;
+				// border: none;
+				// resize: none;
+				// width: 95%;
+				// background: none;
+				// box-sizing: border-box;
+				// padding: 1rem;
+				// font-size: 1rem;
+				// font-weight: normal;
+				// min-height: 100%;
+				// overflow: auto;
+				// color: white;
+			}
+
+			svg {
+				color: white;
+			}
 		}
 	}
 }
