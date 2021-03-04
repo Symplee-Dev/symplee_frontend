@@ -10,8 +10,8 @@
 	.chats {
 		display: flex;
 		overflow-y: scroll;
-		height: 90%;
-		flex-direction: column-reverse;
+		height: 90vh;
+		flex-direction: column;
 		align-items: center;
 
 		.message-container {
@@ -24,8 +24,39 @@
 			.top {
 				display: flex;
 				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 1rem;
+
+				.left {
+					display: flex;
+					align-items: center;
+
+					.MuiAvatar-circle {
+						width: 25px;
+						height: 25px;
+					}
+
+					h4 {
+						font-weight: 500;
+						margin-left: 0.5rem;
+					}
+				}
+
+				.right {
+					display: flex;
+
+					p {
+						color: #6d6d6d;
+						font-weight: 300;
+						margin-right: 1rem;
+					}
+				}
 			}
 		}
+	}
+
+	.chats > :first-child {
+		margin-top: auto !important;
 	}
 
 	.new-chat-bar {
@@ -33,35 +64,33 @@
 
 		.chat-bar {
 			width: 100%;
+			box-sizing: border-box;
 			height: inherit;
 			padding: 0.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: space-around;
 			background: #404040;
-			border-radius: 15px;
+
+			svg {
+				color: white;
+
+				transition: 0.2s;
+			}
+
+			svg:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+
+			.text-area-root {
+				padding: 0.5rem;
+			}
 
 			.text-area {
 				box-sizing: border-box;
 				color: white;
 				font-family: 'Poppins', sans-serif;
-
-				// outline: none;
-				// border: none;
-				// resize: none;
-				// width: 95%;
-				// background: none;
-				// box-sizing: border-box;
-				// padding: 1rem;
-				// font-size: 1rem;
-				// font-weight: normal;
-				// min-height: 100%;
-				// overflow: auto;
-				// color: white;
-			}
-
-			svg {
-				color: white;
 			}
 		}
 	}

@@ -5,7 +5,7 @@ import {
 	useMessageSentSubscription,
 	Maybe
 } from '../../../../graphql';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
 import { useParams } from 'react-router-dom';
@@ -26,6 +26,8 @@ const Chat = () => {
 				]);
 		}
 	});
+
+	const [end, setEnd] = useState<HTMLSpanElement | null>(null);
 
 	const user = useSelector((state: RootState) => state.user.user!);
 
@@ -49,6 +51,10 @@ const Chat = () => {
 	const handleSend = e => {
 		e.preventDefault();
 
+		if (formState.length <= 0) {
+			return;
+		}
+
 		const chat = {
 			authorId: user.id,
 			authorUsername: user.username,
@@ -65,7 +71,7 @@ const Chat = () => {
 		setFormState('');
 	};
 
-	const { data, loading } = useGetMessagesQuery({
+	const { data } = useGetMessagesQuery({
 		variables: { chatId: Number(params.chatId) },
 		onCompleted() {
 			if (data) setMessages(data.getMessages);
@@ -74,14 +80,29 @@ const Chat = () => {
 		fetchPolicy: 'network-only'
 	});
 
+	useEffect(() => {
+		if (end) {
+			end.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [messages, end]);
+
 	return (
 		<div className="chat-group-chats">
 			<div className="chats">
 				{messages.map((message, key) => (
 					<Message message={message} key={key} />
 				))}
+				<span
+					ref={el => {
+						setEnd(el);
+					}}
+				></span>
 			</div>
-			<NewChatBar />
+			<NewChatBar
+				handleSubmit={handleSend}
+				formState={formState}
+				setFormState={setFormState}
+			/>
 		</div>
 	);
 };
