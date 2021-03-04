@@ -6,14 +6,14 @@ import { LinearProgress } from '@material-ui/core';
 import { UIActions } from '../../../../redux/actions/index';
 
 const ChatGroupIndex = ({ authorId }: { authorId: number }) => {
-	const { id }: { id: string } = useParams();
+	const { groupId }: { groupId: string } = useParams();
 	const [isAuthor, setIsAuthor] = useState(false);
 	const setCurrentChatGroup = UIActions.useSetCurrentChatGroup();
 
 	// const [editing, setEditing] = useState(false);
 
 	const { data, loading, error, refetch } = useChatGroupQuery({
-		variables: { id: parseInt(id) },
+		variables: { id: parseInt(groupId) },
 		onCompleted: d => {
 			setCurrentChatGroup(d.chatGroup);
 		}

@@ -31,5 +31,8 @@ export const UISelectors: RootSelectors['ui'] = {
 	},
 	useSelectCurrentChatGroup() {
 		return useSelector((state: RootState) => state.ui.currentChatGroup);
+	},
+	useSelectCurrentChat() {
+		return useSelector((state: RootState) => state.ui.currentChat);
 	}
 };

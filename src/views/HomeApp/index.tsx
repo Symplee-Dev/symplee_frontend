@@ -18,6 +18,7 @@ import './index.scss';
 import ChatGroupIndex from './views/ChatGroup/index';
 import SidebarFooter from './components/SidebarFooter/SidebarFooter';
 import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
+import { UISelectors } from '../../redux/selectors';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -28,6 +29,7 @@ const HomeApp = () => {
 	UserActions.useGetUser();
 
 	const user = useSelector((state: RootState) => state.user.user);
+	const hasCurrentGroup = UISelectors.useSelectCurrentChatGroup();
 
 	// const [
 	// 	getChangeLog,
@@ -51,14 +53,13 @@ const HomeApp = () => {
 				<div className="sidebar-footer-container">
 					<div className="top">
 						<Sidebar />
-						{location.pathname.includes('/group/') && (
-							<ChatGroupSidebar />
-						)}
+						{location.pathname.includes('/group/') &&
+							hasCurrentGroup && <ChatGroupSidebar />}
 					</div>
 					<SidebarFooter />
 				</div>
 				<Switch location={location}>
-					<Route exact path="/group/:id">
+					<Route exact path="/group/:groupId">
 						<ChatGroupIndex authorId={user.id} />
 					</Route>
 					{/* <Route exact path="/you">
@@ -73,6 +74,8 @@ const HomeApp = () => {
 						<ChatView />
 					</Route> */}
 					<Route exact path="/group/:groupId/chat/:chatId">
+						<ChatGroupIndex authorId={user.id} />
+
 						<Chat />
 						<ChatMembersBar />
 					</Route>

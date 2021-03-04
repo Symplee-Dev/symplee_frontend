@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	ClearCurrentChat,
 	ClearNotification,
 	ClearNotifications,
 	SetChangeLogs
 } from '../types/action-types';
-import { RootState } from '../types/state-types';
+import { RootState, UIState } from '../types/state-types';
 import {
 	SetHasLatestChangelog,
 	SetUser,
@@ -13,6 +14,7 @@ import {
 import { useUserQuery } from '../../graphql';
 import { logger } from '../../utils/logger';
 import decode from 'jwt-decode';
+import { SetCurrentChat } from '../types/action-types';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -91,6 +93,29 @@ export const UserActions: RootActions['user'] = {
 };
 
 export const UIActions: RootActions['ui'] = {
+	useSetCurrentChat() {
+		const dispatch = useDispatch();
+
+		return (chat: UIState['currentChat']) => {
+			const action: SetCurrentChat = {
+				type: UIActionConstants.SET_CURRENT_CHAT,
+				payload: chat
+			};
+
+			dispatch(action);
+		};
+	},
+	useClearCurrentChat() {
+		const dispatch = useDispatch();
+
+		return () => {
+			const action: ClearCurrentChat = {
+				type: UIActionConstants.CLEAR_CURRENT_CHAT
+			};
+
+			dispatch(action);
+		};
+	},
 	useAddNotification() {
 		const dispatch = useDispatch();
 

@@ -33,7 +33,9 @@ export enum UIActionConstants {
 	ADD_NOTIFICATION = 'ADD_NOTIFICATION',
 	SET_CHANGELOGS = 'SET_CHANGELOGS',
 	SET_HAS_LATEST_CHANGELOG = 'SET_HAS_LATEST_CHANGELOG',
-	SET_CURRENT_CHATGROUP = 'SET_CURRENT_CHATGROUP'
+	SET_CURRENT_CHATGROUP = 'SET_CURRENT_CHATGROUP',
+	SET_CURRENT_CHAT = 'SET_CURRENT_CHAT',
+	CLEAR_CURRENT_CHAT = 'CLEAR_CURRENT_CHAT'
 }
 
 export interface SetHasLatestChangelog {
@@ -64,6 +66,15 @@ export interface SetCurrentChatGroup {
 	payload: UIState['currentChatGroup'];
 }
 
+export interface SetCurrentChat {
+	type: UIActionConstants.SET_CURRENT_CHAT;
+	payload: UIState['currentChat'];
+}
+
+export interface ClearCurrentChat {
+	type: UIActionConstants.CLEAR_CURRENT_CHAT;
+}
+
 export type RootActions = {
 	user: {
 		useLogin(): (token: string) => void;
@@ -79,5 +90,7 @@ export type RootActions = {
 		useSetHasLatestChangeLog(): ({ value: boolean }) => void;
 		useSetCurrentChatGroup(): (group: UIState['currentChatGroup']) => void;
 		useClearCurrentChatGroup(): () => void;
+		useSetCurrentChat(): (chat: UIState['currentChat']) => void;
+		useClearCurrentChat(): () => void;
 	};
 };

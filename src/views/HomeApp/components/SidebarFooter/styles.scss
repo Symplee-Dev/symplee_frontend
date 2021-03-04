@@ -16,10 +16,16 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		transition: 0.2s;
 
 		svg {
 			width: 35px;
 			height: 35px;
 		}
+	}
+
+	.footer-icon:hover {
+		cursor: pointer;
+		opacity: 0.7;
 	}
 }

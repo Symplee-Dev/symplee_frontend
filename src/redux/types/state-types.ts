@@ -49,6 +49,12 @@ export type UIState = {
 			isPublic: boolean;
 		}>[];
 	};
+	currentChat?: Maybe<{
+		id: number;
+		name: string;
+		icon: string;
+		isPublic: boolean;
+	}>;
 };
 
 export interface RootState {

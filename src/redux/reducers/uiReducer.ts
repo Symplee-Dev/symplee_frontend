@@ -5,7 +5,8 @@ export const initialUIState: UIState = {
 	notifications: [],
 	hasLatestChangeLog: { value: false, dateSet: new Date().toString() },
 	changelogs: [],
-	currentChatGroup: undefined
+	currentChatGroup: undefined,
+	currentChat: undefined
 };
 
 export const uiReducer = (
@@ -33,6 +34,12 @@ export const uiReducer = (
 		}
 		case UIActionConstants.SET_CURRENT_CHATGROUP: {
 			return { ...state, currentChatGroup: action.payload };
+		}
+		case UIActionConstants.CLEAR_CURRENT_CHAT: {
+			return { ...state, currentChat: undefined };
+		}
+		case UIActionConstants.SET_CURRENT_CHAT: {
+			return { ...state, currentChat: action.payload };
 		}
 		default:
 			return state;
