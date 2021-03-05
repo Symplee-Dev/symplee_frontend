@@ -11,9 +11,18 @@ import { RootState } from '../../../../redux/types/state-types';
 import { useParams } from 'react-router-dom';
 import Message from './Message';
 import NewChatBar from './NewChatBar';
+import { UIActions } from '../../../../redux/actions/index';
 
 const Chat = () => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
+
+	const thisChat = useSelector((state: RootState) =>
+		state.ui.currentChatGroup?.chats.find(
+			chat => chat?.id === Number(params.chatId)
+		)
+	);
+
+	const setCurrentChat = UIActions.useSetCurrentChat();
 
 	useMessageSentSubscription({
 		variables: { chatId: Number(params.chatId) },
@@ -75,6 +84,7 @@ const Chat = () => {
 		variables: { chatId: Number(params.chatId) },
 		onCompleted() {
 			if (data) setMessages(data.getMessages);
+			setCurrentChat(thisChat);
 		},
 		nextFetchPolicy: 'network-only',
 		fetchPolicy: 'network-only'
@@ -88,9 +98,16 @@ const Chat = () => {
 
 	return (
 		<div className="chat-group-chats">
+			<p className="chat-title">#{thisChat?.name}</p>
 			<div className="chats">
 				{messages.map((message, key) => (
-					<Message message={message} key={key} />
+					<Message
+						message={message}
+						key={key}
+						noHeader={
+							messages[key - 1]?.author.id === message?.author.id
+						}
+					/>
 				))}
 				<span
 					ref={el => {

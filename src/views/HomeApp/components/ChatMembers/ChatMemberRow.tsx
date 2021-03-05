@@ -16,9 +16,14 @@ const ChatMemberRow = ({
 			<Avatar
 				src={member.avatar}
 				alt={member.username}
-				style={{ width: '25px', height: '25px' }}
+				style={{
+					width: '25px',
+					height: '25px',
+					fontSize: '0.8rem',
+					textAlign: 'center'
+				}}
 			>
-				{member.username[0]}
+				{member.username[0].toUpperCase()}
 			</Avatar>
 			<p>
 				{member.username}#{member.key}
