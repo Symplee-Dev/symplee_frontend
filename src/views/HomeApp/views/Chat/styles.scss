@@ -7,6 +7,14 @@
 	display: flex;
 	flex-direction: column;
 
+	.no-messages {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100%;
+		justify-content: center;
+	}
+
 	.chat-title {
 		text-align: center;
 		opacity: 0.5;

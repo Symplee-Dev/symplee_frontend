@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import Message from './Message';
 import NewChatBar from './NewChatBar';
 import { UIActions } from '../../../../redux/actions/index';
+import noMessages from '../../../../assets/no_messages.svg';
 
 const Chat = () => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
@@ -114,6 +115,13 @@ const Chat = () => {
 						setEnd(el);
 					}}
 				></span>
+				{messages.length < 1 && (
+					<div className="no-messages">
+						<h3>There's Nothing Here</h3>
+						<p>Be the first to send a message.</p>
+						<img src={noMessages} alt="no messages baloons" />
+					</div>
+				)}
 			</div>
 			<NewChatBar
 				handleSubmit={handleSend}
