@@ -17,7 +17,7 @@ import Notifications from './components/Notifications';
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#BB86FC'
+			main: '#FFFFFF'
 		}
 	}
 });

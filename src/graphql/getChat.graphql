@@ -5,6 +5,7 @@ subscription MessageSent($chatId: Int!) {
 		author {
 			id
 			username
+			avatar
 		}
 		chatId
 		createdAt

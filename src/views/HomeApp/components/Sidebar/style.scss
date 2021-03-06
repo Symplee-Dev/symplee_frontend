@@ -1,0 +1,64 @@
+.sidebar {
+	box-sizing: border-box;
+	padding: 1rem;
+	background-color: #2b2e30;
+	width: 80px;
+	height: 93vh;
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.sidebar-btn {
+		min-width: 55px;
+		min-height: 50px;
+		border-radius: 15px;
+		border: 1px solid white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 1rem;
+
+		.MuiSvgIcon-root {
+			width: 30px;
+			height: 30px;
+		}
+
+		transition: ease-in-out 0.2s;
+	}
+
+	.sidebar-btn:hover {
+		cursor: pointer;
+		opacity: 0.5;
+	}
+
+	.chat-group-button {
+		min-width: 55px;
+		min-height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 1rem;
+		transition: ease-in-out 0.2s;
+
+		.MuiAvatar-rounded {
+			border-radius: 15px;
+			width: 50px;
+			height: 50px;
+		}
+	}
+
+	.active {
+		opacity: 0.5;
+	}
+
+	hr {
+		margin-top: 1rem;
+		width: 100%;
+	}
+
+	.chat-group-button:hover {
+		opacity: 0.5;
+		cursor: pointer;
+	}
+}

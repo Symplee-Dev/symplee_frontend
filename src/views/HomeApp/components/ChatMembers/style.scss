@@ -1,0 +1,22 @@
+.chat-members-bar {
+	width: 300px;
+	background: #3e4756;
+	font-weight: 1rem;
+	box-sizing: border-box;
+	padding: 1rem;
+	font-weight: bold;
+
+	overflow-y: scroll;
+
+	.chat-member-row {
+		display: flex;
+		align-items: center;
+		font-weight: 300;
+		p {
+			font-size: 0.8rem;
+			margin-left: 0.5rem;
+		}
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+}

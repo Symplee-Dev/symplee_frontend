@@ -1,0 +1,116 @@
+.chat-group-chats {
+	color: black;
+	width: 100%;
+	height: 100vh;
+	box-sizing: border-box;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+
+	.no-messages {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100%;
+		justify-content: center;
+	}
+
+	.chat-title {
+		text-align: center;
+		opacity: 0.5;
+	}
+
+	.chats {
+		display: flex;
+		overflow-y: scroll;
+		height: 90vh;
+		flex-direction: column;
+		align-items: center;
+
+		.message-container {
+			box-sizing: border-box;
+			width: 100%;
+			margin-top: 1rem;
+
+			.top {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 1rem;
+
+				.left {
+					display: flex;
+					align-items: center;
+
+					.MuiAvatar-circle {
+						width: 25px;
+						height: 25px;
+					}
+
+					h4 {
+						font-weight: 500;
+						margin-left: 0.5rem;
+					}
+
+					p {
+						color: #6d6d6d;
+						font-weight: 300;
+						margin-left: 1rem;
+					}
+				}
+
+				.right {
+					display: flex;
+				}
+			}
+
+			.body {
+				width: 75%;
+				p {
+					width: 75%;
+					word-break: break-word;
+				}
+			}
+		}
+	}
+
+	.chats > :first-child {
+		margin-top: auto !important;
+	}
+
+	.new-chat-bar {
+		margin-top: 1rem;
+
+		.chat-bar {
+			width: 100%;
+			box-sizing: border-box;
+			height: inherit;
+			padding: 0.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			background: #404040;
+
+			svg {
+				color: white;
+
+				transition: 0.2s;
+			}
+
+			svg:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+
+			.text-area-root {
+				padding: 0.5rem;
+			}
+
+			.text-area {
+				box-sizing: border-box;
+				color: white;
+				font-family: 'Poppins', sans-serif;
+			}
+		}
+	}
+}
