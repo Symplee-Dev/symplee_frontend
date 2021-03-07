@@ -11,10 +11,11 @@ import {
 	SetUser,
 	SetCurrentChatGroup
 } from '../types/action-types';
-import { useUserQuery } from '../../graphql';
+import { useUserQuery, useUserLazyQuery } from '../../graphql';
 import { logger } from '../../utils/logger';
 import decode from 'jwt-decode';
-import { SetCurrentChat } from '../types/action-types';
+import { SetCurrentChat, RefetchedUser } from '../types/action-types';
+import { useEffect } from 'react';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -89,6 +90,35 @@ export const UserActions: RootActions['user'] = {
 				refetch({ id: userReduxId.userId });
 			}
 		});
+	},
+	useRefetchUser() {
+		const dispatch = useDispatch();
+
+		const token = useSelector((state: RootState) => state.user.token);
+
+		const userReduxId: { userId: number } = decode(token);
+
+		const [fetch, { data, error }] = useUserLazyQuery({
+			fetchPolicy: 'network-only'
+		});
+
+		useEffect(() => {
+			if (data && !error) {
+				const action: RefetchedUser = {
+					type: UserActionConstants.REFETCHED_USER,
+					payload: data.user
+				};
+
+				dispatch(action);
+				console.log('Completed');
+			}
+		}, [data, error, dispatch]);
+
+		return () => {
+			fetch({
+				variables: { id: userReduxId.userId }
+			});
+		};
 	}
 };
 

@@ -1,0 +1,140 @@
+.paper-ref {
+	background: #3e4756 !important;
+	color: white !important;
+	font-family: 'Poppins', sans-serif !important;
+	box-sizing: border-box;
+	padding: 2rem;
+
+	.content {
+		h3 {
+			font-weight: 300;
+			font-size: 1.5rem;
+			text-align: center;
+			margin-bottom: 2rem;
+		}
+
+		.go-back {
+			display: flex;
+			justify-content: flex-start;
+			transition: 0.2s;
+
+			svg {
+				width: 30px;
+				height: 30px;
+			}
+		}
+
+		.go-back:hover {
+			opacity: 0.8;
+			cursor: pointer;
+		}
+
+		.group-router {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+
+			.route {
+				width: 40%;
+				border-radius: 1rem;
+				height: 200px;
+				background: lightgray;
+				color: black;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				transition: 0.3s;
+
+				p {
+					font-weight: 300;
+					font-size: 1.2rem;
+					margin-bottom: 1rem;
+				}
+
+				svg {
+					width: 20%;
+					height: 20%;
+				}
+			}
+
+			.route:hover {
+				cursor: pointer;
+				opacity: 0.8;
+			}
+		}
+
+		.new-group {
+			.form {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+
+				.public-label {
+					margin-top: 1rem;
+					margin-bottom: 1rem;
+
+					p {
+						color: white !important;
+					}
+				}
+
+				.public-div {
+					display: flex;
+					align-items: center;
+				}
+
+				.MuiAvatar-rounded {
+					border-radius: 10px;
+					width: 60px;
+					height: 60px;
+				}
+
+				.text-field {
+					margin-top: 1rem;
+					margin-bottom: 1rem;
+
+					input {
+						text-align: center;
+					}
+				}
+
+				.upload-actions {
+					display: flex;
+					width: 50px;
+					align-items: center;
+					justify-content: space-around;
+					margin-top: 1rem;
+					margin-bottom: 1rem;
+				}
+
+				.submit-btn {
+					margin-top: 1.5rem;
+					padding: 2%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					box-sizing: border-box;
+					width: 100%;
+					height: 30px;
+					background: none;
+					border: none;
+					outline: none;
+					color: white;
+					font-size: 1rem;
+					font-weight: 600;
+					border: 1px solid white;
+					border-radius: 1rem;
+					transition: 0.3s;
+				}
+
+				.submit-btn:hover {
+					cursor: pointer;
+					background: white;
+					color: black;
+				}
+			}
+		}
+	}
+}
