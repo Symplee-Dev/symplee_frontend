@@ -65,10 +65,25 @@
 			}
 
 			.body {
-				width: 75%;
+				padding: 0.2rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				width: 100%;
 				p {
 					width: 75%;
 					word-break: break-word;
+				}
+				transition: ease-in-out 0.2s;
+
+				.bubbles {
+					cursor: pointer;
+					transition: ease-in-out 0.2s;
+
+					.chat-actions {
+						display: flex;
+						align-self: flex-end;
+					}
 				}
 			}
 		}
