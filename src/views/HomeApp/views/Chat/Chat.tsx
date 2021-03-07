@@ -13,6 +13,7 @@ import Message from './Message';
 import NewChatBar from './NewChatBar';
 import { UIActions } from '../../../../redux/actions/index';
 import noMessages from '../../../../assets/no_messages.svg';
+import { CircularProgress } from '@material-ui/core';
 
 const Chat = () => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
@@ -40,6 +41,8 @@ const Chat = () => {
 	const [end, setEnd] = useState<HTMLSpanElement | null>(null);
 
 	const user = useSelector((state: RootState) => state.user.user!);
+
+	const [firstLoad, setFirstLoad] = useState(true);
 
 	const [formState, setFormState] = useState('');
 
@@ -92,10 +95,26 @@ const Chat = () => {
 	});
 
 	useEffect(() => {
+		if (end && firstLoad) {
+			end.scrollIntoView({ behavior: 'auto' });
+			setFirstLoad(false);
+			return;
+		}
 		if (end) {
 			end.scrollIntoView({ behavior: 'smooth' });
 		}
-	}, [messages, end]);
+	}, [messages, end, firstLoad]);
+
+	if (messages.length < 1 && !data) {
+		return (
+			<div className="chat-group-chats">
+				<p className="chat-title">#{thisChat?.name}</p>
+				<div className="no-message">
+					<CircularProgress />
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="chat-group-chats">
