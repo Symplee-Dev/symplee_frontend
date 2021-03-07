@@ -64,7 +64,7 @@ const NewChatBar = ({
 			{!multiLine && formState.length < 1 && (
 				<p className="helper">Shift + Enter to expand</p>
 			)}
-			{!multiLine && formState.length > 1 && (
+			{!multiLine && formState.length >= 1 && (
 				<p className="helper">Shift + Enter to expand</p>
 			)}
 			{multiLine && formState.length >= 1 && (
