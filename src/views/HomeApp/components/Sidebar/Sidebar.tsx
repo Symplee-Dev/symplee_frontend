@@ -8,7 +8,11 @@ import DashboardSharpIcon from '@material-ui/icons/DashboardSharp';
 import { RootState } from '../../../../redux/types/state-types';
 import { useSelector } from 'react-redux';
 
-const Sidebar = () => {
+const Sidebar = ({
+	setCreatingGroup
+}: {
+	setCreatingGroup: (input: boolean) => void;
+}) => {
 	const path = useReactPath();
 
 	const chatGroups = useSelector(
@@ -20,7 +24,7 @@ const Sidebar = () => {
 			<div className="sidebar-btn">
 				<DashboardSharpIcon />
 			</div>
-			<div className="sidebar-btn">
+			<div className="sidebar-btn" onClick={() => setCreatingGroup(true)}>
 				<AddSharpIcon />
 			</div>
 			<hr />

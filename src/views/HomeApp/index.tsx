@@ -19,6 +19,8 @@ import ChatGroupIndex from './views/ChatGroup/index';
 import SidebarFooter from './components/SidebarFooter/SidebarFooter';
 import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 import { UISelectors } from '../../redux/selectors';
+import { useState } from 'react';
+import NewGroupModal from './components/NewGroup/NewGroupModal';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -30,6 +32,8 @@ const HomeApp = () => {
 
 	const user = useSelector((state: RootState) => state.user.user);
 	const hasCurrentGroup = UISelectors.useSelectCurrentChatGroup();
+
+	const [creatingGroup, setCreatingGroup] = useState(false);
 
 	// const [
 	// 	getChangeLog,
@@ -50,9 +54,15 @@ const HomeApp = () => {
 		return (
 			<div className="home-app">
 				{/* <Sidebar chatGroups={user.chatGroups} /> */}
+				{creatingGroup && (
+					<NewGroupModal
+						open={creatingGroup}
+						setOpen={setCreatingGroup}
+					/>
+				)}
 				<div className="sidebar-footer-container">
 					<div className="top">
-						<Sidebar />
+						<Sidebar setCreatingGroup={setCreatingGroup} />
 						{location.pathname.includes('/group/') &&
 							hasCurrentGroup && <ChatGroupSidebar />}
 					</div>

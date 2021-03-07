@@ -1,0 +1,66 @@
+.paper-ref {
+	background: #3e4756 !important;
+	color: white !important;
+	font-family: 'Poppins', sans-serif !important;
+	box-sizing: border-box;
+	padding: 2rem;
+
+	.content {
+		h3 {
+			font-weight: 400;
+			font-size: 1.5rem;
+			text-align: center;
+			margin-bottom: 2rem;
+		}
+
+		.go-back {
+			display: flex;
+			justify-content: flex-start;
+			transition: 0.2s;
+
+			svg {
+				width: 30px;
+				height: 30px;
+			}
+		}
+
+		.go-back:hover {
+			opacity: 0.8;
+			cursor: pointer;
+		}
+
+		.group-router {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+
+			.route {
+				width: 40%;
+				height: 200px;
+				background: white;
+				color: black;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				transition: 0.3s;
+
+				p {
+					font-weight: 300;
+					font-size: 1.2rem;
+					margin-bottom: 1rem;
+				}
+
+				svg {
+					width: 20%;
+					height: 20%;
+				}
+			}
+
+			.route:hover {
+				cursor: pointer;
+				opacity: 0.8;
+			}
+		}
+	}
+}
