@@ -5,7 +5,13 @@ export enum UserActionConstants {
 	SET_LOGGED_IN = 'SET_LOGGED_IN',
 	SET_USER_ID = 'SET_USER_ID',
 	SET_LOGGED_OUT = 'SET_LOGGED_OUT',
-	SET_USER = 'SET_USER'
+	SET_USER = 'SET_USER',
+	REFETCHED_USER = 'REFETCHED_USER'
+}
+
+export interface RefetchedUser {
+	type: UserActionConstants.REFETCHED_USER;
+	payload: UserState['user'];
 }
 
 export interface SetLoggedIn {
@@ -81,6 +87,7 @@ export type RootActions = {
 		useLogout(): () => void;
 		useSetUserId(): (id: number) => void;
 		useGetUser(): void;
+		useRefetchUser(): () => void;
 	};
 	ui: {
 		useClearNotifications(): () => void;

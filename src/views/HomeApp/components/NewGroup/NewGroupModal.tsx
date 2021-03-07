@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 // Icons
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
+import NewGroup from './NewGroup';
 
 interface NewGroupModalProps {
 	open: boolean;
@@ -16,7 +17,11 @@ interface NewGroupModalProps {
 }
 
 const NewGroupModal = ({ open, setOpen }: NewGroupModalProps) => {
-	const [newGroup, setNewGroup] = useState({
+	const [newGroup, setNewGroup] = useState<{
+		isPublic: boolean;
+		name: string;
+		avatar: undefined | string;
+	}>({
 		isPublic: false,
 		name: '',
 		avatar: undefined
@@ -47,7 +52,7 @@ const NewGroupModal = ({ open, setOpen }: NewGroupModalProps) => {
 					</div>
 				)}
 				{route === '' && <h3>What would you like to do?</h3>}
-				{route === 'new-group' && <h3>Create a new chat</h3>}
+				{route === 'new-group' && <h3>Create a new group</h3>}
 				{route === 'enter-code' && <h3>Enter a group code</h3>}
 				{route === '' && (
 					<div className="group-router">
@@ -66,6 +71,9 @@ const NewGroupModal = ({ open, setOpen }: NewGroupModalProps) => {
 							<KeyboardSharpIcon />
 						</div>
 					</div>
+				)}
+				{route === 'new-group' && (
+					<NewGroup group={newGroup} setGroup={setNewGroup} />
 				)}
 			</DialogContent>
 		</Dialog>

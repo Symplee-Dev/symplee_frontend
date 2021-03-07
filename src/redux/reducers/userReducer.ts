@@ -29,6 +29,13 @@ export const userReducer = (
 				user: action.payload
 			};
 		}
+		case UserActionConstants.REFETCHED_USER: {
+			return {
+				...state,
+				userId: action.payload.id,
+				user: action.payload
+			};
+		}
 		default:
 			return state;
 	}
