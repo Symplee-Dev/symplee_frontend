@@ -1,0 +1,3 @@
+mutation AcceptInvite($acceptArgs: AcceptInviteInput!) {
+	acceptInvite(acceptArgs: $acceptArgs)
+}

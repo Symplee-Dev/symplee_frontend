@@ -1,14 +1,20 @@
 import './styles.scss';
-import { UISelectors } from '../../../../redux/selectors';
+import { UISelectors, UserSelectors } from '../../../../redux/selectors';
 import { CircularProgress, Avatar } from '@material-ui/core';
 import ChatGroupSidebarChat from './ChatGroupSidebarChat';
 
 // Icons
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import HomeSharpIcon from '@material-ui/icons/HomeSharp';
+import LinkSharpIcon from '@material-ui/icons/LinkSharp';
 
-const ChatGroupSidebar = () => {
+const ChatGroupSidebar = ({
+	setCreatingInvite
+}: {
+	setCreatingInvite: (val: boolean) => void;
+}) => {
 	const group = UISelectors.useSelectCurrentChatGroup();
+	const userId = UserSelectors.useSelectUserId();
 
 	if (!group)
 		return (
@@ -30,6 +36,22 @@ const ChatGroupSidebar = () => {
 				</Avatar>
 			</div>
 			<div className="content">
+				{group.isPublic && !(group.createdBy === userId) && (
+					<button
+						className="create-invite"
+						onClick={() => setCreatingInvite(true)}
+					>
+						Create Invite <LinkSharpIcon />
+					</button>
+				)}
+				{group.createdBy === userId && (
+					<button
+						className="create-invite"
+						onClick={() => setCreatingInvite(true)}
+					>
+						Create Invite <LinkSharpIcon />
+					</button>
+				)}
 				<h4>Channels</h4>
 				<div className="sidebar-chats">
 					<div className="chats-actions">
