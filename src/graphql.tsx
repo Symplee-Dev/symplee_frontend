@@ -93,9 +93,13 @@ export type Mutation = {
   updateUser: User;
   updateChatGroup: ChatGroup;
   sendMessage: Scalars['Boolean'];
+
   sendInvite: Scalars['Boolean'];
   acceptInvite: Scalars['Boolean'];
   markNotificationAsRead: Scalars['Boolean'];
+
+  toggleUserOnline: Scalars['Boolean'];
+
 };
 
 
@@ -189,6 +193,7 @@ export type MutationSendMessageArgs = {
 };
 
 
+
 export type MutationSendInviteArgs = {
   invite: SendInviteInput;
 };
@@ -201,16 +206,22 @@ export type MutationAcceptInviteArgs = {
 
 export type MutationMarkNotificationAsReadArgs = {
   notificationId: Scalars['Int'];
+
+export type MutationToggleUserOnlineArgs = {
+  status?: Maybe<Scalars['Boolean']>;
+
 };
 
 export type Subscription = {
   messageSent: MessagesChats;
+  activeChatUsers: Array<User>;
 };
 
 
 export type SubscriptionMessageSentArgs = {
   chatId: Scalars['Int'];
 };
+
 
 export type SendInviteInput = {
   fromId: Scalars['Int'];
@@ -223,6 +234,11 @@ export type AcceptInviteInput = {
   userId: Scalars['Int'];
   code: Scalars['String'];
   notificationId: Scalars['Int'];
+
+
+export type SubscriptionActiveChatUsersArgs = {
+  chatId: Scalars['Int'];
+
 };
 
 export type NewMessage = {
@@ -376,6 +392,7 @@ export type User = {
   createdAt: Scalars['String'];
   verified: Scalars['Boolean'];
   avatar?: Maybe<Scalars['String']>;
+  is_online: Scalars['Boolean'];
 };
 
 export type ChatGroup = {
@@ -528,6 +545,13 @@ export type SignupMutationVariables = Exact<{
 
 
 export type SignupMutation = { signup: { id: number, email: string, key: string, username: string } };
+
+export type ToggleUserOnlineMutationVariables = Exact<{
+  status?: Maybe<Scalars['Boolean']>;
+}>;
+
+
+export type ToggleUserOnlineMutation = { toggleUserOnline: boolean };
 
 export type UpdateChatGroupMutationVariables = Exact<{
   group?: Maybe<UpdateChatGroupInput>;
@@ -1013,6 +1037,36 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const ToggleUserOnlineDocument = gql`
+    mutation ToggleUserOnline($status: Boolean = false) {
+  toggleUserOnline(status: $status)
+}
+    `;
+export type ToggleUserOnlineMutationFn = Apollo.MutationFunction<ToggleUserOnlineMutation, ToggleUserOnlineMutationVariables>;
+
+/**
+ * __useToggleUserOnlineMutation__
+ *
+ * To run a mutation, you first call `useToggleUserOnlineMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleUserOnlineMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleUserOnlineMutation, { data, loading, error }] = useToggleUserOnlineMutation({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useToggleUserOnlineMutation(baseOptions?: Apollo.MutationHookOptions<ToggleUserOnlineMutation, ToggleUserOnlineMutationVariables>) {
+        return Apollo.useMutation<ToggleUserOnlineMutation, ToggleUserOnlineMutationVariables>(ToggleUserOnlineDocument, baseOptions);
+      }
+export type ToggleUserOnlineMutationHookResult = ReturnType<typeof useToggleUserOnlineMutation>;
+export type ToggleUserOnlineMutationResult = Apollo.MutationResult<ToggleUserOnlineMutation>;
+export type ToggleUserOnlineMutationOptions = Apollo.BaseMutationOptions<ToggleUserOnlineMutation, ToggleUserOnlineMutationVariables>;
 export const UpdateChatGroupDocument = gql`
     mutation UpdateChatGroup($group: UpdateChatGroupInput, $chatGroupId: Int!) {
   updateChatGroup(group: $group, chatGroupId: $chatGroupId) {

@@ -11,7 +11,7 @@ import {
 	SetUser,
 	SetCurrentChatGroup
 } from '../types/action-types';
-import { useUserQuery, useUserLazyQuery } from '../../graphql';
+import { useUserQuery, useUserLazyQuery, useToggleUserOnlineMutation } from '../../graphql';
 import { logger } from '../../utils/logger';
 import decode from 'jwt-decode';
 import { SetCurrentChat, RefetchedUser } from '../types/action-types';
@@ -43,8 +43,9 @@ export const UserActions: RootActions['user'] = {
 	},
 	useLogout() {
 		const dispatch = useDispatch();
-
+		const [toggleOnline] = useToggleUserOnlineMutation()
 		return () => {
+			toggleOnline();
 			localStorage.removeItem('bolttoken');
 
 			const action: SetLoggedOut = {
