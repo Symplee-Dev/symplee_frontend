@@ -4,7 +4,10 @@ import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
-import { useChangeLogsLazyQuery, useToggleUserOnlineMutation } from '../../graphql';
+import {
+	useChangeLogsLazyQuery,
+	useToggleUserOnlineMutation
+} from '../../graphql';
 import CreateGroup from './views/CreateGroup';
 import ChangeLogModal from './ChangeLogModal';
 import { useChangeLog } from '../../hooks/useChangeLog';
@@ -22,6 +25,9 @@ import { UISelectors } from '../../redux/selectors';
 import { useEffect, useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
 import SendInviteModal from './components/SendInviteModal/SendInviteModal';
+import { Dashboard } from '@material-ui/icons';
+import Dashbaord from './views/Dashboard/Dashboard';
+import DashboardSidebar from './components/DashboardSidebar/DashboardSidebar';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -38,6 +44,9 @@ const HomeApp = () => {
 
 	const [creatingGroup, setCreatingGroup] = useState(false);
 	const [creatingInvite, setCreatingInvite] = useState(false);
+	const [dashboardRoute, setDashboardRoute] = useState<
+		'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS'
+	>('ROOT');
 
 	useEffect(() => {
 		toggleOnline({
@@ -46,7 +55,7 @@ const HomeApp = () => {
 			}
 		});
 		window.addEventListener('beforeunload', () => toggleOnline());
-	}, [])
+	}, []);
 
 	// const [
 	// 	getChangeLog,
@@ -88,6 +97,12 @@ const HomeApp = () => {
 									setCreatingInvite={setCreatingInvite}
 								/>
 							)}
+						{location.pathname === '/' && (
+							<DashboardSidebar
+								route={dashboardRoute}
+								setRoute={setDashboardRoute}
+							/>
+						)}
 					</div>
 					<SidebarFooter />
 				</div>
@@ -113,7 +128,7 @@ const HomeApp = () => {
 						<ChatMembersBar />
 					</Route>
 					<Route exact path="/">
-						{/* <HomeAppRoot user={user} /> */}
+						<Dashbaord route={dashboardRoute} />
 					</Route>
 				</Switch>
 				{/* {changeLogOpen && currentLog && (

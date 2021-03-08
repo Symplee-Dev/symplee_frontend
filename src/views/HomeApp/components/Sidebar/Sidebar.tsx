@@ -7,6 +7,7 @@ import AddSharpIcon from '@material-ui/icons/AddSharp';
 import DashboardSharpIcon from '@material-ui/icons/DashboardSharp';
 import { RootState } from '../../../../redux/types/state-types';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 const Sidebar = ({
 	setCreatingGroup
@@ -19,9 +20,11 @@ const Sidebar = ({
 		(state: RootState) => state.user.user?.chatGroups ?? []
 	);
 
+	const history = useHistory();
+
 	return (
 		<div className="sidebar">
-			<div className="sidebar-btn">
+			<div className="sidebar-btn" onClick={() => history.push('/')}>
 				<DashboardSharpIcon />
 			</div>
 			<div className="sidebar-btn" onClick={() => setCreatingGroup(true)}>
