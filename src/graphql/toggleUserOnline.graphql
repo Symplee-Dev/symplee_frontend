@@ -1,0 +1,3 @@
+mutation ToggleUserOnline($status: Boolean = false) {
+  toggleUserOnline(status: $status)
+}

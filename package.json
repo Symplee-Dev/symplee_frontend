@@ -11,7 +11,7 @@
 		"@material-ui/lab": "^4.0.0-alpha.57",
 		"@sentry/react": "^6.2.0",
 		"@sentry/tracing": "^6.2.0",
-		"@symplee-dev/app-utilities": "1.0.0",
+		"@symplee-dev/app-utilities": "1.0.1",
 		"axios": "^0.21.1",
 		"comlink": "^4.3.0",
 		"emoji-picker-react": "^3.4.2",
