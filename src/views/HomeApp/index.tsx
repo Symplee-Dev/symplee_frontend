@@ -21,6 +21,7 @@ import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 import { UISelectors } from '../../redux/selectors';
 import { useEffect, useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
+import SendInviteModal from './components/SendInviteModal/SendInviteModal';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -36,6 +37,7 @@ const HomeApp = () => {
 	const hasCurrentGroup = UISelectors.useSelectCurrentChatGroup();
 
 	const [creatingGroup, setCreatingGroup] = useState(false);
+	const [creatingInvite, setCreatingInvite] = useState(false);
 
 	useEffect(() => {
 		toggleOnline({
@@ -71,11 +73,21 @@ const HomeApp = () => {
 						setOpen={setCreatingGroup}
 					/>
 				)}
+				{creatingInvite && (
+					<SendInviteModal
+						open={creatingInvite}
+						setOpen={setCreatingInvite}
+					/>
+				)}
 				<div className="sidebar-footer-container">
 					<div className="top">
 						<Sidebar setCreatingGroup={setCreatingGroup} />
 						{location.pathname.includes('/group/') &&
-							hasCurrentGroup && <ChatGroupSidebar />}
+							hasCurrentGroup && (
+								<ChatGroupSidebar
+									setCreatingInvite={setCreatingInvite}
+								/>
+							)}
 					</div>
 					<SidebarFooter />
 				</div>

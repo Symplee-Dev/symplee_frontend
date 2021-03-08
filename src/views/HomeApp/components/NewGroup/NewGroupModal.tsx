@@ -10,6 +10,7 @@ import { useState } from 'react';
 // Icons
 import KeyboardBackspaceSharpIcon from '@material-ui/icons/KeyboardBackspaceSharp';
 import NewGroup from './NewGroup';
+import EnterCode from './EnterCode';
 
 interface NewGroupModalProps {
 	open: boolean;
@@ -75,6 +76,8 @@ const NewGroupModal = ({ open, setOpen }: NewGroupModalProps) => {
 				{route === 'new-group' && (
 					<NewGroup group={newGroup} setGroup={setNewGroup} />
 				)}
+
+				{route === 'enter-code' && <EnterCode setOpen={setOpen} />}
 			</DialogContent>
 		</Dialog>
 	);

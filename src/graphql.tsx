@@ -30,6 +30,7 @@ export type Query = {
   feedbackById: AppFeedback;
   getMembers: Array<User>;
   getMessages: Array<Maybe<MessagesChats>>;
+  getNotifications: Array<Maybe<Notification>>;
 };
 
 
@@ -68,6 +69,12 @@ export type QueryGetMessagesArgs = {
   chatId: Scalars['Int'];
 };
 
+
+export type QueryGetNotificationsArgs = {
+  userId: Scalars['Int'];
+  type: Scalars['String'];
+};
+
 export type Mutation = {
   sendForgotPasswordEmail: Scalars['Boolean'];
   signup: User;
@@ -86,7 +93,13 @@ export type Mutation = {
   updateUser: User;
   updateChatGroup: ChatGroup;
   sendMessage: Scalars['Boolean'];
+
+  sendInvite: Scalars['Boolean'];
+  acceptInvite: Scalars['Boolean'];
+  markNotificationAsRead: Scalars['Boolean'];
+
   toggleUserOnline: Scalars['Boolean'];
+
 };
 
 
@@ -180,8 +193,23 @@ export type MutationSendMessageArgs = {
 };
 
 
+
+export type MutationSendInviteArgs = {
+  invite: SendInviteInput;
+};
+
+
+export type MutationAcceptInviteArgs = {
+  acceptArgs: AcceptInviteInput;
+};
+
+
+export type MutationMarkNotificationAsReadArgs = {
+  notificationId: Scalars['Int'];
+
 export type MutationToggleUserOnlineArgs = {
   status?: Maybe<Scalars['Boolean']>;
+
 };
 
 export type Subscription = {
@@ -195,8 +223,22 @@ export type SubscriptionMessageSentArgs = {
 };
 
 
+export type SendInviteInput = {
+  fromId: Scalars['Int'];
+  uses: Scalars['Int'];
+  to: Array<Maybe<Scalars['Int']>>;
+  groupId: Scalars['Int'];
+};
+
+export type AcceptInviteInput = {
+  userId: Scalars['Int'];
+  code: Scalars['String'];
+  notificationId: Scalars['Int'];
+
+
 export type SubscriptionActiveChatUsersArgs = {
   chatId: Scalars['Int'];
+
 };
 
 export type NewMessage = {
@@ -383,10 +425,39 @@ export type MessagesChats = {
   author: User;
 };
 
+export type GroupInvite = {
+  id: Scalars['Int'];
+  fromId: Scalars['Int'];
+  fromAuthor: User;
+  code: Scalars['String'];
+  uses: Scalars['Int'];
+  used: Scalars['Int'];
+  groupId: Scalars['Int'];
+  group: ChatGroup;
+};
+
+export type Notification = {
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  description: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  fromId?: Maybe<Scalars['Int']>;
+  from?: Maybe<User>;
+  createdAt: Scalars['String'];
+  read: Scalars['Boolean'];
+};
+
 export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
 
+
+export type AcceptInviteMutationVariables = Exact<{
+  acceptArgs: AcceptInviteInput;
+}>;
+
+
+export type AcceptInviteMutation = { acceptInvite: boolean };
 
 export type ChangeLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -451,6 +522,13 @@ export type SendFeedbackMutationVariables = Exact<{
 
 export type SendFeedbackMutation = { sendFeedback: { id: number } };
 
+export type SendInviteMutationVariables = Exact<{
+  invite: SendInviteInput;
+}>;
+
+
+export type SendInviteMutation = { sendInvite: boolean };
+
 export type SendMessageMutationVariables = Exact<{
   message: NewMessage;
 }>;
@@ -506,6 +584,36 @@ export type VerifyEmailMutationVariables = Exact<{
 export type VerifyEmailMutation = { verifyEmail: boolean };
 
 
+export const AcceptInviteDocument = gql`
+    mutation AcceptInvite($acceptArgs: AcceptInviteInput!) {
+  acceptInvite(acceptArgs: $acceptArgs)
+}
+    `;
+export type AcceptInviteMutationFn = Apollo.MutationFunction<AcceptInviteMutation, AcceptInviteMutationVariables>;
+
+/**
+ * __useAcceptInviteMutation__
+ *
+ * To run a mutation, you first call `useAcceptInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptInviteMutation, { data, loading, error }] = useAcceptInviteMutation({
+ *   variables: {
+ *      acceptArgs: // value for 'acceptArgs'
+ *   },
+ * });
+ */
+export function useAcceptInviteMutation(baseOptions?: Apollo.MutationHookOptions<AcceptInviteMutation, AcceptInviteMutationVariables>) {
+        return Apollo.useMutation<AcceptInviteMutation, AcceptInviteMutationVariables>(AcceptInviteDocument, baseOptions);
+      }
+export type AcceptInviteMutationHookResult = ReturnType<typeof useAcceptInviteMutation>;
+export type AcceptInviteMutationResult = Apollo.MutationResult<AcceptInviteMutation>;
+export type AcceptInviteMutationOptions = Apollo.BaseMutationOptions<AcceptInviteMutation, AcceptInviteMutationVariables>;
 export const ChangeLogsDocument = gql`
     query ChangeLogs {
   changeLogs {
@@ -829,6 +937,36 @@ export function useSendFeedbackMutation(baseOptions?: Apollo.MutationHookOptions
 export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
 export type SendFeedbackMutationResult = Apollo.MutationResult<SendFeedbackMutation>;
 export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<SendFeedbackMutation, SendFeedbackMutationVariables>;
+export const SendInviteDocument = gql`
+    mutation SendInvite($invite: SendInviteInput!) {
+  sendInvite(invite: $invite)
+}
+    `;
+export type SendInviteMutationFn = Apollo.MutationFunction<SendInviteMutation, SendInviteMutationVariables>;
+
+/**
+ * __useSendInviteMutation__
+ *
+ * To run a mutation, you first call `useSendInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendInviteMutation, { data, loading, error }] = useSendInviteMutation({
+ *   variables: {
+ *      invite: // value for 'invite'
+ *   },
+ * });
+ */
+export function useSendInviteMutation(baseOptions?: Apollo.MutationHookOptions<SendInviteMutation, SendInviteMutationVariables>) {
+        return Apollo.useMutation<SendInviteMutation, SendInviteMutationVariables>(SendInviteDocument, baseOptions);
+      }
+export type SendInviteMutationHookResult = ReturnType<typeof useSendInviteMutation>;
+export type SendInviteMutationResult = Apollo.MutationResult<SendInviteMutation>;
+export type SendInviteMutationOptions = Apollo.BaseMutationOptions<SendInviteMutation, SendInviteMutationVariables>;
 export const SendMessageDocument = gql`
     mutation SendMessage($message: NewMessage!) {
   sendMessage(message: $message)
