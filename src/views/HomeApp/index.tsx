@@ -4,7 +4,7 @@ import { Route, Switch, useLocation } from 'react-router';
 import HomeAppRoot from './views/HomeAppRoot';
 import { CircularProgress } from '@material-ui/core';
 import Account from './views/Account';
-import { useChangeLogsLazyQuery } from '../../graphql';
+import { useChangeLogsLazyQuery, useToggleUserOnlineMutation } from '../../graphql';
 import CreateGroup from './views/CreateGroup';
 import ChangeLogModal from './ChangeLogModal';
 import { useChangeLog } from '../../hooks/useChangeLog';
@@ -19,12 +19,14 @@ import ChatGroupIndex from './views/ChatGroup/index';
 import SidebarFooter from './components/SidebarFooter/SidebarFooter';
 import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 import { UISelectors } from '../../redux/selectors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
 
 const HomeApp = () => {
 	// remove padding for home app
 	document.body.classList.add('body-app');
+
+	const [toggleOnline] = useToggleUserOnlineMutation();
 
 	const location = useLocation();
 
@@ -34,6 +36,15 @@ const HomeApp = () => {
 	const hasCurrentGroup = UISelectors.useSelectCurrentChatGroup();
 
 	const [creatingGroup, setCreatingGroup] = useState(false);
+
+	useEffect(() => {
+		toggleOnline({
+			variables: {
+				status: true
+			}
+		});
+		window.addEventListener('beforeunload', () => toggleOnline());
+	}, [])
 
 	// const [
 	// 	getChangeLog,
