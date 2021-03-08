@@ -1,10 +1,13 @@
 import './style.scss';
 import Dialog from '@material-ui/core/Dialog';
 import {
+	Button,
 	CircularProgress,
+	DialogActions,
 	DialogContent,
 	MenuItem,
-	Select
+	Select,
+	Tooltip
 } from '@material-ui/core';
 import { useState } from 'react';
 import { UserSelectors, UISelectors } from '../../../../redux/selectors';
@@ -20,7 +23,7 @@ interface SendInviteModalProps {
 }
 
 const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
-	const userId = UserSelectors.useSelectUserId();
+	const userId = useSelector((state: RootState) => state.user.user!.id);
 	const currentGroup = UISelectors.useSelectCurrentChatGroup();
 	const id = useSelector(
 		(state: RootState) => state.ui.notifications.length + 1
@@ -32,7 +35,7 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 		to: number[];
 		groupId: number;
 	}>({
-		fromId: userId!,
+		fromId: userId,
 		uses: -1,
 		to: [],
 		groupId: currentGroup!.id
@@ -41,12 +44,13 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 	const [sendInvite, { data, loading, error }] = useSendInviteMutation();
 
 	const sendNotification = UIActions.useAddNotification();
+	const [copied, setCopied] = useState(false);
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		sendInvite({ variables: { invite: formState } });
-
-		if (data && !error) {
+		sendInvite({
+			variables: { invite: { ...formState, fromId: userId } }
+		}).then(() => {
 			sendNotification({
 				id,
 				title: 'Invite Sent!',
@@ -54,7 +58,13 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 				autoDismiss: true,
 				autoTimeoutTime: 3000
 			});
-		}
+		});
+	};
+
+	const onCopy = () => {
+		navigator.clipboard.writeText(data!.sendInvite.toString() ?? '');
+
+		setCopied(true);
 	};
 
 	return (
@@ -66,12 +76,12 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 			PaperProps={{ className: 'paper-ref' }}
 		>
 			<DialogContent>
-				<h3>Create a new invite code</h3>
+				<h3>Create a new invite code {copied && '- Copied!'}</h3>
 				{loading && <CircularProgress />}
 
 				{!data && !error && (
 					<form onSubmit={handleSubmit}>
-						<p>Number of uses</p>
+						<h5>Number of uses</h5>
 						<Select
 							fullWidth
 							value={formState.uses}
@@ -91,15 +101,23 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 							<MenuItem value={100}>100</MenuItem>
 							<MenuItem value={1000}>1000</MenuItem>
 						</Select>
+						<button className="generate-btn">Generate</button>
 					</form>
 				)}
 				{data && !error && (
-					<div className="copy-code">
-						<p>{data.sendInvite}</p>
-						<FileCopySharpIcon />
-					</div>
+					<Tooltip placement="bottom" title="Copy">
+						<div className="copy-code" onClick={onCopy}>
+							<p>{data.sendInvite}</p>
+							<FileCopySharpIcon />
+						</div>
+					</Tooltip>
 				)}
 			</DialogContent>
+			<DialogActions>
+				<Button onClick={() => setOpen(false)} color="primary">
+					Close
+				</Button>
+			</DialogActions>
 		</Dialog>
 	);
 };
