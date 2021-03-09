@@ -50,6 +50,12 @@
 					h4 {
 						font-weight: 500;
 						margin-left: 0.5rem;
+						transition: 0.3s;
+					}
+
+					h4:hover {
+						cursor: pointer;
+						opacity: 0.5;
 					}
 
 					p {

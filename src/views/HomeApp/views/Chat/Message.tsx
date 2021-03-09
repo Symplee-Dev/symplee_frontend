@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import MoreVertSharpIcon from '@material-ui/icons/MoreVertSharp';
 import { UserSelectors } from '../../../../redux/selectors';
 import { useState } from 'react';
+import UserPopover from '../../components/UserPopOver/UserPopover';
 
 interface MessageProps {
 	message: Maybe<{
@@ -19,6 +20,10 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 	const userId = UserSelectors.useSelectUserId();
 	const [showBubble, setShowBubble] = useState(false);
 
+	const [anchorEl, setAnchorEl] = useState<
+		(EventTarget & HTMLHeadingElement) | null
+	>(null);
+
 	if (!message) return null;
 
 	return (
@@ -33,9 +38,16 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 				<div className="top">
 					<div className="left">
 						<Avatar src={message.author.avatar}>
-							{message.author.username[0]}
+							{message.author.username[0].toUpperCase()}
 						</Avatar>
-						<h4>{message.author.username}</h4>
+						<h4 onClick={el => setAnchorEl(el.currentTarget)}>
+							{message.author.username}
+						</h4>
+						<UserPopover
+							anchor={anchorEl}
+							user={message.author}
+							setAnchor={setAnchorEl}
+						/>
 						<p>
 							<Moment fromNow={true} ago>
 								{new Date(message.createdAt)}
