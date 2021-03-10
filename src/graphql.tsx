@@ -234,6 +234,7 @@ export type MutationAddFriendArgs = {
 
 export type MutationRemoveFriendArgs = {
   friendId: Scalars['Int'];
+  userId: Scalars['Int'];
 };
 
 
@@ -504,6 +505,7 @@ export type UserFriend = {
   friend?: Maybe<User>;
   friendsSince: Scalars['String'];
   status: Scalars['String'];
+  sentBy: Scalars['Int'];
 };
 
 export type CacheControlScope =
@@ -580,7 +582,7 @@ export type GetFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetFriendsQuery = { getFriends: Array<Maybe<{ id: number, userId: number, friendsSince: string, status: string, friend?: Maybe<{ id: number }> }>> };
+export type GetFriendsQuery = { getFriends: Array<Maybe<{ id: number, userId: number, friendsSince: string, status: string, sentBy: number, friend?: Maybe<{ id: number }> }>> };
 
 export type GetMembersQueryVariables = Exact<{
   chatId: Scalars['Int'];
@@ -615,6 +617,7 @@ export type LoginMutation = { login?: Maybe<{ authenticated: boolean, token: str
 
 export type RemoveFriendMutationVariables = Exact<{
   friendId: Scalars['Int'];
+  userId: Scalars['Int'];
 }>;
 
 
@@ -1001,6 +1004,7 @@ export const GetFriendsDocument = gql`
     }
     friendsSince
     status
+    sentBy
   }
 }
     `;
@@ -1186,8 +1190,8 @@ export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const RemoveFriendDocument = gql`
-    mutation RemoveFriend($friendId: Int!) {
-  removeFriend(friendId: $friendId)
+    mutation RemoveFriend($friendId: Int!, $userId: Int!) {
+  removeFriend(friendId: $friendId, userId: $userId)
 }
     `;
 export type RemoveFriendMutationFn = Apollo.MutationFunction<RemoveFriendMutation, RemoveFriendMutationVariables>;
@@ -1206,6 +1210,7 @@ export type RemoveFriendMutationFn = Apollo.MutationFunction<RemoveFriendMutatio
  * const [removeFriendMutation, { data, loading, error }] = useRemoveFriendMutation({
  *   variables: {
  *      friendId: // value for 'friendId'
+ *      userId: // value for 'userId'
  *   },
  * });
  */

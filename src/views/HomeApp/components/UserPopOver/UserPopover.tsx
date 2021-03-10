@@ -57,6 +57,7 @@ export const UserPopover = ({
 				friend?: Maybe<{
 					id: number;
 				}>;
+				sentBy: number;
 		  }
 		| undefined
 	>(undefined);
@@ -70,15 +71,6 @@ export const UserPopover = ({
 			);
 			if (friend) {
 				setThisFriend(friend);
-			} else {
-				const otherFriend = data.getFriends.find(
-					friend =>
-						friend?.userId === user.id &&
-						friend.friend?.id === userId
-				);
-				if (otherFriend) {
-					setThisFriend(otherFriend);
-				}
 			}
 		}
 	}, [data, user.id, userId]);
@@ -112,19 +104,19 @@ export const UserPopover = ({
 
 	const handleRemove = () => {
 		if (!thisFriend || !thisFriend.friend) return;
-		removeFriend({ variables: { friendId: thisFriend.friend.id } }).then(
-			() => {
-				addNotification({
-					title: 'Friend has been unadded.',
-					id: notifId,
-					type: 'error',
-					autoDismiss: true,
-					autoTimeoutTime: 3000
-				});
+		removeFriend({
+			variables: { friendId: thisFriend.friend.id, userId: userId }
+		}).then(() => {
+			addNotification({
+				title: 'Friend has been unadded.',
+				id: notifId,
+				type: 'error',
+				autoDismiss: true,
+				autoTimeoutTime: 3000
+			});
 
-				refetch();
-			}
-		);
+			refetch();
+		});
 	};
 
 	return (
@@ -193,7 +185,7 @@ export const UserPopover = ({
 						user.id !== userId &&
 						thisFriend &&
 						thisFriend.status === 'PENDING' &&
-						thisFriend.friend?.id === userId && (
+						thisFriend.sentBy !== userId && (
 							<div className="right">
 								<Tooltip
 									placement="right"
@@ -214,7 +206,8 @@ export const UserPopover = ({
 						user.id !== userId &&
 						thisFriend &&
 						thisFriend.status === 'PENDING' &&
-						thisFriend.userId === userId && (
+						thisFriend.userId === userId &&
+						thisFriend.sentBy === userId && (
 							<div className="right">
 								<Tooltip
 									placement="right"

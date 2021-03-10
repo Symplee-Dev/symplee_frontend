@@ -7,5 +7,6 @@ query GetFriends($userId: Int!, $friendId: Int!) {
 		}
 		friendsSince
 		status
+		sentBy
 	}
 }
