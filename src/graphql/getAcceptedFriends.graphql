@@ -1,0 +1,11 @@
+query GetAcceptedFriends($userId: Int!) {
+	getAcceptedFriends(userId: $userId) {
+		friendsSince
+		friend {
+			id
+			username
+			key
+			is_online
+		}
+	}
+}

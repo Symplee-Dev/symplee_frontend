@@ -1,0 +1,17 @@
+query GetProfile($userId: Int!, $otherUserId: Int!) {
+	getProfile(userId: $userId, otherUserId: $otherUserId) {
+		user {
+			username
+			key
+			verified
+			createdAt
+			avatar
+			is_online
+		}
+		relatedGroups {
+			name
+			isPublic
+			avatar
+		}
+	}
+}

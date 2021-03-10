@@ -41,7 +41,13 @@ export enum UIActionConstants {
 	SET_HAS_LATEST_CHANGELOG = 'SET_HAS_LATEST_CHANGELOG',
 	SET_CURRENT_CHATGROUP = 'SET_CURRENT_CHATGROUP',
 	SET_CURRENT_CHAT = 'SET_CURRENT_CHAT',
-	CLEAR_CURRENT_CHAT = 'CLEAR_CURRENT_CHAT'
+	CLEAR_CURRENT_CHAT = 'CLEAR_CURRENT_CHAT',
+	SET_CURRENT_PROFILE_VIEW = 'SET_CURRENT_PROFILE_VIEW'
+}
+
+export interface SetCurrentProfileView {
+	type: UIActionConstants.SET_CURRENT_PROFILE_VIEW;
+	payload: UIState['currentlyViewedProfile'];
 }
 
 export interface SetHasLatestChangelog {
@@ -99,5 +105,8 @@ export type RootActions = {
 		useClearCurrentChatGroup(): () => void;
 		useSetCurrentChat(): (chat: UIState['currentChat']) => void;
 		useClearCurrentChat(): () => void;
+		useSetCurrentProfile(): (
+			profile: UIState['currentlyViewedProfile']
+		) => void;
 	};
 };

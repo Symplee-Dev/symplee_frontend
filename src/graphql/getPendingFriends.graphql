@@ -1,0 +1,11 @@
+query GetPendingFriends($userId: Int!) {
+	getPendingFriends(userId: $userId) {
+		friendsSince
+		friend {
+			id
+			username
+			key
+			is_online
+		}
+	}
+}
