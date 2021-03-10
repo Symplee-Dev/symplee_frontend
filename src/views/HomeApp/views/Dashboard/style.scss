@@ -15,6 +15,48 @@
 			box-sizing: border-box;
 			padding: 1.5rem;
 
+			.content {
+				margin-top: 1rem;
+				.notification {
+					width: 100%;
+					background-color: #2b2e30;
+					box-sizing: border-box;
+					border: 1px solid black;
+					padding: 1rem;
+
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.middle {
+						display: flex;
+						align-items: center;
+
+						.read-p {
+							margin-right: 1rem;
+						}
+
+						svg {
+							margin-right: 1rem;
+						}
+
+						svg:hover {
+							cursor: pointer;
+							opacity: 0.8;
+						}
+					}
+
+					p {
+						font-weight: 300;
+						font-size: 0.8rem;
+					}
+				}
+
+				.read {
+					opacity: 0.7;
+				}
+			}
+
 			.top {
 				display: flex;
 				justify-content: space-between;

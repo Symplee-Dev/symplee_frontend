@@ -1,0 +1,59 @@
+.user-popup {
+	width: 300px;
+	padding: 1rem;
+	background: #3e4756;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.left {
+			width: 50%;
+			display: flex;
+			align-items: center;
+
+			h3 {
+				font-weight: 500;
+				font-size: 1rem;
+				margin-left: 1rem;
+			}
+		}
+
+		.right {
+			svg:hover {
+				cursor: pointer;
+			}
+		}
+	}
+
+	.content {
+		margin-top: 1rem;
+
+		button {
+			background: #2b2e30;
+			width: 100%;
+			color: white;
+			border: none;
+			box-sizing: border-box;
+			padding: 0.5rem;
+			outline: none;
+			transition: 0.3s;
+			font-weight: 300;
+		}
+
+		button:hover {
+			cursor: pointer;
+			opacity: 0.8;
+		}
+	}
+	.friends-since {
+		font-weight: 300;
+		font-size: 0.8rem;
+		margin-top: 0.5rem;
+	}
+}

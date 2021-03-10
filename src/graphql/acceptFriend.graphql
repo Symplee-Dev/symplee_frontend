@@ -1,0 +1,3 @@
+mutation AcceptFriend($notificationId: Int!, $invite: AcceptFriendInput!) {
+	acceptFriend(notificationId: $notificationId, invite: $invite)
+}
