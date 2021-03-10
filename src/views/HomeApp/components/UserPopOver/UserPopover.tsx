@@ -190,7 +190,7 @@ export const UserPopover = ({
 						user.id !== userId &&
 						thisFriend &&
 						thisFriend.status === 'PENDING' &&
-						thisFriend.userId !== userId && (
+						thisFriend.friend?.id === userId && (
 							<div className="right">
 								<Tooltip
 									placement="right"
