@@ -1,10 +1,12 @@
 query GetNotifications($userId: Int!, $type: String!) {
 	getNotifications(userId: $userId, type: $type) {
+		id
 		description
 		type
 		from {
 			username
 			key
+			id
 		}
 		createdAt
 		read

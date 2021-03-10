@@ -1,0 +1,3 @@
+mutation DeclineFriend($notificationId: Int!, $invite: DeclineFriendInput!) {
+	declineFriend(notificationId: $notificationId, invite: $invite)
+}

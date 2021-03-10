@@ -1,5 +1,4 @@
 .user-popup {
-	height: 100px;
 	width: 300px;
 	padding: 1rem;
 	background: #3e4756;
@@ -51,5 +50,10 @@
 			cursor: pointer;
 			opacity: 0.8;
 		}
+	}
+	.friends-since {
+		font-weight: 300;
+		font-size: 0.8rem;
+		margin-top: 0.5rem;
 	}
 }

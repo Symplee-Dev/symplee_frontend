@@ -1,0 +1,11 @@
+query GetFriends($userId: Int!, $friendId: Int!) {
+	getFriends(userId: $userId, friendId: $friendId) {
+		id
+		userId
+		friend {
+			id
+		}
+		friendsSince
+		status
+	}
+}

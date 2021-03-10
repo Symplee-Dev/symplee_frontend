@@ -43,11 +43,13 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 						<h4 onClick={el => setAnchorEl(el.currentTarget)}>
 							{message.author.username}
 						</h4>
-						<UserPopover
-							anchor={anchorEl}
-							user={message.author}
-							setAnchor={setAnchorEl}
-						/>
+						{anchorEl && (
+							<UserPopover
+								anchor={anchorEl}
+								user={message.author}
+								setAnchor={setAnchorEl}
+							/>
+						)}
 						<p>
 							<Moment fromNow={true} ago>
 								{new Date(message.createdAt)}
