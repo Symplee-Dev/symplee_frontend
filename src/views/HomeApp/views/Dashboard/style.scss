@@ -14,8 +14,13 @@
 			background: #3e4756;
 			box-sizing: border-box;
 			padding: 1.5rem;
+			display: flex;
+			flex-direction: column;
 
 			.content {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				margin-top: 1rem;
 				.notification {
 					width: 100%;

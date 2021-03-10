@@ -65,20 +65,23 @@ export const UserPopover = ({
 		console.log('new data');
 		if (data) {
 			const friend = data.getFriends.find(
-				friend => friend?.friend?.id === user.id
+				friend =>
+					friend?.friend?.id === user.id && friend.userId === userId
 			);
 			if (friend) {
 				setThisFriend(friend);
 			} else {
 				const otherFriend = data.getFriends.find(
-					friend => friend?.userId === user.id
+					friend =>
+						friend?.userId === user.id &&
+						friend.friend?.id === userId
 				);
 				if (otherFriend) {
 					setThisFriend(otherFriend);
 				}
 			}
 		}
-	}, [data, user.id]);
+	}, [data, user.id, userId]);
 
 	const handleClose = () => {
 		setAnchor(null);
