@@ -262,7 +262,17 @@ export const UserPopover = ({
 						</p>
 					)}
 				<div className="content">
-					<button>View</button>
+					{thisFriend && (
+						<button
+							onClick={() =>
+								history.push(
+									'/user/profile/' + thisFriend?.friend?.id
+								)
+							}
+						>
+							View
+						</button>
+					)}
 				</div>
 			</div>
 		</Popover>
