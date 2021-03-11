@@ -77,4 +77,99 @@
 			}
 		}
 	}
+
+	.friends {
+		background: #eeeeee;
+		height: 100%;
+		width: 70%;
+		color: black;
+		.top {
+			padding: 1rem;
+			box-sizing: border-box;
+			p {
+				font-weight: 300;
+				font-size: 1.2rem;
+				margin-bottom: 1rem;
+			}
+
+			form {
+				display: flex;
+				flex-direction: column;
+				.text-input {
+				}
+
+				button {
+					margin-top: 1rem;
+					height: 35px;
+					border: none;
+					transition: ease-in-out 0.3s;
+					background: #2b2e30;
+					outline: none;
+					color: white;
+					font-weight: 300;
+					font-size: 0.8rem;
+				}
+
+				button:hover {
+					cursor: pointer;
+					opacity: 0.7;
+				}
+			}
+		}
+
+		.content {
+			padding: 1rem;
+			height: 80%;
+			.friend-list {
+				height: 80%;
+				display: flex;
+				overflow-y: scroll;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-content: flex-start;
+
+				.friend {
+					display: flex;
+					flex-direction: column;
+
+					width: 48%;
+					padding: 1rem;
+					box-sizing: border-box;
+					margin-top: 1rem;
+					height: 75px;
+					color: white;
+					background: #2b2e30;
+					border-radius: 0.5rem;
+
+					.friend-top {
+						display: flex;
+						align-items: center;
+
+						h5 {
+							margin-right: 1rem;
+							font-size: 1rem;
+							font-weight: 500;
+						}
+
+						P {
+							margin-right: 1rem;
+						}
+					}
+
+					h3 {
+						margin-top: 0.5rem;
+						font-weight: 300;
+						font-size: 0.8rem;
+					}
+
+					transition: ease-in-out 0.2s;
+				}
+
+				.friend:hover {
+					cursor: pointer;
+					opacity: 0.8;
+				}
+			}
+		}
+	}
 }

@@ -650,7 +650,7 @@ export type GetProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string> }>> } };
+export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
 
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
@@ -1293,6 +1293,7 @@ export const GetProfileDocument = gql`
       name
       isPublic
       avatar
+      id
     }
   }
 }

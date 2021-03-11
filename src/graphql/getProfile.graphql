@@ -12,6 +12,7 @@ query GetProfile($userId: Int!, $otherUserId: Int!) {
 			name
 			isPublic
 			avatar
+			id
 		}
 	}
 }

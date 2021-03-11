@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { useGetProfileQuery } from '../../../../graphql';
 import { UserSelectors } from '../../../../redux/selectors';
 import PublicProfileSkeleton from './PublicProfileSkeleton';
@@ -10,6 +10,7 @@ const PublicProfile = () => {
 	const { id }: { id: string } = useParams();
 	const userId = UserSelectors.useSelectUserId()!;
 	const setCurrentProfile = UIActions.useSetCurrentProfile();
+	const history = useHistory();
 
 	const { data, loading } = useGetProfileQuery({
 		variables: { userId: userId, otherUserId: Number(id) },
@@ -63,17 +64,27 @@ const PublicProfile = () => {
 					</div>
 
 					<div className="related-groups-main">
-						<h3 className="title">
-							Groups You Are In With{' '}
-							{data.getProfile.user.username}
-						</h3>
+						<h3 className="title">Mutual Groups</h3>
+						<hr />
 						{data.getProfile.relatedGroups.map(g =>
 							g?.isPublic ? (
-								<div className="group">
-									<Avatar src={g?.avatar}>
-										{g?.name[0].toUpperCase()}
-									</Avatar>
-									<h3>{g?.name}</h3>
+								<div className="group-container">
+									<div className="group">
+										<Avatar src={g?.avatar}>
+											{g?.name[0].toUpperCase()}
+										</Avatar>
+										<h3>{g?.name}</h3>
+										<p>
+											{g.isPublic ? 'Public' : 'Private'}
+										</p>
+									</div>
+									<button
+										onClick={() =>
+											history.push('/group/' + g.id)
+										}
+									>
+										View
+									</button>
 								</div>
 							) : null
 						)}
