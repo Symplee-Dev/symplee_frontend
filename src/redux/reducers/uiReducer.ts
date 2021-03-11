@@ -6,7 +6,8 @@ export const initialUIState: UIState = {
 	hasLatestChangeLog: { value: false, dateSet: new Date().toString() },
 	changelogs: [],
 	currentChatGroup: undefined,
-	currentChat: undefined
+	currentChat: undefined,
+	currentlyViewedProfile: undefined
 };
 
 export const uiReducer = (
@@ -40,6 +41,9 @@ export const uiReducer = (
 		}
 		case UIActionConstants.SET_CURRENT_CHAT: {
 			return { ...state, currentChat: action.payload };
+		}
+		case UIActionConstants.SET_CURRENT_PROFILE_VIEW: {
+			return { ...state, currentlyViewedProfile: action.payload };
 		}
 		default:
 			return state;

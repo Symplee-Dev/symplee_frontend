@@ -33,6 +33,9 @@ export type Query = {
   getNotifications: Array<Maybe<Notification>>;
   getFriends: Array<Maybe<UserFriend>>;
   searchGroups: Array<Maybe<ChatGroup>>;
+  getProfile: GetProfileReturn;
+  getAcceptedFriends: Array<Maybe<UserFriend>>;
+  getPendingFriends: Array<Maybe<UserFriend>>;
 };
 
 
@@ -86,6 +89,27 @@ export type QueryGetFriendsArgs = {
 
 export type QuerySearchGroupsArgs = {
   queryString: Scalars['String'];
+};
+
+
+export type QueryGetProfileArgs = {
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+};
+
+
+export type QueryGetAcceptedFriendsArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetPendingFriendsArgs = {
+  userId: Scalars['Int'];
+};
+
+export type GetProfileReturn = {
+  user: User;
+  relatedGroups: Array<Maybe<ChatGroup>>;
 };
 
 export type Mutation = {
@@ -569,6 +593,13 @@ export type DeclineFriendMutationVariables = Exact<{
 
 export type DeclineFriendMutation = { declineFriend: boolean };
 
+export type GetAcceptedFriendsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetAcceptedFriendsQuery = { getAcceptedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
 }>;
@@ -605,6 +636,21 @@ export type GetNotificationsQueryVariables = Exact<{
 
 
 export type GetNotificationsQuery = { getNotifications: Array<Maybe<{ id: number, description: string, type?: Maybe<string>, createdAt: string, read: boolean, from?: Maybe<{ username: string, key: string, id: number }> }>> };
+
+export type GetPendingFriendsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetPendingFriendsQuery = { getPendingFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
+export type GetProfileQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+}>;
+
+
+export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string> }>> } };
 
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
@@ -957,6 +1003,45 @@ export function useDeclineFriendMutation(baseOptions?: Apollo.MutationHookOption
 export type DeclineFriendMutationHookResult = ReturnType<typeof useDeclineFriendMutation>;
 export type DeclineFriendMutationResult = Apollo.MutationResult<DeclineFriendMutation>;
 export type DeclineFriendMutationOptions = Apollo.BaseMutationOptions<DeclineFriendMutation, DeclineFriendMutationVariables>;
+export const GetAcceptedFriendsDocument = gql`
+    query GetAcceptedFriends($userId: Int!) {
+  getAcceptedFriends(userId: $userId) {
+    friendsSince
+    friend {
+      id
+      username
+      key
+      is_online
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAcceptedFriendsQuery__
+ *
+ * To run a query within a React component, call `useGetAcceptedFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAcceptedFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAcceptedFriendsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetAcceptedFriendsQuery(baseOptions: Apollo.QueryHookOptions<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>) {
+        return Apollo.useQuery<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>(GetAcceptedFriendsDocument, baseOptions);
+      }
+export function useGetAcceptedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>) {
+          return Apollo.useLazyQuery<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>(GetAcceptedFriendsDocument, baseOptions);
+        }
+export type GetAcceptedFriendsQueryHookResult = ReturnType<typeof useGetAcceptedFriendsQuery>;
+export type GetAcceptedFriendsLazyQueryHookResult = ReturnType<typeof useGetAcceptedFriendsLazyQuery>;
+export type GetAcceptedFriendsQueryResult = Apollo.QueryResult<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>;
 export const MessageSentDocument = gql`
     subscription MessageSent($chatId: Int!) {
   messageSent(chatId: $chatId) {
@@ -1154,6 +1239,91 @@ export function useGetNotificationsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetNotificationsQueryHookResult = ReturnType<typeof useGetNotificationsQuery>;
 export type GetNotificationsLazyQueryHookResult = ReturnType<typeof useGetNotificationsLazyQuery>;
 export type GetNotificationsQueryResult = Apollo.QueryResult<GetNotificationsQuery, GetNotificationsQueryVariables>;
+export const GetPendingFriendsDocument = gql`
+    query GetPendingFriends($userId: Int!) {
+  getPendingFriends(userId: $userId) {
+    friendsSince
+    friend {
+      id
+      username
+      key
+      is_online
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPendingFriendsQuery__
+ *
+ * To run a query within a React component, call `useGetPendingFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPendingFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPendingFriendsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetPendingFriendsQuery(baseOptions: Apollo.QueryHookOptions<GetPendingFriendsQuery, GetPendingFriendsQueryVariables>) {
+        return Apollo.useQuery<GetPendingFriendsQuery, GetPendingFriendsQueryVariables>(GetPendingFriendsDocument, baseOptions);
+      }
+export function useGetPendingFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPendingFriendsQuery, GetPendingFriendsQueryVariables>) {
+          return Apollo.useLazyQuery<GetPendingFriendsQuery, GetPendingFriendsQueryVariables>(GetPendingFriendsDocument, baseOptions);
+        }
+export type GetPendingFriendsQueryHookResult = ReturnType<typeof useGetPendingFriendsQuery>;
+export type GetPendingFriendsLazyQueryHookResult = ReturnType<typeof useGetPendingFriendsLazyQuery>;
+export type GetPendingFriendsQueryResult = Apollo.QueryResult<GetPendingFriendsQuery, GetPendingFriendsQueryVariables>;
+export const GetProfileDocument = gql`
+    query GetProfile($userId: Int!, $otherUserId: Int!) {
+  getProfile(userId: $userId, otherUserId: $otherUserId) {
+    user {
+      username
+      key
+      verified
+      createdAt
+      avatar
+      is_online
+    }
+    relatedGroups {
+      name
+      isPublic
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProfileQuery__
+ *
+ * To run a query within a React component, call `useGetProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      otherUserId: // value for 'otherUserId'
+ *   },
+ * });
+ */
+export function useGetProfileQuery(baseOptions: Apollo.QueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+        return Apollo.useQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, baseOptions);
+      }
+export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          return Apollo.useLazyQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, baseOptions);
+        }
+export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
+export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
+export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String, $email: String, $password: String!) {
   login(credentials: {email: $email, password: $password, username: $username}) {

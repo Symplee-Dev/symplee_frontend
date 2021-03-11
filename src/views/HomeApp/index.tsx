@@ -1,16 +1,16 @@
 // import Sidebar from './SideBar';
 import Sidebar from './components/Sidebar/Sidebar';
 import { Route, Switch, useLocation } from 'react-router';
-import HomeAppRoot from './views/HomeAppRoot';
+// import HomeAppRoot from './views/HomeAppRoot';
 import { CircularProgress } from '@material-ui/core';
-import Account from './views/Account';
+// import Account from './views/Account';
 import {
-	useChangeLogsLazyQuery,
+	// useChangeLogsLazyQuery,
 	useToggleUserOnlineMutation
 } from '../../graphql';
-import CreateGroup from './views/CreateGroup';
-import ChangeLogModal from './ChangeLogModal';
-import { useChangeLog } from '../../hooks/useChangeLog';
+// import CreateGroup from './views/CreateGroup';
+// import ChangeLogModal from './ChangeLogModal';
+// import { useChangeLog } from '../../hooks/useChangeLog';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 import { UserActions } from '../../redux/actions/index';
@@ -25,9 +25,10 @@ import { UISelectors } from '../../redux/selectors';
 import { useEffect, useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
 import SendInviteModal from './components/SendInviteModal/SendInviteModal';
-import { Dashboard } from '@material-ui/icons';
 import Dashbaord from './views/Dashboard/Dashboard';
 import DashboardSidebar from './components/DashboardSidebar/DashboardSidebar';
+import PublicProfileSidebar from './views/PublicProfile/PublicProfileSidebar';
+import PublicProfile from './views/PublicProfile/PublicProfile';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -103,6 +104,10 @@ const HomeApp = () => {
 								setRoute={setDashboardRoute}
 							/>
 						)}
+
+						{location.pathname.includes('/user/profile/') && (
+							<PublicProfileSidebar />
+						)}
 					</div>
 					<SidebarFooter />
 				</div>
@@ -121,6 +126,9 @@ const HomeApp = () => {
 					<Route exact path="/group/:groupId/chat/:chatId">
 						<ChatView />
 					</Route> */}
+					<Route exact path="/user/profile/:id">
+						<PublicProfile />
+					</Route>
 					<Route exact path="/group/:groupId/chat/:chatId">
 						<ChatGroupIndex authorId={user.id} />
 

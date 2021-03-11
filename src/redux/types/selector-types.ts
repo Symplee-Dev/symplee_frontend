@@ -14,5 +14,6 @@ export type RootSelectors = {
 		useSelectChangeLog?: (id: number) => ChangeLog | undefined;
 		useSelectCurrentChatGroup: () => UIState['currentChatGroup'];
 		useSelectCurrentChat: () => UIState['currentChat'];
+		useSelectCurrentProfile: () => UIState['currentlyViewedProfile'];
 	};
 };

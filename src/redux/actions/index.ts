@@ -11,10 +11,18 @@ import {
 	SetUser,
 	SetCurrentChatGroup
 } from '../types/action-types';
-import { useUserQuery, useUserLazyQuery, useToggleUserOnlineMutation } from '../../graphql';
+import {
+	useUserQuery,
+	useUserLazyQuery,
+	useToggleUserOnlineMutation
+} from '../../graphql';
 import { logger } from '../../utils/logger';
 import decode from 'jwt-decode';
-import { SetCurrentChat, RefetchedUser } from '../types/action-types';
+import {
+	SetCurrentChat,
+	RefetchedUser,
+	SetCurrentProfileView
+} from '../types/action-types';
 import { useEffect } from 'react';
 import {
 	SetLoggedOut,
@@ -43,7 +51,7 @@ export const UserActions: RootActions['user'] = {
 	},
 	useLogout() {
 		const dispatch = useDispatch();
-		const [toggleOnline] = useToggleUserOnlineMutation()
+		const [toggleOnline] = useToggleUserOnlineMutation();
 		return () => {
 			toggleOnline();
 			localStorage.removeItem('bolttoken');
@@ -230,6 +238,18 @@ export const UIActions: RootActions['ui'] = {
 			const action: SetCurrentChatGroup = {
 				type: UIActionConstants.SET_CURRENT_CHATGROUP,
 				payload: chatGroup
+			};
+
+			dispatch(action);
+		};
+	},
+	useSetCurrentProfile() {
+		const dispatch = useDispatch();
+
+		return profile => {
+			const action: SetCurrentProfileView = {
+				type: UIActionConstants.SET_CURRENT_PROFILE_VIEW,
+				payload: profile
 			};
 
 			dispatch(action);

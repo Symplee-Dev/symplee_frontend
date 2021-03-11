@@ -55,6 +55,23 @@ export type UIState = {
 		icon: string;
 		isPublic: boolean;
 	}>;
+	currentlyViewedProfile?:
+		| {
+				user: {
+					username: string;
+					key: string;
+					verified: boolean;
+					createdAt: string;
+					avatar?: Maybe<string>;
+					is_online: boolean;
+				};
+				relatedGroups: Maybe<{
+					name: string;
+					isPublic: boolean;
+					avatar?: Maybe<string>;
+				}>[];
+		  }
+		| undefined;
 };
 
 export interface RootState {

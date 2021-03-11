@@ -34,5 +34,10 @@ export const UISelectors: RootSelectors['ui'] = {
 	},
 	useSelectCurrentChat() {
 		return useSelector((state: RootState) => state.ui.currentChat);
+	},
+	useSelectCurrentProfile() {
+		return useSelector(
+			(state: RootState) => state.ui.currentlyViewedProfile
+		);
 	}
 };
