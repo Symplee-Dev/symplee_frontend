@@ -1,4 +1,9 @@
-import { Avatar, CircularProgress, TextField } from '@material-ui/core';
+import {
+	Avatar,
+	CircularProgress,
+	TextField,
+	Tooltip
+} from '@material-ui/core';
 import { UserSelectors } from '../../../../redux/selectors';
 import { useGetAcceptedFriendsQuery } from '../../../../graphql';
 import Moment from 'react-moment';
@@ -32,31 +37,34 @@ const Friends = () => {
 				) : (
 					<div className="friend-list">
 						{data?.getAcceptedFriends.map((f, key) => (
-							<div
-								className="friend"
-								onClick={() =>
-									history.push(
-										'/user/profile/' + f?.friend?.id
-									)
-								}
-							>
-								<div className="friend-top" key={key}>
-									<h5>
-										{f?.friend?.username}#{f?.friend?.key}
-									</h5>
-									<p>
-										{f?.friend?.is_online
-											? 'Online'
-											: 'Offline'}
-									</p>
+							<Tooltip placement="top" title="View Profile">
+								<div
+									className="friend"
+									onClick={() =>
+										history.push(
+											'/user/profile/' + f?.friend?.id
+										)
+									}
+								>
+									<div className="friend-top" key={key}>
+										<h5>
+											{f?.friend?.username}#
+											{f?.friend?.key}
+										</h5>
+										<p>
+											{f?.friend?.is_online
+												? 'Online'
+												: 'Offline'}
+										</p>
+									</div>
+									<h3>
+										Friends Since{' '}
+										<Moment ago format="MMM, D YYYY">
+											{f?.friendsSince}
+										</Moment>
+									</h3>
 								</div>
-								<h3>
-									Friends Since{' '}
-									<Moment ago format="MMM, D YYYY">
-										{f?.friendsSince}
-									</Moment>
-								</h3>
-							</div>
+							</Tooltip>
 						))}
 					</div>
 				)}
