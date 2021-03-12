@@ -689,6 +689,13 @@ export type RemoveFriendMutationVariables = Exact<{
 
 export type RemoveFriendMutation = { removeFriend: boolean };
 
+export type SearchGroupsQueryVariables = Exact<{
+  queryString: Scalars['String'];
+}>;
+
+
+export type SearchGroupsQuery = { searchGroups: Array<Maybe<{ id: number, name: string, avatar?: Maybe<string> }>> };
+
 export type SendFeedbackMutationVariables = Exact<{
   feedback: SendAppFeedbackInput;
 }>;
@@ -1442,6 +1449,41 @@ export function useRemoveFriendMutation(baseOptions?: Apollo.MutationHookOptions
 export type RemoveFriendMutationHookResult = ReturnType<typeof useRemoveFriendMutation>;
 export type RemoveFriendMutationResult = Apollo.MutationResult<RemoveFriendMutation>;
 export type RemoveFriendMutationOptions = Apollo.BaseMutationOptions<RemoveFriendMutation, RemoveFriendMutationVariables>;
+export const SearchGroupsDocument = gql`
+    query SearchGroups($queryString: String!) {
+  searchGroups(queryString: $queryString) {
+    id
+    name
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useSearchGroupsQuery__
+ *
+ * To run a query within a React component, call `useSearchGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchGroupsQuery({
+ *   variables: {
+ *      queryString: // value for 'queryString'
+ *   },
+ * });
+ */
+export function useSearchGroupsQuery(baseOptions: Apollo.QueryHookOptions<SearchGroupsQuery, SearchGroupsQueryVariables>) {
+        return Apollo.useQuery<SearchGroupsQuery, SearchGroupsQueryVariables>(SearchGroupsDocument, baseOptions);
+      }
+export function useSearchGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchGroupsQuery, SearchGroupsQueryVariables>) {
+          return Apollo.useLazyQuery<SearchGroupsQuery, SearchGroupsQueryVariables>(SearchGroupsDocument, baseOptions);
+        }
+export type SearchGroupsQueryHookResult = ReturnType<typeof useSearchGroupsQuery>;
+export type SearchGroupsLazyQueryHookResult = ReturnType<typeof useSearchGroupsLazyQuery>;
+export type SearchGroupsQueryResult = Apollo.QueryResult<SearchGroupsQuery, SearchGroupsQueryVariables>;
 export const SendFeedbackDocument = gql`
     mutation SendFeedback($feedback: SendAppFeedbackInput!) {
   sendFeedback(feedback: $feedback) {
