@@ -1,0 +1,38 @@
+.home-preview-card {
+	width: 200px;
+	height: 200px;
+	box-sizing: border-box;
+	padding: 1rem;
+	background: #3e4756;
+	box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+	border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	.top {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	p {
+		font-weight: 300;
+		line-height: 2;
+	}
+
+	.go-to {
+		display: flex;
+		align-items: center;
+		transition: ease-in-out 0.3s;
+
+		p {
+			margin-right: 1rem;
+		}
+	}
+
+	.go-to:hover {
+		cursor: pointer;
+		opacity: 0.8;
+		margin-left: 1rem;
+	}
+}

@@ -5,6 +5,8 @@ import RefreshSharpIcon from '@material-ui/icons/RefreshSharp';
 import { CircularProgress, Tooltip } from '@material-ui/core';
 import { useState } from 'react';
 import Notification from './Notification';
+import HomePreviewCard from '../../components/HomePreviewCard/HomePreviewCard';
+import PublicSharpIcon from '@material-ui/icons/PublicSharp';
 
 const Home = () => {
 	const userId = UserSelectors.useSelectUserId();
@@ -45,6 +47,14 @@ const Home = () => {
 						))}
 					</div>
 				)}
+			</div>
+			<div className="preview-cards">
+				<HomePreviewCard
+					title="Discover"
+					Icon={PublicSharpIcon}
+					routeTo="/discover"
+					description="Find public groups in the community."
+				/>
 			</div>
 		</div>
 	);
