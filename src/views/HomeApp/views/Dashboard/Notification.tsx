@@ -8,9 +8,13 @@ import CancelSharpIcon from '@material-ui/icons/CancelSharp';
 import { Tooltip } from '@material-ui/core';
 import Moment from 'react-moment';
 import { UserSelectors } from '../../../../redux/selectors';
-import { UIActions } from '../../../../redux/actions/index';
+import { UIActions, UserActions } from '../../../../redux/actions/index';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
+import {
+	useAcceptInviteMutation,
+	useDeclineInviteMutation
+} from '../../../../graphql';
 
 const Notification = ({
 	notif,
@@ -27,6 +31,7 @@ const Notification = ({
 			key: string;
 			id: number;
 		}>;
+		code?: string;
 	}>;
 	refetch: () => void;
 }) => {
@@ -34,6 +39,9 @@ const Notification = ({
 
 	const [acceptFriend] = useAcceptFriendMutation();
 	const [declineFriend] = useDeclineFriendMutation();
+	const [acceptGroup] = useAcceptInviteMutation();
+	const [declineGroup] = useDeclineInviteMutation();
+	const refetchGroups = UserActions.useRefetchUser();
 
 	const addNotification = UIActions.useAddNotification();
 	const notifId = useSelector(
@@ -54,6 +62,48 @@ const Notification = ({
 			type: 'success',
 			autoDismiss: true,
 			autoTimeoutTime: 3000
+		});
+	};
+
+	const handleAcceptGroup = () => {
+		acceptGroup({
+			variables: {
+				acceptArgs: {
+					code: notif?.code!,
+					notificationId: notif?.id!,
+					userId: userId!
+				}
+			}
+		}).then(() => {
+			refetchGroups();
+
+			addNotification({
+				title: 'You have accepted an invite to join the group',
+				id: notifId,
+				type: 'success',
+				autoDismiss: true,
+				autoTimeoutTime: 3000
+			});
+		});
+	};
+
+	const handleDeclineGroup = () => {
+		declineGroup({
+			variables: {
+				declineArgs: {
+					code: notif?.code!,
+					notificationId: notif?.id!,
+					userId: userId!
+				}
+			}
+		}).then(() => {
+			addNotification({
+				title: 'You have declined an invite to join the group',
+				id: notifId,
+				type: 'error',
+				autoDismiss: true,
+				autoTimeoutTime: 3000
+			});
 		});
 	};
 
@@ -79,20 +129,26 @@ const Notification = ({
 
 	return (
 		<div className={`notification ${notif?.read && 'read'}`}>
-			<p>
-				{!notif?.read
-					? notif?.description
-					: notif?.description + ' - Accepted'}
-			</p>
+			<p>{notif?.description}</p>
 			<div className="middle">
 				<p className="read-p">{notif?.read ? 'Read' : 'Unread'}</p>
-				{!notif?.read && (
+				{!notif?.read && notif?.type === 'FRIEND_REQUEST' && (
 					<>
 						<Tooltip placement="top" title="Decline">
 							<CancelSharpIcon onClick={handleDecline} />
 						</Tooltip>
 						<Tooltip placement="top" title="Accept">
 							<CheckCircleSharpIcon onClick={handleAccept} />
+						</Tooltip>
+					</>
+				)}
+				{!notif?.read && notif?.type === 'INVITE' && (
+					<>
+						<Tooltip placement="top" title="Decline">
+							<CancelSharpIcon onClick={handleDeclineGroup} />
+						</Tooltip>
+						<Tooltip placement="top" title="Accept">
+							<CheckCircleSharpIcon onClick={handleAcceptGroup} />
 						</Tooltip>
 					</>
 				)}

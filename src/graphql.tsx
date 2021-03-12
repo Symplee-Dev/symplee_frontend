@@ -132,6 +132,7 @@ export type Mutation = {
   sendMessage: Scalars['Boolean'];
   sendInvite: Scalars['String'];
   acceptInvite: Scalars['Boolean'];
+  declineInvite: Scalars['Boolean'];
   markNotificationAsRead: Scalars['Boolean'];
   toggleUserOnline: Scalars['Boolean'];
   addFriend: Scalars['Boolean'];
@@ -241,6 +242,11 @@ export type MutationAcceptInviteArgs = {
 };
 
 
+export type MutationDeclineInviteArgs = {
+  declineArgs: DeclineInviteInput;
+};
+
+
 export type MutationMarkNotificationAsReadArgs = {
   notificationId: Scalars['Int'];
 };
@@ -311,6 +317,12 @@ export type SendInviteInput = {
 };
 
 export type AcceptInviteInput = {
+  userId: Scalars['Int'];
+  code: Scalars['String'];
+  notificationId: Scalars['Int'];
+};
+
+export type DeclineInviteInput = {
   userId: Scalars['Int'];
   code: Scalars['String'];
   notificationId: Scalars['Int'];
@@ -520,6 +532,7 @@ export type Notification = {
   from?: Maybe<User>;
   createdAt: Scalars['String'];
   read: Scalars['Boolean'];
+  code?: Maybe<Scalars['String']>;
 };
 
 export type UserFriend = {
@@ -593,6 +606,13 @@ export type DeclineFriendMutationVariables = Exact<{
 
 export type DeclineFriendMutation = { declineFriend: boolean };
 
+export type DeclineInviteMutationVariables = Exact<{
+  declineArgs: DeclineInviteInput;
+}>;
+
+
+export type DeclineInviteMutation = { declineInvite: boolean };
+
 export type GetAcceptedFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
 }>;
@@ -635,7 +655,7 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { getNotifications: Array<Maybe<{ id: number, description: string, type?: Maybe<string>, createdAt: string, read: boolean, from?: Maybe<{ username: string, key: string, id: number }> }>> };
+export type GetNotificationsQuery = { getNotifications: Array<Maybe<{ id: number, description: string, type?: Maybe<string>, createdAt: string, read: boolean, code?: Maybe<string>, from?: Maybe<{ username: string, key: string, id: number }> }>> };
 
 export type GetPendingFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -1003,6 +1023,36 @@ export function useDeclineFriendMutation(baseOptions?: Apollo.MutationHookOption
 export type DeclineFriendMutationHookResult = ReturnType<typeof useDeclineFriendMutation>;
 export type DeclineFriendMutationResult = Apollo.MutationResult<DeclineFriendMutation>;
 export type DeclineFriendMutationOptions = Apollo.BaseMutationOptions<DeclineFriendMutation, DeclineFriendMutationVariables>;
+export const DeclineInviteDocument = gql`
+    mutation DeclineInvite($declineArgs: DeclineInviteInput!) {
+  declineInvite(declineArgs: $declineArgs)
+}
+    `;
+export type DeclineInviteMutationFn = Apollo.MutationFunction<DeclineInviteMutation, DeclineInviteMutationVariables>;
+
+/**
+ * __useDeclineInviteMutation__
+ *
+ * To run a mutation, you first call `useDeclineInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeclineInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [declineInviteMutation, { data, loading, error }] = useDeclineInviteMutation({
+ *   variables: {
+ *      declineArgs: // value for 'declineArgs'
+ *   },
+ * });
+ */
+export function useDeclineInviteMutation(baseOptions?: Apollo.MutationHookOptions<DeclineInviteMutation, DeclineInviteMutationVariables>) {
+        return Apollo.useMutation<DeclineInviteMutation, DeclineInviteMutationVariables>(DeclineInviteDocument, baseOptions);
+      }
+export type DeclineInviteMutationHookResult = ReturnType<typeof useDeclineInviteMutation>;
+export type DeclineInviteMutationResult = Apollo.MutationResult<DeclineInviteMutation>;
+export type DeclineInviteMutationOptions = Apollo.BaseMutationOptions<DeclineInviteMutation, DeclineInviteMutationVariables>;
 export const GetAcceptedFriendsDocument = gql`
     query GetAcceptedFriends($userId: Int!) {
   getAcceptedFriends(userId: $userId) {
@@ -1209,6 +1259,7 @@ export const GetNotificationsDocument = gql`
     }
     createdAt
     read
+    code
   }
 }
     `;

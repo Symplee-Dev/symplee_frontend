@@ -2,6 +2,7 @@ import './style.scss';
 import Dialog from '@material-ui/core/Dialog';
 import {
 	Button,
+	Checkbox,
 	CircularProgress,
 	DialogActions,
 	DialogContent,
@@ -11,7 +12,10 @@ import {
 } from '@material-ui/core';
 import { useState } from 'react';
 import { UserSelectors, UISelectors } from '../../../../redux/selectors';
-import { useSendInviteMutation } from '../../../../graphql';
+import {
+	useSendInviteMutation,
+	useGetAcceptedFriendsQuery
+} from '../../../../graphql';
 import { UIActions } from '../../../../redux/actions/index';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
@@ -42,14 +46,25 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 	});
 
 	const [sendInvite, { data, loading, error }] = useSendInviteMutation();
+	const {
+		data: friends,
+		loading: friendsLoading,
+		error: friendsError
+	} = useGetAcceptedFriendsQuery({
+		variables: { userId: userId }
+	});
 
 	const sendNotification = UIActions.useAddNotification();
 	const [copied, setCopied] = useState(false);
 
+	const [selected, setSelected] = useState<number[]>([]);
+
 	const handleSubmit = e => {
 		e.preventDefault();
 		sendInvite({
-			variables: { invite: { ...formState, fromId: userId } }
+			variables: {
+				invite: { ...formState, fromId: userId, to: selected }
+			}
 		}).then(() => {
 			sendNotification({
 				id,
@@ -59,6 +74,20 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 				autoTimeoutTime: 3000
 			});
 		});
+	};
+
+	const handleSelect = friendId => {
+		if (selected.find(id => id === friendId)) {
+			const newSelected = selected.filter(id => id !== friendId);
+			setSelected(newSelected);
+		} else {
+			setSelected([...selected, friendId]);
+		}
+	};
+
+	const checkIfSelected = (fid: number) => {
+		const found = selected.find(id => id === fid);
+		return found !== undefined ? true : false;
 	};
 
 	const onCopy = () => {
@@ -101,6 +130,42 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 							<MenuItem value={100}>100</MenuItem>
 							<MenuItem value={1000}>1000</MenuItem>
 						</Select>
+						{friends && !friendsLoading && (
+							<>
+								<div className="friends">
+									<h3>
+										Select friends to invite (
+										{selected.length} selected)
+									</h3>
+									{friends.getAcceptedFriends.length > 0 &&
+										friends.getAcceptedFriends.map(
+											(f, key) => (
+												<div
+													className="friend"
+													key={key}
+												>
+													<Checkbox
+														color="primary"
+														onChange={() =>
+															handleSelect(
+																f?.friend?.id
+															)
+														}
+														checked={checkIfSelected(
+															f?.friend
+																?.id as number
+														)}
+													/>
+													{f?.friend?.username}#
+													{f?.friend?.key}
+												</div>
+											)
+										)}
+									{friends.getAcceptedFriends.length ===
+										0 && <p>No friends to invite.</p>}
+								</div>
+							</>
+						)}
 						<button className="generate-btn">Generate</button>
 					</form>
 				)}

@@ -1,0 +1,3 @@
+mutation DeclineInvite($declineArgs: DeclineInviteInput!) {
+	declineInvite(declineArgs: $declineArgs)
+}
