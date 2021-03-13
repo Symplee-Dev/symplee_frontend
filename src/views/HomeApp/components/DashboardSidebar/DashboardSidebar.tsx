@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router';
 import './style.scss';
 
 const DashboardSidebar = ({
@@ -9,6 +10,8 @@ const DashboardSidebar = ({
 		React.SetStateAction<'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS'>
 	>;
 }) => {
+	const history = useHistory();
+
 	return (
 		<div className="dashboard-sidebar">
 			<div className="top">
@@ -19,25 +22,37 @@ const DashboardSidebar = ({
 				<div className="tabs">
 					<div
 						className={`tab ${route === 'ROOT' && 'active'}`}
-						onClick={() => setRoute('ROOT')}
+						onClick={() => {
+							history.push('/');
+							setRoute('ROOT');
+						}}
 					>
 						<p>Dashboard</p>
 					</div>
 					<div
 						className={`tab ${route === 'MESSAGES' && 'active'}`}
-						onClick={() => setRoute('MESSAGES')}
+						onClick={() => {
+							history.push('/');
+							setRoute('MESSAGES');
+						}}
 					>
 						<p>Direct Messages</p>
 					</div>
 					<div
 						className={`tab ${route === 'FRIENDS' && 'active'}`}
-						onClick={() => setRoute('FRIENDS')}
+						onClick={() => {
+							history.push('/');
+							setRoute('FRIENDS');
+						}}
 					>
 						<p>Friends</p>
 					</div>
 					<div
 						className={`tab ${route === 'TEAMS' && 'active'}`}
-						onClick={() => setRoute('TEAMS')}
+						onClick={() => {
+							history.push('/');
+							setRoute('TEAMS');
+						}}
 					>
 						<p>Teams</p>
 					</div>
