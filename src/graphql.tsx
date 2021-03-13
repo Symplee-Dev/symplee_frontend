@@ -139,6 +139,7 @@ export type Mutation = {
   removeFriend: Scalars['Boolean'];
   acceptFriend: Scalars['Boolean'];
   declineFriend: Scalars['Boolean'];
+  joinGroup: Scalars['Boolean'];
 };
 
 
@@ -277,6 +278,12 @@ export type MutationAcceptFriendArgs = {
 export type MutationDeclineFriendArgs = {
   notificationId: Scalars['Int'];
   invite: DeclineFriendInput;
+};
+
+
+export type MutationJoinGroupArgs = {
+  groupId: Scalars['Int'];
+  userId: Scalars['Int'];
 };
 
 export type DeclineFriendInput = {
@@ -672,6 +679,14 @@ export type GetProfileQueryVariables = Exact<{
 
 export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
 
+export type JoinGroupMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+}>;
+
+
+export type JoinGroupMutation = { joinGroup: boolean };
+
 export type LoginMutationVariables = Exact<{
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -688,6 +703,13 @@ export type RemoveFriendMutationVariables = Exact<{
 
 
 export type RemoveFriendMutation = { removeFriend: boolean };
+
+export type SearchGroupsQueryVariables = Exact<{
+  queryString: Scalars['String'];
+}>;
+
+
+export type SearchGroupsQuery = { searchGroups: Array<Maybe<{ id: number, name: string, avatar?: Maybe<string> }>> };
 
 export type SendFeedbackMutationVariables = Exact<{
   feedback: SendAppFeedbackInput;
@@ -1376,6 +1398,37 @@ export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
 export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
 export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
+export const JoinGroupDocument = gql`
+    mutation JoinGroup($userId: Int!, $groupId: Int!) {
+  joinGroup(userId: $userId, groupId: $groupId)
+}
+    `;
+export type JoinGroupMutationFn = Apollo.MutationFunction<JoinGroupMutation, JoinGroupMutationVariables>;
+
+/**
+ * __useJoinGroupMutation__
+ *
+ * To run a mutation, you first call `useJoinGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinGroupMutation, { data, loading, error }] = useJoinGroupMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useJoinGroupMutation(baseOptions?: Apollo.MutationHookOptions<JoinGroupMutation, JoinGroupMutationVariables>) {
+        return Apollo.useMutation<JoinGroupMutation, JoinGroupMutationVariables>(JoinGroupDocument, baseOptions);
+      }
+export type JoinGroupMutationHookResult = ReturnType<typeof useJoinGroupMutation>;
+export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>;
+export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<JoinGroupMutation, JoinGroupMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String, $email: String, $password: String!) {
   login(credentials: {email: $email, password: $password, username: $username}) {
@@ -1442,6 +1495,41 @@ export function useRemoveFriendMutation(baseOptions?: Apollo.MutationHookOptions
 export type RemoveFriendMutationHookResult = ReturnType<typeof useRemoveFriendMutation>;
 export type RemoveFriendMutationResult = Apollo.MutationResult<RemoveFriendMutation>;
 export type RemoveFriendMutationOptions = Apollo.BaseMutationOptions<RemoveFriendMutation, RemoveFriendMutationVariables>;
+export const SearchGroupsDocument = gql`
+    query SearchGroups($queryString: String!) {
+  searchGroups(queryString: $queryString) {
+    id
+    name
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useSearchGroupsQuery__
+ *
+ * To run a query within a React component, call `useSearchGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchGroupsQuery({
+ *   variables: {
+ *      queryString: // value for 'queryString'
+ *   },
+ * });
+ */
+export function useSearchGroupsQuery(baseOptions: Apollo.QueryHookOptions<SearchGroupsQuery, SearchGroupsQueryVariables>) {
+        return Apollo.useQuery<SearchGroupsQuery, SearchGroupsQueryVariables>(SearchGroupsDocument, baseOptions);
+      }
+export function useSearchGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchGroupsQuery, SearchGroupsQueryVariables>) {
+          return Apollo.useLazyQuery<SearchGroupsQuery, SearchGroupsQueryVariables>(SearchGroupsDocument, baseOptions);
+        }
+export type SearchGroupsQueryHookResult = ReturnType<typeof useSearchGroupsQuery>;
+export type SearchGroupsLazyQueryHookResult = ReturnType<typeof useSearchGroupsLazyQuery>;
+export type SearchGroupsQueryResult = Apollo.QueryResult<SearchGroupsQuery, SearchGroupsQueryVariables>;
 export const SendFeedbackDocument = gql`
     mutation SendFeedback($feedback: SendAppFeedbackInput!) {
   sendFeedback(feedback: $feedback) {

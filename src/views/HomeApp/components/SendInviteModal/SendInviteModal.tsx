@@ -8,13 +8,15 @@ import {
 	DialogContent,
 	MenuItem,
 	Select,
+	TextField,
 	Tooltip
 } from '@material-ui/core';
 import { useState } from 'react';
-import { UserSelectors, UISelectors } from '../../../../redux/selectors';
+import { UISelectors } from '../../../../redux/selectors';
 import {
 	useSendInviteMutation,
-	useGetAcceptedFriendsQuery
+	useGetAcceptedFriendsQuery,
+	Maybe
 } from '../../../../graphql';
 import { UIActions } from '../../../../redux/actions/index';
 import { useSelector } from 'react-redux';
@@ -32,6 +34,19 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 	const id = useSelector(
 		(state: RootState) => state.ui.notifications.length + 1
 	);
+
+	const [searchString, setSearchString] = useState('');
+	const [localFriends, setLocalFriends] = useState<
+		Maybe<{
+			friendsSince: string;
+			friend?: Maybe<{
+				id: number;
+				username: string;
+				key: string;
+				is_online: boolean;
+			}>;
+		}>[]
+	>([]);
 
 	const [formState, setFormState] = useState<{
 		fromId: number;
@@ -51,7 +66,10 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 		loading: friendsLoading,
 		error: friendsError
 	} = useGetAcceptedFriendsQuery({
-		variables: { userId: userId }
+		variables: { userId: userId },
+		onCompleted(d) {
+			setLocalFriends(d.getAcceptedFriends);
+		}
 	});
 
 	const sendNotification = UIActions.useAddNotification();
@@ -96,6 +114,29 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 		setCopied(true);
 	};
 
+	const handleFilter = e => {
+		setSearchString(e.target.value);
+
+		if (e.target.value.length <= 0) {
+			if (friends) {
+				setLocalFriends(friends.getAcceptedFriends);
+			}
+		} else {
+			if (friends) {
+				const newFriends = friends?.getAcceptedFriends.filter(
+					friend =>
+						friend?.friend?.username
+							.toLowerCase()
+							.includes(e.target.value.toLowerCase()) ||
+						friend?.friend?.key
+							.toLowerCase()
+							.includes(e.target.value.toLowerCase())
+				);
+				setLocalFriends(newFriends);
+			}
+		}
+	};
+
 	return (
 		<Dialog
 			fullWidth
@@ -131,40 +172,42 @@ const SendInviteModal = ({ open, setOpen }: SendInviteModalProps) => {
 							<MenuItem value={1000}>1000</MenuItem>
 						</Select>
 						{friends && !friendsLoading && (
-							<>
+							<div className="friends-search">
+								<h3>
+									Search or select friends to invite (
+									{selected.length} selected)
+								</h3>
+								<TextField
+									fullWidth
+									variant="filled"
+									placeholder="Beep#C3P0"
+									value={searchString}
+									onChange={e => handleFilter(e)}
+								/>
 								<div className="friends">
-									<h3>
-										Select friends to invite (
-										{selected.length} selected)
-									</h3>
-									{friends.getAcceptedFriends.length > 0 &&
-										friends.getAcceptedFriends.map(
-											(f, key) => (
-												<div
-													className="friend"
-													key={key}
-												>
-													<Checkbox
-														color="primary"
-														onChange={() =>
-															handleSelect(
-																f?.friend?.id
-															)
-														}
-														checked={checkIfSelected(
-															f?.friend
-																?.id as number
-														)}
-													/>
-													{f?.friend?.username}#
-													{f?.friend?.key}
-												</div>
-											)
-										)}
-									{friends.getAcceptedFriends.length ===
-										0 && <p>No friends to invite.</p>}
+									{localFriends.length > 0 &&
+										localFriends.map((f, key) => (
+											<div className="friend" key={key}>
+												<Checkbox
+													color="primary"
+													onChange={() =>
+														handleSelect(
+															f?.friend?.id
+														)
+													}
+													checked={checkIfSelected(
+														f?.friend?.id as number
+													)}
+												/>
+												{f?.friend?.username}#
+												{f?.friend?.key}
+											</div>
+										))}
+									{localFriends.length === 0 && (
+										<p>No friends to invite.</p>
+									)}
 								</div>
-							</>
+							</div>
 						)}
 						<button className="generate-btn">Generate</button>
 					</form>

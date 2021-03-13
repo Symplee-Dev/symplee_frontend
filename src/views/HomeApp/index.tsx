@@ -29,6 +29,7 @@ import Dashbaord from './views/Dashboard/Dashboard';
 import DashboardSidebar from './components/DashboardSidebar/DashboardSidebar';
 import PublicProfileSidebar from './views/PublicProfile/PublicProfileSidebar';
 import PublicProfile from './views/PublicProfile/PublicProfile';
+import Discover from './views/Discover/Discover';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -40,6 +41,15 @@ const HomeApp = () => {
 
 	UserActions.useGetUser();
 
+	window.addEventListener('load', () => {
+		toggleOnline({
+			variables: {
+				status: true
+			}
+		});
+	});
+	window.addEventListener('beforeunload', () => toggleOnline());
+
 	const user = useSelector((state: RootState) => state.user.user);
 	const hasCurrentGroup = UISelectors.useSelectCurrentChatGroup();
 
@@ -48,15 +58,6 @@ const HomeApp = () => {
 	const [dashboardRoute, setDashboardRoute] = useState<
 		'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS'
 	>('ROOT');
-
-	useEffect(() => {
-		toggleOnline({
-			variables: {
-				status: true
-			}
-		});
-		window.addEventListener('beforeunload', () => toggleOnline());
-	}, []);
 
 	// const [
 	// 	getChangeLog,
@@ -98,7 +99,8 @@ const HomeApp = () => {
 									setCreatingInvite={setCreatingInvite}
 								/>
 							)}
-						{location.pathname === '/' && (
+						{(location.pathname === '/' ||
+							location.pathname.includes('/discover')) && (
 							<DashboardSidebar
 								route={dashboardRoute}
 								setRoute={setDashboardRoute}
@@ -126,6 +128,9 @@ const HomeApp = () => {
 					<Route exact path="/group/:groupId/chat/:chatId">
 						<ChatView />
 					</Route> */}
+					<Route exact path="/discover">
+						<Discover />
+					</Route>
 					<Route exact path="/user/profile/:id">
 						<PublicProfile />
 					</Route>
