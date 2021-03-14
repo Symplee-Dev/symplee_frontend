@@ -55,10 +55,17 @@ const Friends = () => {
 						{blockedData &&
 							blockedData.getBlockedFriends.length > 0 && (
 								<>
-									<h3>Blocked</h3>
+									<h3>
+										{blockedData?.getBlockedFriends.filter(
+											f => f?.blockedBy === userId
+										).length > 0 && 'Blocked'}
+									</h3>
 									<>
-										{blockedData?.getBlockedFriends.map(
-											(f, key) => (
+										{blockedData?.getBlockedFriends
+											.filter(
+												f => f?.blockedBy === userId
+											)
+											.map((f, key) => (
 												<Tooltip
 													placement="top"
 													title="View Profile"
@@ -103,8 +110,7 @@ const Friends = () => {
 														</h3>
 													</div>
 												</Tooltip>
-											)
-										)}
+											))}
 									</>
 								</>
 							)}

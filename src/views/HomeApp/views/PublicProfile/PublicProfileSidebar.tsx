@@ -53,7 +53,16 @@ const PublicProfileSidebar = ({
 						) === undefined ? (
 							<button onClick={handleBlock}>Block</button>
 						) : (
-							<button onClick={handleUnblock}>Unblock</button>
+							<>
+								{data.getBlockedFriends.find(
+									f =>
+										f?.friend?.id === currentProfile.user.id
+								)?.blockedBy === userId && (
+									<button onClick={handleUnblock}>
+										Unblock
+									</button>
+								)}
+							</>
 						)}
 						<button>Send Message</button>
 					</div>
