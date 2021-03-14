@@ -1,0 +1,3 @@
+mutation SendUserTyping($chatId: Int!, $userId: Int!, $username: String!) {
+	userTyping(chatId: $chatId, userId: $userId, username: $username)
+}

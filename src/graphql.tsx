@@ -140,6 +140,11 @@ export type Mutation = {
   acceptFriend: Scalars['Boolean'];
   declineFriend: Scalars['Boolean'];
   joinGroup: Scalars['Boolean'];
+  deleteGroup: Scalars['Boolean'];
+  deleteChatChannel: Scalars['Boolean'];
+  editMessage: MessagesChats;
+  deleteMessage: Scalars['Boolean'];
+  userTyping: Scalars['Boolean'];
 };
 
 
@@ -286,6 +291,33 @@ export type MutationJoinGroupArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type MutationDeleteGroupArgs = {
+  chatGroupId: Scalars['Int'];
+};
+
+
+export type MutationDeleteChatChannelArgs = {
+  chatChannelId: Scalars['Int'];
+};
+
+
+export type MutationEditMessageArgs = {
+  message: InEditMessage;
+};
+
+
+export type MutationDeleteMessageArgs = {
+  messageId: Scalars['Int'];
+};
+
+
+export type MutationUserTypingArgs = {
+  chatId: Scalars['Int'];
+  userId: Scalars['Int'];
+  username: Scalars['String'];
+};
+
 export type DeclineFriendInput = {
   userId: Scalars['Int'];
   fromId: Scalars['Int'];
@@ -301,9 +333,17 @@ export type FriendRequestInput = {
   friendId: Scalars['Int'];
 };
 
+export type InEditMessage = {
+  id: Scalars['Int'];
+  body: Scalars['String'];
+};
+
 export type Subscription = {
   messageSent: MessagesChats;
   activeChatUsers: Array<User>;
+  messageEdited: MessagesChats;
+  messageDeleted: Scalars['Int'];
+  userTyping?: Maybe<UserTypingReturn>;
 };
 
 
@@ -314,6 +354,26 @@ export type SubscriptionMessageSentArgs = {
 
 export type SubscriptionActiveChatUsersArgs = {
   chatId: Scalars['Int'];
+};
+
+
+export type SubscriptionMessageEditedArgs = {
+  chatId: Scalars['Int'];
+};
+
+
+export type SubscriptionMessageDeletedArgs = {
+  chatId: Scalars['Int'];
+};
+
+
+export type SubscriptionUserTypingArgs = {
+  chatId: Scalars['Int'];
+};
+
+export type UserTypingReturn = {
+  userId: Scalars['Int'];
+  username: Scalars['String'];
 };
 
 export type SendInviteInput = {
@@ -732,6 +792,15 @@ export type SendMessageMutationVariables = Exact<{
 
 export type SendMessageMutation = { sendMessage: boolean };
 
+export type SendUserTypingMutationVariables = Exact<{
+  chatId: Scalars['Int'];
+  userId: Scalars['Int'];
+  username: Scalars['String'];
+}>;
+
+
+export type SendUserTypingMutation = { userTyping: boolean };
+
 export type SignupMutationVariables = Exact<{
   email: Scalars['String'];
   name: Scalars['String'];
@@ -771,6 +840,13 @@ export type UserQueryVariables = Exact<{
 
 
 export type UserQuery = { user: { username: string, name: string, id: number, email: string, key: string, createdAt: string, verified: boolean, avatar?: Maybe<string>, chatGroups: Array<{ name: string, id: number, avatar?: Maybe<string> }> } };
+
+export type UserTypingSubscriptionSubscriptionVariables = Exact<{
+  chatId: Scalars['Int'];
+}>;
+
+
+export type UserTypingSubscriptionSubscription = { userTyping?: Maybe<{ userId: number, username: string }> };
 
 export type VerifyEmailMutationVariables = Exact<{
   token: Scalars['String'];
@@ -1622,6 +1698,38 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const SendUserTypingDocument = gql`
+    mutation SendUserTyping($chatId: Int!, $userId: Int!, $username: String!) {
+  userTyping(chatId: $chatId, userId: $userId, username: $username)
+}
+    `;
+export type SendUserTypingMutationFn = Apollo.MutationFunction<SendUserTypingMutation, SendUserTypingMutationVariables>;
+
+/**
+ * __useSendUserTypingMutation__
+ *
+ * To run a mutation, you first call `useSendUserTypingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendUserTypingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendUserTypingMutation, { data, loading, error }] = useSendUserTypingMutation({
+ *   variables: {
+ *      chatId: // value for 'chatId'
+ *      userId: // value for 'userId'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useSendUserTypingMutation(baseOptions?: Apollo.MutationHookOptions<SendUserTypingMutation, SendUserTypingMutationVariables>) {
+        return Apollo.useMutation<SendUserTypingMutation, SendUserTypingMutationVariables>(SendUserTypingDocument, baseOptions);
+      }
+export type SendUserTypingMutationHookResult = ReturnType<typeof useSendUserTypingMutation>;
+export type SendUserTypingMutationResult = Apollo.MutationResult<SendUserTypingMutation>;
+export type SendUserTypingMutationOptions = Apollo.BaseMutationOptions<SendUserTypingMutation, SendUserTypingMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($email: String!, $name: String!, $username: String!, $password: String!) {
   signup(
@@ -1803,6 +1911,36 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserTypingSubscriptionDocument = gql`
+    subscription UserTypingSubscription($chatId: Int!) {
+  userTyping(chatId: $chatId) {
+    userId
+    username
+  }
+}
+    `;
+
+/**
+ * __useUserTypingSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `useUserTypingSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useUserTypingSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserTypingSubscriptionSubscription({
+ *   variables: {
+ *      chatId: // value for 'chatId'
+ *   },
+ * });
+ */
+export function useUserTypingSubscriptionSubscription(baseOptions: Apollo.SubscriptionHookOptions<UserTypingSubscriptionSubscription, UserTypingSubscriptionSubscriptionVariables>) {
+        return Apollo.useSubscription<UserTypingSubscriptionSubscription, UserTypingSubscriptionSubscriptionVariables>(UserTypingSubscriptionDocument, baseOptions);
+      }
+export type UserTypingSubscriptionSubscriptionHookResult = ReturnType<typeof useUserTypingSubscriptionSubscription>;
+export type UserTypingSubscriptionSubscriptionResult = Apollo.SubscriptionResult<UserTypingSubscriptionSubscription>;
 export const VerifyEmailDocument = gql`
     mutation VerifyEmail($token: String!) {
   verifyEmail(token: $token)

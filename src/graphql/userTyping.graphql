@@ -1,0 +1,6 @@
+subscription UserTypingSubscription($chatId: Int!) {
+	userTyping(chatId: $chatId) {
+		userId
+		username
+	}
+}
