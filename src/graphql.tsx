@@ -650,6 +650,7 @@ export type UserFriend = {
   friendsSince: Scalars['String'];
   status: Scalars['String'];
   sentBy: Scalars['Int'];
+  blockedBy?: Maybe<Scalars['Int']>;
 };
 
 export type CacheControlScope =
@@ -747,7 +748,7 @@ export type GetBlockedFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
 
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
@@ -1341,6 +1342,7 @@ export const GetBlockedFriendsDocument = gql`
       key
       is_online
     }
+    blockedBy
   }
 }
     `;

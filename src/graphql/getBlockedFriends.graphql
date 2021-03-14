@@ -7,5 +7,6 @@ query GetBlockedFriends($userId: Int!) {
 			key
 			is_online
 		}
+		blockedBy
 	}
 }
