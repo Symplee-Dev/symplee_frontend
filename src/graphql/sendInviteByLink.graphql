@@ -1,0 +1,13 @@
+mutation InviteByLink(
+	$userId: Int!
+	$groupId: Int!
+	$otherUserId: Int!
+	$uses: Int!
+) {
+	inviteByLink(
+		userId: $userId
+		groupId: $groupId
+		otherUserId: $otherUserId
+		uses: $uses
+	)
+}

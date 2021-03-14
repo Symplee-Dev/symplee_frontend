@@ -66,28 +66,32 @@ const PublicProfile = () => {
 					<div className="related-groups-main">
 						<h3 className="title">Mutual Groups</h3>
 						<hr />
-						{data.getProfile.relatedGroups.map(g =>
-							g?.isPublic ? (
-								<div className="group-container">
-									<div className="group">
-										<Avatar src={g?.avatar}>
-											{g?.name[0].toUpperCase()}
-										</Avatar>
-										<h3>{g?.name}</h3>
-										<p>
-											{g.isPublic ? 'Public' : 'Private'}
-										</p>
+						<>
+							{data.getProfile.relatedGroups.map((g, key) =>
+								g?.isPublic ? (
+									<div className="group-container" key={key}>
+										<div className="group">
+											<Avatar src={g?.avatar}>
+												{g?.name[0].toUpperCase()}
+											</Avatar>
+											<h3>{g?.name}</h3>
+											<p>
+												{g.isPublic
+													? 'Public'
+													: 'Private'}
+											</p>
+										</div>
+										<button
+											onClick={() =>
+												history.push('/group/' + g.id)
+											}
+										>
+											View
+										</button>
 									</div>
-									<button
-										onClick={() =>
-											history.push('/group/' + g.id)
-										}
-									>
-										View
-									</button>
-								</div>
-							) : null
-						)}
+								) : null
+							)}
+						</>
 					</div>
 				</>
 			)}

@@ -1,0 +1,11 @@
+query GetBlockedFriends($userId: Int!) {
+	getBlockedFriends(userId: $userId) {
+		friendsSince
+		friend {
+			id
+			username
+			key
+			is_online
+		}
+	}
+}

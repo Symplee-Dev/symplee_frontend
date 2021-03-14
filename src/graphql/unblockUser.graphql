@@ -1,0 +1,3 @@
+mutation UnblockUser($userId: Int!, $otherUserId: Int!) {
+	unblockUser(userId: $userId, otherUserId: $otherUserId)
+}

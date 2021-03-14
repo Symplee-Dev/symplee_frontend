@@ -1,0 +1,3 @@
+mutation AcceptInviteByLink($token: String!) {
+	acceptInviteByLink(token: $token)
+}

@@ -36,6 +36,7 @@ export type Query = {
   getProfile: GetProfileReturn;
   getAcceptedFriends: Array<Maybe<UserFriend>>;
   getPendingFriends: Array<Maybe<UserFriend>>;
+  getBlockedFriends: Array<Maybe<UserFriend>>;
 };
 
 
@@ -107,6 +108,11 @@ export type QueryGetPendingFriendsArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type QueryGetBlockedFriendsArgs = {
+  userId: Scalars['Int'];
+};
+
 export type GetProfileReturn = {
   user: User;
   relatedGroups: Array<Maybe<ChatGroup>>;
@@ -145,6 +151,10 @@ export type Mutation = {
   editMessage: MessagesChats;
   deleteMessage: Scalars['Boolean'];
   userTyping: Scalars['Boolean'];
+  acceptInviteByLink: ErrorCode;
+  inviteByLink: Scalars['Boolean'];
+  blockUser: Scalars['Boolean'];
+  unblockUser: Scalars['Boolean'];
 };
 
 
@@ -318,6 +328,35 @@ export type MutationUserTypingArgs = {
   username: Scalars['String'];
 };
 
+
+export type MutationAcceptInviteByLinkArgs = {
+  token: Scalars['String'];
+};
+
+
+export type MutationInviteByLinkArgs = {
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+  uses: Scalars['Int'];
+};
+
+
+export type MutationBlockUserArgs = {
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+};
+
+
+export type MutationUnblockUserArgs = {
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+};
+
+export type ErrorCode =
+  | 'ALREADY_FAILURE'
+  | 'SUCCESS';
+
 export type DeclineFriendInput = {
   userId: Scalars['Int'];
   fromId: Scalars['Int'];
@@ -374,6 +413,7 @@ export type SubscriptionUserTypingArgs = {
 export type UserTypingReturn = {
   userId: Scalars['Int'];
   username: Scalars['String'];
+  chatId: Scalars['Int'];
 };
 
 export type SendInviteInput = {
@@ -632,12 +672,27 @@ export type AcceptInviteMutationVariables = Exact<{
 
 export type AcceptInviteMutation = { acceptInvite: boolean };
 
+export type AcceptInviteByLinkMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type AcceptInviteByLinkMutation = { acceptInviteByLink: ErrorCode };
+
 export type AddFriendMutationVariables = Exact<{
   friendRequest: FriendRequestInput;
 }>;
 
 
 export type AddFriendMutation = { addFriend: boolean };
+
+export type BlockUserMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+}>;
+
+
+export type BlockUserMutation = { blockUser: boolean };
 
 export type ChangeLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -686,6 +741,13 @@ export type GetAcceptedFriendsQueryVariables = Exact<{
 
 
 export type GetAcceptedFriendsQuery = { getAcceptedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
+export type GetBlockedFriendsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
 
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
@@ -737,7 +799,7 @@ export type GetProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
+export type GetProfileQuery = { getProfile: { user: { id: number, username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
 
 export type JoinGroupMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -785,6 +847,16 @@ export type SendInviteMutationVariables = Exact<{
 
 export type SendInviteMutation = { sendInvite: string };
 
+export type InviteByLinkMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  groupId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+  uses: Scalars['Int'];
+}>;
+
+
+export type InviteByLinkMutation = { inviteByLink: boolean };
+
 export type SendMessageMutationVariables = Exact<{
   message: NewMessage;
 }>;
@@ -817,6 +889,14 @@ export type ToggleUserOnlineMutationVariables = Exact<{
 
 
 export type ToggleUserOnlineMutation = { toggleUserOnline: boolean };
+
+export type UnblockUserMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  otherUserId: Scalars['Int'];
+}>;
+
+
+export type UnblockUserMutation = { unblockUser: boolean };
 
 export type UpdateChatGroupMutationVariables = Exact<{
   group?: Maybe<UpdateChatGroupInput>;
@@ -917,6 +997,36 @@ export function useAcceptInviteMutation(baseOptions?: Apollo.MutationHookOptions
 export type AcceptInviteMutationHookResult = ReturnType<typeof useAcceptInviteMutation>;
 export type AcceptInviteMutationResult = Apollo.MutationResult<AcceptInviteMutation>;
 export type AcceptInviteMutationOptions = Apollo.BaseMutationOptions<AcceptInviteMutation, AcceptInviteMutationVariables>;
+export const AcceptInviteByLinkDocument = gql`
+    mutation AcceptInviteByLink($token: String!) {
+  acceptInviteByLink(token: $token)
+}
+    `;
+export type AcceptInviteByLinkMutationFn = Apollo.MutationFunction<AcceptInviteByLinkMutation, AcceptInviteByLinkMutationVariables>;
+
+/**
+ * __useAcceptInviteByLinkMutation__
+ *
+ * To run a mutation, you first call `useAcceptInviteByLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptInviteByLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptInviteByLinkMutation, { data, loading, error }] = useAcceptInviteByLinkMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useAcceptInviteByLinkMutation(baseOptions?: Apollo.MutationHookOptions<AcceptInviteByLinkMutation, AcceptInviteByLinkMutationVariables>) {
+        return Apollo.useMutation<AcceptInviteByLinkMutation, AcceptInviteByLinkMutationVariables>(AcceptInviteByLinkDocument, baseOptions);
+      }
+export type AcceptInviteByLinkMutationHookResult = ReturnType<typeof useAcceptInviteByLinkMutation>;
+export type AcceptInviteByLinkMutationResult = Apollo.MutationResult<AcceptInviteByLinkMutation>;
+export type AcceptInviteByLinkMutationOptions = Apollo.BaseMutationOptions<AcceptInviteByLinkMutation, AcceptInviteByLinkMutationVariables>;
 export const AddFriendDocument = gql`
     mutation AddFriend($friendRequest: FriendRequestInput!) {
   addFriend(friendRequest: $friendRequest)
@@ -947,6 +1057,37 @@ export function useAddFriendMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddFriendMutationHookResult = ReturnType<typeof useAddFriendMutation>;
 export type AddFriendMutationResult = Apollo.MutationResult<AddFriendMutation>;
 export type AddFriendMutationOptions = Apollo.BaseMutationOptions<AddFriendMutation, AddFriendMutationVariables>;
+export const BlockUserDocument = gql`
+    mutation BlockUser($userId: Int!, $otherUserId: Int!) {
+  blockUser(userId: $userId, otherUserId: $otherUserId)
+}
+    `;
+export type BlockUserMutationFn = Apollo.MutationFunction<BlockUserMutation, BlockUserMutationVariables>;
+
+/**
+ * __useBlockUserMutation__
+ *
+ * To run a mutation, you first call `useBlockUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBlockUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [blockUserMutation, { data, loading, error }] = useBlockUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      otherUserId: // value for 'otherUserId'
+ *   },
+ * });
+ */
+export function useBlockUserMutation(baseOptions?: Apollo.MutationHookOptions<BlockUserMutation, BlockUserMutationVariables>) {
+        return Apollo.useMutation<BlockUserMutation, BlockUserMutationVariables>(BlockUserDocument, baseOptions);
+      }
+export type BlockUserMutationHookResult = ReturnType<typeof useBlockUserMutation>;
+export type BlockUserMutationResult = Apollo.MutationResult<BlockUserMutation>;
+export type BlockUserMutationOptions = Apollo.BaseMutationOptions<BlockUserMutation, BlockUserMutationVariables>;
 export const ChangeLogsDocument = gql`
     query ChangeLogs {
   changeLogs {
@@ -1190,6 +1331,45 @@ export function useGetAcceptedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetAcceptedFriendsQueryHookResult = ReturnType<typeof useGetAcceptedFriendsQuery>;
 export type GetAcceptedFriendsLazyQueryHookResult = ReturnType<typeof useGetAcceptedFriendsLazyQuery>;
 export type GetAcceptedFriendsQueryResult = Apollo.QueryResult<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>;
+export const GetBlockedFriendsDocument = gql`
+    query GetBlockedFriends($userId: Int!) {
+  getBlockedFriends(userId: $userId) {
+    friendsSince
+    friend {
+      id
+      username
+      key
+      is_online
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBlockedFriendsQuery__
+ *
+ * To run a query within a React component, call `useGetBlockedFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlockedFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlockedFriendsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetBlockedFriendsQuery(baseOptions: Apollo.QueryHookOptions<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>) {
+        return Apollo.useQuery<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>(GetBlockedFriendsDocument, baseOptions);
+      }
+export function useGetBlockedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>) {
+          return Apollo.useLazyQuery<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>(GetBlockedFriendsDocument, baseOptions);
+        }
+export type GetBlockedFriendsQueryHookResult = ReturnType<typeof useGetBlockedFriendsQuery>;
+export type GetBlockedFriendsLazyQueryHookResult = ReturnType<typeof useGetBlockedFriendsLazyQuery>;
+export type GetBlockedFriendsQueryResult = Apollo.QueryResult<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>;
 export const MessageSentDocument = gql`
     subscription MessageSent($chatId: Int!) {
   messageSent(chatId: $chatId) {
@@ -1431,6 +1611,7 @@ export const GetProfileDocument = gql`
     query GetProfile($userId: Int!, $otherUserId: Int!) {
   getProfile(userId: $userId, otherUserId: $otherUserId) {
     user {
+      id
       username
       key
       verified
@@ -1668,6 +1849,44 @@ export function useSendInviteMutation(baseOptions?: Apollo.MutationHookOptions<S
 export type SendInviteMutationHookResult = ReturnType<typeof useSendInviteMutation>;
 export type SendInviteMutationResult = Apollo.MutationResult<SendInviteMutation>;
 export type SendInviteMutationOptions = Apollo.BaseMutationOptions<SendInviteMutation, SendInviteMutationVariables>;
+export const InviteByLinkDocument = gql`
+    mutation InviteByLink($userId: Int!, $groupId: Int!, $otherUserId: Int!, $uses: Int!) {
+  inviteByLink(
+    userId: $userId
+    groupId: $groupId
+    otherUserId: $otherUserId
+    uses: $uses
+  )
+}
+    `;
+export type InviteByLinkMutationFn = Apollo.MutationFunction<InviteByLinkMutation, InviteByLinkMutationVariables>;
+
+/**
+ * __useInviteByLinkMutation__
+ *
+ * To run a mutation, you first call `useInviteByLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteByLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteByLinkMutation, { data, loading, error }] = useInviteByLinkMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      groupId: // value for 'groupId'
+ *      otherUserId: // value for 'otherUserId'
+ *      uses: // value for 'uses'
+ *   },
+ * });
+ */
+export function useInviteByLinkMutation(baseOptions?: Apollo.MutationHookOptions<InviteByLinkMutation, InviteByLinkMutationVariables>) {
+        return Apollo.useMutation<InviteByLinkMutation, InviteByLinkMutationVariables>(InviteByLinkDocument, baseOptions);
+      }
+export type InviteByLinkMutationHookResult = ReturnType<typeof useInviteByLinkMutation>;
+export type InviteByLinkMutationResult = Apollo.MutationResult<InviteByLinkMutation>;
+export type InviteByLinkMutationOptions = Apollo.BaseMutationOptions<InviteByLinkMutation, InviteByLinkMutationVariables>;
 export const SendMessageDocument = gql`
     mutation SendMessage($message: NewMessage!) {
   sendMessage(message: $message)
@@ -1800,6 +2019,37 @@ export function useToggleUserOnlineMutation(baseOptions?: Apollo.MutationHookOpt
 export type ToggleUserOnlineMutationHookResult = ReturnType<typeof useToggleUserOnlineMutation>;
 export type ToggleUserOnlineMutationResult = Apollo.MutationResult<ToggleUserOnlineMutation>;
 export type ToggleUserOnlineMutationOptions = Apollo.BaseMutationOptions<ToggleUserOnlineMutation, ToggleUserOnlineMutationVariables>;
+export const UnblockUserDocument = gql`
+    mutation UnblockUser($userId: Int!, $otherUserId: Int!) {
+  unblockUser(userId: $userId, otherUserId: $otherUserId)
+}
+    `;
+export type UnblockUserMutationFn = Apollo.MutationFunction<UnblockUserMutation, UnblockUserMutationVariables>;
+
+/**
+ * __useUnblockUserMutation__
+ *
+ * To run a mutation, you first call `useUnblockUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnblockUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unblockUserMutation, { data, loading, error }] = useUnblockUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      otherUserId: // value for 'otherUserId'
+ *   },
+ * });
+ */
+export function useUnblockUserMutation(baseOptions?: Apollo.MutationHookOptions<UnblockUserMutation, UnblockUserMutationVariables>) {
+        return Apollo.useMutation<UnblockUserMutation, UnblockUserMutationVariables>(UnblockUserDocument, baseOptions);
+      }
+export type UnblockUserMutationHookResult = ReturnType<typeof useUnblockUserMutation>;
+export type UnblockUserMutationResult = Apollo.MutationResult<UnblockUserMutation>;
+export type UnblockUserMutationOptions = Apollo.BaseMutationOptions<UnblockUserMutation, UnblockUserMutationVariables>;
 export const UpdateChatGroupDocument = gql`
     mutation UpdateChatGroup($group: UpdateChatGroupInput, $chatGroupId: Int!) {
   updateChatGroup(group: $group, chatGroupId: $chatGroupId) {

@@ -5,13 +5,29 @@ import {
 	Tooltip
 } from '@material-ui/core';
 import { UserSelectors } from '../../../../redux/selectors';
-import { useGetAcceptedFriendsQuery } from '../../../../graphql';
+import {
+	useGetAcceptedFriendsQuery,
+	useGetBlockedFriendsQuery
+} from '../../../../graphql';
 import Moment from 'react-moment';
 import { useHistory } from 'react-router';
+import { useEffect } from 'react';
 
 const Friends = () => {
 	const userId = UserSelectors.useSelectUserId()!;
-	const { data, loading, error } = useGetAcceptedFriendsQuery({
+	const { data, loading, refetch } = useGetAcceptedFriendsQuery({
+		variables: { userId }
+	});
+
+	useEffect(() => {
+		refetch();
+		refetchBlocked();
+	});
+
+	const {
+		data: blockedData,
+		refetch: refetchBlocked
+	} = useGetBlockedFriendsQuery({
 		variables: { userId }
 	});
 
@@ -35,38 +51,107 @@ const Friends = () => {
 				{loading ? (
 					<CircularProgress />
 				) : (
-					<div className="friend-list">
-						{data?.getAcceptedFriends.map((f, key) => (
-							<Tooltip placement="top" title="View Profile">
-								<div
-									className="friend"
-									onClick={() =>
-										history.push(
-											'/user/profile/' + f?.friend?.id
-										)
-									}
-								>
-									<div className="friend-top" key={key}>
-										<h5>
-											{f?.friend?.username}#
-											{f?.friend?.key}
-										</h5>
-										<p>
-											{f?.friend?.is_online
-												? 'Online'
-												: 'Offline'}
-										</p>
-									</div>
-									<h3>
-										Friends Since{' '}
-										<Moment ago format="MMM, D YYYY">
-											{f?.friendsSince}
-										</Moment>
-									</h3>
-								</div>
-							</Tooltip>
-						))}
-					</div>
+					<>
+						{blockedData &&
+							blockedData.getBlockedFriends.length > 0 && (
+								<>
+									<h3>Blocked</h3>
+									<>
+										{blockedData?.getBlockedFriends.map(
+											(f, key) => (
+												<Tooltip
+													placement="top"
+													title="View Profile"
+												>
+													<div
+														className="friend"
+														key={key}
+														onClick={() =>
+															history.push(
+																'/user/profile/' +
+																	f?.friend
+																		?.id
+															)
+														}
+													>
+														<div className="friend-top">
+															<h5>
+																{
+																	f?.friend
+																		?.username
+																}
+																#
+																{f?.friend?.key}
+															</h5>
+															<p>
+																{f?.friend
+																	?.is_online
+																	? 'Online'
+																	: 'Offline'}
+															</p>
+														</div>
+														<h3>
+															Friends Since{' '}
+															<Moment
+																ago
+																format="MMM, D YYYY"
+															>
+																{
+																	f?.friendsSince
+																}
+															</Moment>
+														</h3>
+													</div>
+												</Tooltip>
+											)
+										)}
+									</>
+								</>
+							)}
+						<h3 style={{ marginTop: '2rem' }}>Friends</h3>
+						<div className="friend-list">
+							<>
+								{data?.getAcceptedFriends.map((f, key) => (
+									<Tooltip
+										placement="top"
+										title="View Profile"
+									>
+										<div
+											className="friend"
+											key={key}
+											onClick={() =>
+												history.push(
+													'/user/profile/' +
+														f?.friend?.id
+												)
+											}
+										>
+											<div className="friend-top">
+												<h5>
+													{f?.friend?.username}#
+													{f?.friend?.key}
+												</h5>
+												<p>
+													{f?.friend?.is_online
+														? 'Online'
+														: 'Offline'}
+												</p>
+											</div>
+											<h3>
+												Friends Since{' '}
+												<Moment
+													ago
+													format="MMM, D YYYY"
+												>
+													{f?.friendsSince}
+												</Moment>
+											</h3>
+										</div>
+									</Tooltip>
+								))}
+							</>
+						</div>
+					</>
 				)}
 			</div>
 		</div>
