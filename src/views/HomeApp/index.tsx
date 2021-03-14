@@ -108,7 +108,9 @@ const HomeApp = () => {
 						)}
 
 						{location.pathname.includes('/user/profile/') && (
-							<PublicProfileSidebar />
+							<PublicProfileSidebar
+								setDashboardRoute={setDashboardRoute}
+							/>
 						)}
 					</div>
 					<SidebarFooter />

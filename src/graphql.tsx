@@ -36,6 +36,7 @@ export type Query = {
   getProfile: GetProfileReturn;
   getAcceptedFriends: Array<Maybe<UserFriend>>;
   getPendingFriends: Array<Maybe<UserFriend>>;
+  getBlockedFriends: Array<Maybe<UserFriend>>;
 };
 
 
@@ -104,6 +105,11 @@ export type QueryGetAcceptedFriendsArgs = {
 
 
 export type QueryGetPendingFriendsArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetBlockedFriendsArgs = {
   userId: Scalars['Int'];
 };
 
@@ -736,6 +742,13 @@ export type GetAcceptedFriendsQueryVariables = Exact<{
 
 export type GetAcceptedFriendsQuery = { getAcceptedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
 
+export type GetBlockedFriendsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
 }>;
@@ -786,7 +799,7 @@ export type GetProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileQuery = { getProfile: { user: { username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
+export type GetProfileQuery = { getProfile: { user: { id: number, username: string, key: string, verified: boolean, createdAt: string, avatar?: Maybe<string>, is_online: boolean }, relatedGroups: Array<Maybe<{ name: string, isPublic: boolean, avatar?: Maybe<string>, id: number }>> } };
 
 export type JoinGroupMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -1318,6 +1331,45 @@ export function useGetAcceptedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetAcceptedFriendsQueryHookResult = ReturnType<typeof useGetAcceptedFriendsQuery>;
 export type GetAcceptedFriendsLazyQueryHookResult = ReturnType<typeof useGetAcceptedFriendsLazyQuery>;
 export type GetAcceptedFriendsQueryResult = Apollo.QueryResult<GetAcceptedFriendsQuery, GetAcceptedFriendsQueryVariables>;
+export const GetBlockedFriendsDocument = gql`
+    query GetBlockedFriends($userId: Int!) {
+  getBlockedFriends(userId: $userId) {
+    friendsSince
+    friend {
+      id
+      username
+      key
+      is_online
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBlockedFriendsQuery__
+ *
+ * To run a query within a React component, call `useGetBlockedFriendsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlockedFriendsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlockedFriendsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetBlockedFriendsQuery(baseOptions: Apollo.QueryHookOptions<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>) {
+        return Apollo.useQuery<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>(GetBlockedFriendsDocument, baseOptions);
+      }
+export function useGetBlockedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>) {
+          return Apollo.useLazyQuery<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>(GetBlockedFriendsDocument, baseOptions);
+        }
+export type GetBlockedFriendsQueryHookResult = ReturnType<typeof useGetBlockedFriendsQuery>;
+export type GetBlockedFriendsLazyQueryHookResult = ReturnType<typeof useGetBlockedFriendsLazyQuery>;
+export type GetBlockedFriendsQueryResult = Apollo.QueryResult<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>;
 export const MessageSentDocument = gql`
     subscription MessageSent($chatId: Int!) {
   messageSent(chatId: $chatId) {
@@ -1559,6 +1611,7 @@ export const GetProfileDocument = gql`
     query GetProfile($userId: Int!, $otherUserId: Int!) {
   getProfile(userId: $userId, otherUserId: $otherUserId) {
     user {
+      id
       username
       key
       verified

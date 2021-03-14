@@ -58,6 +58,7 @@ export type UIState = {
 	currentlyViewedProfile?:
 		| {
 				user: {
+					id: number;
 					username: string;
 					key: string;
 					verified: boolean;

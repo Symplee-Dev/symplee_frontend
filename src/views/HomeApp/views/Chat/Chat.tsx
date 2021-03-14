@@ -3,7 +3,8 @@ import {
 	useGetMessagesQuery,
 	useSendMessageMutation,
 	useMessageSentSubscription,
-	Maybe
+	Maybe,
+	useGetBlockedFriendsQuery
 } from '../../../../graphql';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -34,16 +35,35 @@ const Chat = () => {
 	const userId = useSelector((state: RootState) => state.user.userId)!;
 
 	const setCurrentChat = UIActions.useSetCurrentChat();
+	const { data: blockedFriendsData } = useGetBlockedFriendsQuery({
+		variables: { userId }
+	});
 
 	useMessageSentSubscription({
 		variables: { chatId: Number(params.chatId) },
 		onSubscriptionData(data) {
 			console.log('received message');
 			if (data.subscriptionData.data?.messageSent)
-				setMessages([
-					...messages,
-					data.subscriptionData.data?.messageSent
-				]);
+				if (blockedFriendsData) {
+					if (
+						blockedFriendsData.getBlockedFriends.find(
+							f =>
+								f?.friend?.id ===
+								data.subscriptionData.data?.messageSent.author
+									.id
+						) === undefined
+					) {
+						setMessages([
+							...messages,
+							data.subscriptionData.data?.messageSent
+						]);
+					}
+				} else {
+					setMessages([
+						...messages,
+						data.subscriptionData.data?.messageSent
+					]);
+				}
 		}
 	});
 
@@ -59,16 +79,26 @@ const Chat = () => {
 							data.subscriptionData.data?.userTyping?.userId
 					)
 				) {
-					setWhosTyping([
-						...whosTyping.filter(
-							typer =>
-								typer.userId !==
+					if (blockedFriendsData) {
+						if (
+							blockedFriendsData.getBlockedFriends.find(
+								f =>
+									f?.friend?.id ===
 									data.subscriptionData.data?.userTyping
-										?.userId &&
-								data.subscriptionData.data?.userTyping
-									?.userId !== userId
-						)
-					]);
+							) === undefined
+						) {
+							setWhosTyping([
+								...whosTyping.filter(
+									typer =>
+										typer.userId !==
+											data.subscriptionData.data
+												?.userTyping?.userId &&
+										data.subscriptionData.data?.userTyping
+											?.userId !== userId
+								)
+							]);
+						}
+					}
 				} else {
 					data.subscriptionData.data?.userTyping?.userId !== userId &&
 						setWhosTyping([
@@ -142,7 +172,16 @@ const Chat = () => {
 	const { data } = useGetMessagesQuery({
 		variables: { chatId: Number(params.chatId) },
 		onCompleted() {
-			if (data) setMessages(data.getMessages);
+			if (data) {
+				setMessages(
+					data.getMessages.filter(
+						msg =>
+							!blockedFriendsData?.getBlockedFriends.find(
+								f => f?.friend?.id === msg?.author.id
+							)
+					)
+				);
+			}
 			setCurrentChat(thisChat);
 		},
 		nextFetchPolicy: 'network-only',
@@ -175,15 +214,18 @@ const Chat = () => {
 		<div className="chat-group-chats">
 			<p className="chat-title">#{thisChat?.name}</p>
 			<div className="chats">
-				{messages.map((message, key) => (
-					<Message
-						message={message}
-						key={key}
-						noHeader={
-							messages[key - 1]?.author.id === message?.author.id
-						}
-					/>
-				))}
+				<>
+					{messages.map((message, key) => (
+						<Message
+							message={message}
+							key={key}
+							noHeader={
+								messages[key - 1]?.author.id ===
+								message?.author.id
+							}
+						/>
+					))}
+				</>
 				<span
 					ref={el => {
 						setEnd(el);
@@ -202,7 +244,10 @@ const Chat = () => {
 					whosTyping.length <= 3 &&
 					whosTyping.length > 1 && (
 						<p className="typer">
-							{whosTyping.map(typer => typer.username + ', ')} is
+							<>
+								{whosTyping.map(typer => typer.username + ', ')}{' '}
+								is
+							</>
 							typing
 						</p>
 					)}
@@ -210,7 +255,10 @@ const Chat = () => {
 					whosTyping.length <= 3 &&
 					whosTyping.length === 1 && (
 						<p className="typer">
-							{whosTyping.map(typer => typer.username)} is typing
+							<>
+								{whosTyping.map(typer => typer.username)} is
+								typing
+							</>
 						</p>
 					)}
 				{whosTyping.length > 3 && (
