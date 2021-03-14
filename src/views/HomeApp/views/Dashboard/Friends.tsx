@@ -22,7 +22,7 @@ const Friends = () => {
 	useEffect(() => {
 		refetch();
 		refetchBlocked();
-	});
+	}, [);
 
 	const {
 		data: blockedData,
