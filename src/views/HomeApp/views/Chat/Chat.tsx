@@ -13,7 +13,11 @@ import Message from './Message';
 import NewChatBar from './NewChatBar';
 import { UIActions } from '../../../../redux/actions/index';
 import noMessages from '../../../../assets/no_messages.svg';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, debounce } from '@material-ui/core';
+import {
+	useUserTypingSubscriptionSubscription,
+	useSendUserTypingMutation
+} from '../../../../graphql';
 
 const Chat = () => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
@@ -24,17 +28,54 @@ const Chat = () => {
 		)
 	);
 
+	const username = useSelector(
+		(state: RootState) => state.user.user?.username
+	)!;
+	const userId = useSelector((state: RootState) => state.user.userId)!;
+
 	const setCurrentChat = UIActions.useSetCurrentChat();
 
 	useMessageSentSubscription({
 		variables: { chatId: Number(params.chatId) },
 		onSubscriptionData(data) {
-			console.log('received');
+			console.log('received message');
 			if (data.subscriptionData.data?.messageSent)
 				setMessages([
 					...messages,
 					data.subscriptionData.data?.messageSent
 				]);
+		}
+	});
+
+	useUserTypingSubscriptionSubscription({
+		variables: { chatId: Number(params.chatId) },
+		onSubscriptionData(data) {
+			console.log('received typed');
+			if (data.subscriptionData.data?.userTyping)
+				if (
+					whosTyping.find(
+						typer =>
+							typer.userId ===
+							data.subscriptionData.data?.userTyping?.userId
+					)
+				) {
+					setWhosTyping([
+						...whosTyping.filter(
+							typer =>
+								typer.userId !==
+									data.subscriptionData.data?.userTyping
+										?.userId &&
+								data.subscriptionData.data?.userTyping
+									?.userId !== userId
+						)
+					]);
+				} else {
+					data.subscriptionData.data?.userTyping?.userId !== userId &&
+						setWhosTyping([
+							...whosTyping,
+							data.subscriptionData.data.userTyping
+						]);
+				}
 		}
 	});
 
@@ -47,6 +88,14 @@ const Chat = () => {
 	const [formState, setFormState] = useState('');
 
 	const [sendMessage] = useSendMessageMutation();
+	const [sendUserTyping] = useSendUserTypingMutation();
+
+	const [whosTyping, setWhosTyping] = useState<
+		{
+			userId: number;
+			username: string;
+		}[]
+	>([]);
 
 	const [messages, setMessages] = useState<
 		Maybe<{
@@ -82,6 +131,12 @@ const Chat = () => {
 		console.log('sending');
 
 		setFormState('');
+	};
+
+	const handleSendTyping = () => {
+		sendUserTyping({
+			variables: { chatId: Number(params.chatId), userId, username }
+		});
 	};
 
 	const { data } = useGetMessagesQuery({
@@ -142,7 +197,30 @@ const Chat = () => {
 					</div>
 				)}
 			</div>
+			<div className="whos-typing">
+				{whosTyping.length > 0 &&
+					whosTyping.length <= 3 &&
+					whosTyping.length > 1 && (
+						<p className="typer">
+							{whosTyping.map(typer => typer.username + ', ')} is
+							typing
+						</p>
+					)}
+				{whosTyping.length > 0 &&
+					whosTyping.length <= 3 &&
+					whosTyping.length === 1 && (
+						<p className="typer">
+							{whosTyping.map(typer => typer.username)} is typing
+						</p>
+					)}
+				{whosTyping.length > 3 && (
+					<p className="typer">
+						{whosTyping.length} users are typing
+					</p>
+				)}
+			</div>
 			<NewChatBar
+				handleSendType={handleSendTyping}
 				handleSubmit={handleSend}
 				formState={formState}
 				setFormState={setFormState}

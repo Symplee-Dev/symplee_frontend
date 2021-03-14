@@ -20,12 +20,27 @@
 		opacity: 0.5;
 	}
 
+	.whos-typing {
+		height: 10px;
+		width: 100%;
+		box-sizing: border-box;
+
+		p {
+			font-weight: 300;
+			font-size: 0.8rem;
+		}
+	}
+
 	.chats {
 		display: flex;
 		overflow-y: scroll;
 		height: 90vh;
 		flex-direction: column;
 		align-items: center;
+
+		// .typer {
+		// 	text-align: left !important;
+		// }
 
 		.message-container {
 			box-sizing: border-box;
