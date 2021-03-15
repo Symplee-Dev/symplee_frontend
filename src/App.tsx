@@ -13,6 +13,9 @@ import HomeApp from './views/HomeApp/index';
 import EmailVerificationScreen from './views/EmailVerificationScreen/EmailVerificationScreen';
 import { useLocalToken } from './hooks/useLocalToken';
 import Notifications from './components/Notifications';
+import { useReactPath } from './hooks/useReactPath';
+import { useEffect } from 'react';
+import { UIActions } from './redux/actions/index';
 
 const theme = createMuiTheme({
 	palette: {
@@ -25,6 +28,15 @@ const theme = createMuiTheme({
 const App = () => {
 	const location = useLocation();
 	const authenticated = useLocalToken();
+	const clearChat = UIActions.useClearCurrentChat();
+
+	const path = useReactPath();
+
+	useEffect(() => {
+		if (!path.includes('/chat')) {
+			clearChat();
+		}
+	}, [path, clearChat]);
 
 	return (
 		<ErrorBoundary

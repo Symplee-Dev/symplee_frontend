@@ -1,0 +1,20 @@
+.new-mail {
+	h5 {
+		margin-bottom: 0.5rem;
+	}
+}
+
+.mail-button {
+	width: 100px;
+	height: 50px;
+	background: none;
+	outline: none;
+	border: 1px solid white;
+	color: white;
+	transition: 0.2s;
+}
+
+.mail-button:hover {
+	cursor: pointer;
+	background: #3e4756;
+}
