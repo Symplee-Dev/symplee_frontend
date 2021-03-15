@@ -95,7 +95,57 @@ const Account = ({
 			</div>
 			<div className="body">
 				<div className="top">
-					<div className="top-top">
+					<div>
+						<div className="top-top">
+							<h2 className="username">
+								{user.username}#{user.key}
+							</h2>
+							<Tooltip
+								placement="top"
+								title="Verified Member"
+								className="verified"
+							>
+								<VerifiedUserIcon />
+							</Tooltip>
+						</div>
+						<div className="joined">
+							<h6>
+								Joined{' '}
+								<Moment fromNow={true} ago>
+									{new Date(user.createdAt)}
+								</Moment>{' '}
+								ago
+							</h6>
+						</div>
+						<div className="change-avatar-root">
+							{!imageLoading ? (
+								<label className="file-upload-root">
+									<input
+										onChange={handleImageUpload}
+										type="file"
+										accept="image/*"
+										style={{ border: 'none' }}
+									/>
+									Change Avatar{' '}
+									<CloudUploadIcon
+										style={{ marginLeft: '0.5rem' }}
+									/>
+								</label>
+							) : (
+								<>
+									<LinearProgress
+										color="primary"
+										style={{
+											marginTop: '1rem',
+											marginBottom: '0.5rem'
+										}}
+									/>
+									<p>Uploading Image...</p>
+								</>
+							)}
+						</div>
+					</div>
+					<div className="avatar-icon">
 						{!formState.avatar ? (
 							<Avatar
 								style={{ background: randomHex.generate() }}
@@ -104,51 +154,6 @@ const Account = ({
 							</Avatar>
 						) : (
 							<Avatar src={formState.avatar} />
-						)}
-						<h2 className="username">
-							{user.username}#{user.key}
-						</h2>
-
-						<Tooltip
-							placement="top"
-							title="Verified Member"
-							className="verified"
-						>
-							<VerifiedUserIcon />
-						</Tooltip>
-					</div>
-					<div className="joined">
-						Joined{' '}
-						<Moment fromNow={true} ago>
-							{new Date(user.createdAt)}
-						</Moment>{' '}
-						ago
-					</div>
-					<div className="change-avatar-root">
-						{!imageLoading ? (
-							<label className="file-upload-root">
-								<input
-									onChange={handleImageUpload}
-									type="file"
-									accept="image/*"
-									style={{ border: 'none' }}
-								/>
-								Change Avatar{' '}
-								<CloudUploadIcon
-									style={{ marginLeft: '0.5rem' }}
-								/>
-							</label>
-						) : (
-							<>
-								<LinearProgress
-									color="primary"
-									style={{
-										marginTop: '1rem',
-										marginBottom: '0.5rem'
-									}}
-								/>
-								<p>Uploading Image...</p>
-							</>
 						)}
 					</div>
 				</div>
