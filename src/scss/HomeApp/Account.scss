@@ -41,6 +41,12 @@
 			display: flex;
 			align-items: center;
 
+			.form-container{
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+			}
+
 			.change-avatar-root {
 				.file-upload-root {
 					transition: 0.3s;
@@ -63,6 +69,14 @@
 			.top-top {
 				display: flex;
 				align-items: center;
+
+				.username-container{
+					display: flex;
+					align-items: start;
+					flex-direction: column;
+					align-self: start;
+				}
+
 				.username {
 					font-weight: 400;
 					letter-spacing: 2px;
@@ -75,8 +89,14 @@
 
 				
 			}
-			.avatar-icon{
+			.avatar-container{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 				margin: auto 0 auto auto;
+
+			}
+			.avatar-icon{
 				div{
 					height: 4.5rem;
 					width: 4.5rem;
@@ -87,8 +107,7 @@
 
 		.top-bottom {
 			margin-top: 1.2rem;
- 			background-color: darken($color: gray, $amount: 25);
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+ 			background-color: darken($color: gray, $amount: 10);
 			padding: 1.2rem;
 			border-radius: 0.4rem;
 			display: flex;
@@ -123,27 +142,26 @@
 
 			.input-field {
 				color: white;
-			}
+			}	
+		}
+		button {
+			background-color: #bb86fc;
+			color: white;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 700;
+			margin-top: 2.5rem;
+			width: 350px;
+			height: 50px;
+			border-radius: 1rem;
+			border: none;
+			outline: none;
+			transition: 0.3s;
+		}
 
-			button {
-				background-color: #bb86fc;
-				color: white;
-				font-family: 'Poppins', sans-serif;
-				font-weight: 700;
-				margin-top: 2.5rem;
-				width: 350px;
-				height: 50px;
-				border-radius: 1rem;
-				border: none;
-				outline: none;
-				transition: 0.3s;
-			}
-
-			button:hover {
-				cursor: pointer;
-				background: white;
-				color: #23272a;
-			}
+		button:hover {
+			cursor: pointer;
+			background: white;
+			color: #23272a;
 		}
 	}
 }

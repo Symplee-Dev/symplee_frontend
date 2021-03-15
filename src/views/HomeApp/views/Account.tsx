@@ -95,109 +95,129 @@ const Account = ({
 			</div>
 			<div className="body">
 				<div className="top">
-					<div>
+					<div className="form-container">
 						<div className="top-top">
-							<h2 className="username">
-								{user.username}#{user.key}
-							</h2>
-							<Tooltip
-								placement="top"
-								title="Verified Member"
-								className="verified"
-							>
-								<VerifiedUserIcon />
-							</Tooltip>
+							<div className="username-container">
+								<div
+									style={{
+										display: 'flex',
+										alignItems: 'center'
+									}}
+								>
+									<h2 className="username">
+										{user.username}#{user.key}
+									</h2>
+									<Tooltip
+										placement="top"
+										title="Verified Member"
+										className="verified"
+									>
+										<VerifiedUserIcon />
+									</Tooltip>
+								</div>
+
+								<div className="joined">
+									<h6>
+										Joined{' '}
+										<Moment fromNow={true} ago>
+											{new Date(user.createdAt)}
+										</Moment>{' '}
+										ago
+									</h6>
+								</div>
+							</div>
+							<div className="avatar-container">
+								<div className="avatar-icon">
+									{!formState.avatar ? (
+										<Avatar
+											style={{
+												background: randomHex.generate()
+											}}
+										>
+											{user.username[0]}
+										</Avatar>
+									) : (
+										<Avatar src={formState.avatar} />
+									)}
+								</div>
+								<div className="change-avatar-root">
+									{!imageLoading ? (
+										<label className="file-upload-root">
+											<input
+												onChange={handleImageUpload}
+												type="file"
+												accept="image/*"
+												style={{ border: 'none' }}
+											/>
+											Change Avatar{' '}
+											<CloudUploadIcon
+												style={{
+													marginLeft: '0.5rem'
+												}}
+											/>
+										</label>
+									) : (
+										<>
+											<LinearProgress
+												color="primary"
+												style={{
+													marginTop: '1rem',
+													marginBottom: '0.5rem'
+												}}
+											/>
+											<p>Uploading Image...</p>
+										</>
+									)}
+								</div>
+							</div>
 						</div>
-						<div className="joined">
-							<h6>
-								Joined{' '}
-								<Moment fromNow={true} ago>
-									{new Date(user.createdAt)}
-								</Moment>{' '}
-								ago
-							</h6>
-						</div>
-						<div className="change-avatar-root">
-							{!imageLoading ? (
-								<label className="file-upload-root">
-									<input
-										onChange={handleImageUpload}
-										type="file"
-										accept="image/*"
-										style={{ border: 'none' }}
-									/>
-									Change Avatar{' '}
-									<CloudUploadIcon
-										style={{ marginLeft: '0.5rem' }}
-									/>
-								</label>
-							) : (
-								<>
-									<LinearProgress
-										color="primary"
+						<div className="top-bottom">
+							<h2>Profile Details</h2>
+
+							<div className="row">
+								<div>
+									<p
 										style={{
-											marginTop: '1rem',
-											marginBottom: '0.5rem'
+											color: '#BB86FC',
+											fontWeight: 'bold'
 										}}
-									/>
-									<p>Uploading Image...</p>
-								</>
-							)}
-						</div>
-					</div>
-					<div className="avatar-icon">
-						{!formState.avatar ? (
-							<Avatar
-								style={{ background: randomHex.generate() }}
-							>
-								{user.username[0]}
-							</Avatar>
-						) : (
-							<Avatar src={formState.avatar} />
-						)}
-					</div>
-				</div>
-
-				<div className="top-bottom">
-					<h2>Profile Details</h2>
-
-					<div className="row">
-						<div>
-							<p>Name </p>
-							{user.name === formState.name ? (
-								''
-							) : (
-								<Tooltip placement="top" title="Undo">
-									<UndoIcon
-										className="undo"
-										style={{ color: '#F2A813' }}
-										onClick={() =>
-											setFormState({
-												...formState,
-												name: user.name
-											})
-										}
-									/>
-								</Tooltip>
-							)}
-						</div>
-						<TextField
-							color="primary"
-							style={{ width: '100%' }}
-							onChange={e =>
-								setFormState({
-									...formState,
-									name: e.target.value
-								})
-							}
-							type="text"
-							variant="filled"
-							value={formState?.name}
-							inputProps={{ className: 'input-field' }}
-						/>
-					</div>
-					{/* Can uncomment when mutation is fixed, handle email in use */}
-					{/* <div className="row">
+									>
+										Name{' '}
+									</p>
+									{user.name === formState.name ? (
+										''
+									) : (
+										<Tooltip placement="top" title="Undo">
+											<UndoIcon
+												className="undo"
+												style={{ color: '#F2A813' }}
+												onClick={() =>
+													setFormState({
+														...formState,
+														name: user.name
+													})
+												}
+											/>
+										</Tooltip>
+									)}
+								</div>
+								<TextField
+									color="primary"
+									style={{ width: '100%' }}
+									onChange={e =>
+										setFormState({
+											...formState,
+											name: e.target.value
+										})
+									}
+									type="text"
+									variant="filled"
+									value={formState?.name}
+									inputProps={{ className: 'input-field' }}
+								/>
+							</div>
+							{/* Can uncomment when mutation is fixed, handle email in use */}
+							{/* <div className="row">
 						<div>
 							<p>Email</p>
 							{user.email === formState.email ? (
@@ -232,43 +252,52 @@ const Account = ({
 							inputProps={{ className: 'input-field' }}
 						/>
 					</div> */}
-					<div className="row">
-						<div>
-							<p>Username</p>
-							{user.username === formState.username ? (
-								''
-							) : (
-								<Tooltip placement="top" title="Undo">
-									<UndoIcon
-										className="undo"
-										style={{ color: '#F2A813' }}
-										onClick={() =>
-											setFormState({
-												...formState,
-												username: user.username
-											})
-										}
-									/>
-								</Tooltip>
-							)}
+							<div className="row">
+								<div>
+									<p
+										style={{
+											color: '#BB86FC',
+											fontWeight: 'bold'
+										}}
+									>
+										Username
+									</p>
+									{user.username === formState.username ? (
+										''
+									) : (
+										<Tooltip placement="top" title="Undo">
+											<UndoIcon
+												className="undo"
+												style={{ color: '#F2A813' }}
+												onClick={() =>
+													setFormState({
+														...formState,
+														username: user.username
+													})
+												}
+											/>
+										</Tooltip>
+									)}
+								</div>
+								<TextField
+									style={{ width: '100%' }}
+									onChange={e =>
+										setFormState({
+											...formState,
+											username: e.target.value
+										})
+									}
+									color="primary"
+									variant="filled"
+									type="text"
+									value={formState?.username}
+									inputProps={{ className: 'input-field' }}
+								/>
+							</div>
 						</div>
-						<TextField
-							style={{ width: '100%' }}
-							onChange={e =>
-								setFormState({
-									...formState,
-									username: e.target.value
-								})
-							}
-							color="primary"
-							variant="filled"
-							type="text"
-							value={formState?.username}
-							inputProps={{ className: 'input-field' }}
-						/>
-					</div>
-					<div className="row">
-						<button onClick={handleSubmit}>Save</button>
+						<div className="row">
+							<button onClick={handleSubmit}>Save</button>
+						</div>
 					</div>
 				</div>
 			</div>
