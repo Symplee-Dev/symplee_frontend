@@ -383,6 +383,7 @@ export type Subscription = {
   messageEdited: MessagesChats;
   messageDeleted: Scalars['Int'];
   userTyping?: Maybe<UserTypingReturn>;
+  mailboxUpdate: UserMailbox;
 };
 
 
@@ -408,6 +409,11 @@ export type SubscriptionMessageDeletedArgs = {
 
 export type SubscriptionUserTypingArgs = {
   chatId: Scalars['Int'];
+};
+
+
+export type SubscriptionMailboxUpdateArgs = {
+  userId: Scalars['Int'];
 };
 
 export type UserTypingReturn = {
@@ -653,6 +659,31 @@ export type UserFriend = {
   blockedBy?: Maybe<Scalars['Int']>;
 };
 
+export type UserMailbox = {
+  id: Scalars['String'];
+  body: Scalars['String'];
+  title: Scalars['String'];
+  goTo: Scalars['String'];
+  userId: Scalars['Int'];
+};
+
+export type UserDm = {
+  id: Scalars['Int'];
+  userId: Scalars['Int'];
+  users: Array<Scalars['Int']>;
+  messages: Array<Maybe<UserDmMessages>>;
+};
+
+export type UserDmMessages = {
+  id: Scalars['Int'];
+  body: Scalars['String'];
+  authorUsername: Scalars['String'];
+  authorId: Scalars['Int'];
+  author: User;
+  createdAt: Scalars['String'];
+  dmId: Scalars['Int'];
+};
+
 export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
@@ -818,6 +849,13 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { login?: Maybe<{ authenticated: boolean, token: string }> };
+
+export type MailboxUpdateSubscriptionVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type MailboxUpdateSubscription = { mailboxUpdate: { id: string, body: string, title: string, goTo: string } };
 
 export type RemoveFriendMutationVariables = Exact<{
   friendId: Scalars['Int'];
@@ -1723,6 +1761,38 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const MailboxUpdateDocument = gql`
+    subscription MailboxUpdate($userId: Int!) {
+  mailboxUpdate(userId: $userId) {
+    id
+    body
+    title
+    goTo
+  }
+}
+    `;
+
+/**
+ * __useMailboxUpdateSubscription__
+ *
+ * To run a query within a React component, call `useMailboxUpdateSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMailboxUpdateSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMailboxUpdateSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useMailboxUpdateSubscription(baseOptions: Apollo.SubscriptionHookOptions<MailboxUpdateSubscription, MailboxUpdateSubscriptionVariables>) {
+        return Apollo.useSubscription<MailboxUpdateSubscription, MailboxUpdateSubscriptionVariables>(MailboxUpdateDocument, baseOptions);
+      }
+export type MailboxUpdateSubscriptionHookResult = ReturnType<typeof useMailboxUpdateSubscription>;
+export type MailboxUpdateSubscriptionResult = Apollo.SubscriptionResult<MailboxUpdateSubscription>;
 export const RemoveFriendDocument = gql`
     mutation RemoveFriend($friendId: Int!, $userId: Int!) {
   removeFriend(friendId: $friendId, userId: $userId)

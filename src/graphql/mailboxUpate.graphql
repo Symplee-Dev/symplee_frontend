@@ -1,0 +1,8 @@
+subscription MailboxUpdate($userId: Int!) {
+	mailboxUpdate(userId: $userId) {
+		id
+		body
+		title
+		goTo
+	}
+}
