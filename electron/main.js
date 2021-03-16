@@ -9,7 +9,8 @@ const createWindow = () => {
 		width: 600,
 		height: 600,
 		show: false,
-		frame: app.isPackaged ? false : true
+		// frame: app.isPackaged ? false : true
+		frame: true
 	});
 	mainWindow.loadURL(
 		!app.isPackaged
