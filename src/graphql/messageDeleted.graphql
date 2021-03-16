@@ -1,0 +1,3 @@
+subscription MessageDeleted($chatId: Int!) {
+	messageDeleted(chatId: $chatId)
+}

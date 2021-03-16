@@ -4,7 +4,8 @@ import {
 	useSendMessageMutation,
 	useMessageSentSubscription,
 	Maybe,
-	useGetBlockedFriendsQuery
+	useGetBlockedFriendsQuery,
+	useMessageDeletedSubscription
 } from '../../../../graphql';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -64,6 +65,22 @@ const Chat = () => {
 						data.subscriptionData.data?.messageSent
 					]);
 				}
+		}
+	});
+
+	useMessageDeletedSubscription({
+		variables: { chatId: Number(params.chatId) },
+		onSubscriptionData({ subscriptionData }) {
+			console.log('deleted message');
+			const data = subscriptionData.data;
+			if (!!data) {
+				setMessages(
+					messages.filter(
+						message =>
+							!!message && message.id !== data.messageDeleted
+					)
+				);
+			}
 		}
 	});
 

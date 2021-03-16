@@ -1,9 +1,9 @@
-import { Avatar } from '@material-ui/core';
-import { Maybe } from '../../../../graphql';
+import { Avatar, makeStyles, Popover } from '@material-ui/core';
+import { Maybe, useDeleteMessageMutation } from '../../../../graphql';
 import Moment from 'react-moment';
 import MoreVertSharpIcon from '@material-ui/icons/MoreVertSharp';
 import { UserSelectors } from '../../../../redux/selectors';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import UserPopover from '../../components/UserPopOver/UserPopover';
 
 interface MessageProps {
@@ -16,13 +16,39 @@ interface MessageProps {
 	noHeader?: boolean;
 }
 
+const useStyle = makeStyles({
+	popover: {
+		padding: '1em'
+	},
+	popoverItem: {
+		background: '#404040',
+		color: '#efefef',
+		padding: '.5em 2em',
+		cursor: 'pointer'
+	}
+});
+
 const Message = ({ message, noHeader = false }: MessageProps) => {
+	const classes = useStyle();
 	const userId = UserSelectors.useSelectUserId();
 	const [showBubble, setShowBubble] = useState(false);
+	const [popoverRef, setPopoverRef] = useState<SVGSVGElement | null>(null);
 
 	const [anchorEl, setAnchorEl] = useState<
 		(EventTarget & HTMLHeadingElement) | null
 	>(null);
+
+	const [deleteMessage, { data, loading }] = useDeleteMessageMutation({
+		variables: { messageId: message ? message.id : -1 }
+	});
+
+	const toggleMenu = (e: MouseEvent<SVGSVGElement>) => {
+		setPopoverRef(e.currentTarget);
+	};
+
+	const closeMenu = () => {
+		setPopoverRef(null);
+	};
 
 	if (!message) return null;
 
@@ -80,7 +106,33 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 				>
 					{userId === message.author.id && (
 						<div className="chat-actions">
-							<MoreVertSharpIcon />
+							<MoreVertSharpIcon onClick={toggleMenu} />
+							<Popover
+								className={classes.popover}
+								open={!!popoverRef}
+								anchorEl={popoverRef}
+								onClose={closeMenu}
+								anchorOrigin={{
+									vertical: 'center',
+									horizontal: 'center'
+								}}
+								transformOrigin={{
+									vertical: 'bottom',
+									horizontal: 'left'
+								}}
+							>
+								<p className={classes.popoverItem}>
+									Edit Message
+								</p>
+								<p
+									className={classes.popoverItem}
+									onClick={() => {
+										deleteMessage();
+									}}
+								>
+									Delete Message
+								</p>
+							</Popover>
 						</div>
 					)}
 				</div>
