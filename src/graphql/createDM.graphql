@@ -1,5 +1,5 @@
-mutation CreateDM($chatGroup: CreateChatGroupInput!) {
-	createChatGroup(chatGroup: $chatGroup) {
+mutation CreateDM($dm: CreateDMInput!) {
+	createDM(dm: $dm) {
 		id
 	}
 }

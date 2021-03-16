@@ -224,12 +224,13 @@
 
 .add-popover {
 	width: 500px;
-	height: 50vh;
+	height: 40vh;
 	padding: 1rem;
 	background: #3e4756;
 	color: white;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 
 	h3 {
 		font-weight: 300;
@@ -242,5 +243,42 @@
 
 	h4 {
 		margin-top: 1rem;
+	}
+
+	.friends {
+		height: 50%;
+		overflow-y: scroll;
+	}
+
+	.start-btn {
+		margin-top: 2rem;
+		height: 50px;
+		width: 100%;
+		outline: none;
+		border: none;
+		background: none;
+		border: 1px solid white;
+		color: white;
+		font-size: 1rem;
+		transition: 0.3s;
+	}
+
+	.start-btn:hover {
+		cursor: pointer;
+		background: #2e3237;
+		border: none;
+	}
+
+	.dm-searchbar {
+		width: 100%;
+		height: 30px;
+		box-sizing: border-box;
+		padding: 1rem;
+		background: #2b2e30;
+		color: white;
+		outline: none;
+		border: none;
+		font-weight: 300;
+		font-size: 0.8rem;
 	}
 }

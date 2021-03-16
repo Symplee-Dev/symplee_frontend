@@ -134,6 +134,7 @@ export type Mutation = {
   verifyEmail: Scalars['Boolean'];
   createChat: Chat;
   createChatGroup: ChatGroup;
+  createDM: ChatGroup;
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
@@ -207,6 +208,11 @@ export type MutationCreateChatArgs = {
 
 export type MutationCreateChatGroupArgs = {
   chatGroup: CreateChatGroupInput;
+};
+
+
+export type MutationCreateDmArgs = {
+  dm: CreateDmInput;
 };
 
 
@@ -507,6 +513,15 @@ export type CreateChatGroupInput = {
   type?: Maybe<ChatGroupType>;
 };
 
+export type CreateDmInput = {
+  name: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+  userId: Scalars['Int'];
+  avatar?: Maybe<Scalars['String']>;
+  type?: Maybe<ChatGroupType>;
+  includes: Array<Scalars['Int']>;
+};
+
 export type LoginInput = {
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -749,11 +764,11 @@ export type CreateChatGroupMutationVariables = Exact<{
 export type CreateChatGroupMutation = { createChatGroup: { id: number } };
 
 export type CreateDmMutationVariables = Exact<{
-  chatGroup: CreateChatGroupInput;
+  dm: CreateDmInput;
 }>;
 
 
-export type CreateDmMutation = { createChatGroup: { id: number } };
+export type CreateDmMutation = { createDM: { id: number } };
 
 export type DeclineFriendMutationVariables = Exact<{
   notificationId: Scalars['Int'];
@@ -1281,8 +1296,8 @@ export type CreateChatGroupMutationHookResult = ReturnType<typeof useCreateChatG
 export type CreateChatGroupMutationResult = Apollo.MutationResult<CreateChatGroupMutation>;
 export type CreateChatGroupMutationOptions = Apollo.BaseMutationOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
 export const CreateDmDocument = gql`
-    mutation CreateDM($chatGroup: CreateChatGroupInput!) {
-  createChatGroup(chatGroup: $chatGroup) {
+    mutation CreateDM($dm: CreateDMInput!) {
+  createDM(dm: $dm) {
     id
   }
 }
@@ -1302,7 +1317,7 @@ export type CreateDmMutationFn = Apollo.MutationFunction<CreateDmMutation, Creat
  * @example
  * const [createDmMutation, { data, loading, error }] = useCreateDmMutation({
  *   variables: {
- *      chatGroup: // value for 'chatGroup'
+ *      dm: // value for 'dm'
  *   },
  * });
  */
