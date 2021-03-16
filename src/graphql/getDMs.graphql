@@ -1,0 +1,7 @@
+query GetDMs($userId: Int!) {
+	getDMS(userId: $userId) {
+		name
+		id
+		avatar
+	}
+}
