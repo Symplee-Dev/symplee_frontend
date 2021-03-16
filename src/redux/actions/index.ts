@@ -24,6 +24,7 @@ import {
 	SetCurrentProfileView
 } from '../types/action-types';
 import { useEffect } from 'react';
+import { SetDashboardRoute } from '../types/action-types';
 import {
 	SetLoggedOut,
 	SetUserId,
@@ -132,6 +133,18 @@ export const UserActions: RootActions['user'] = {
 };
 
 export const UIActions: RootActions['ui'] = {
+	useSetDashboardRoute() {
+		const dispatch = useDispatch();
+
+		return route => {
+			const action: SetDashboardRoute = {
+				type: UIActionConstants.SET_DASHBOARD_ROUTE,
+				payload: route
+			};
+
+			dispatch(action);
+		};
+	},
 	useSetCurrentChat() {
 		const dispatch = useDispatch();
 

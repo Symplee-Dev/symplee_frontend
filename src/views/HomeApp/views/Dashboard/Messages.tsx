@@ -17,12 +17,13 @@ import { useCreateDmMutation } from '../../../../graphql';
 import { UIActions } from '../../../../redux/actions/index';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
+import { Skeleton } from '@material-ui/lab';
 
 const Messages = () => {
 	const userId = UserSelectors.useSelectUserId()!;
 	const history = useHistory();
 
-	const { data, refetch: refetchDMS } = useGetDMsQuery({
+	const { data, refetch: refetchDMS, loading: dmLoading } = useGetDMsQuery({
 		variables: { userId }
 	});
 	const [anchor, setAnchor] = useState<any | null>(null);
@@ -82,7 +83,11 @@ const Messages = () => {
 				variables: {
 					dm: {
 						isPublic: false,
-						name: `${users.map(u => u?.friend?.username + ', ')}`,
+						name: `${users.map((u, key, arr) =>
+							key < arr.length
+								? u?.friend?.username + ', '
+								: u?.friend?.username
+						)}`,
 						userId,
 						avatar: '',
 						type: 'DM',
@@ -225,22 +230,54 @@ const Messages = () => {
 					)}
 				</div>
 
-				{data && (
+				{dmLoading && (
+					<div className="skeleton-dms">
+						<Skeleton
+							variant="rect"
+							width="100%"
+							height="30px"
+							className="dm-skeleton"
+						/>
+						<Skeleton
+							variant="rect"
+							width="100%"
+							height="30px"
+							className="dm-skeleton"
+						/>
+						<Skeleton
+							variant="rect"
+							width="100%"
+							height="30px"
+							className="dm-skeleton"
+						/>
+						<Skeleton
+							variant="rect"
+							width="100%"
+							height="30px"
+							className="dm-skeleton"
+						/>
+					</div>
+				)}
+
+				{data && !dmLoading && (
 					<>
-						<>
+						<div className="dm-container">
 							{data.getDMS.map((dm, key) => (
-								<div className="dm-button" key={key}>
+								<div
+									className="dm-button"
+									key={key}
+									onClick={() =>
+										history.push('/dm/' + dm?.id)
+									}
+								>
 									<p>{dm?.name}</p>
 								</div>
 							))}
-						</>
+						</div>
 						{data.getDMS.length < 1 && <p>No Direct Messages</p>}
 					</>
 				)}
 			</div>
-			<Switch>
-				<Route path="/dm/:id">1</Route>
-			</Switch>
 		</div>
 	);
 };

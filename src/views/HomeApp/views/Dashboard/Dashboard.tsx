@@ -9,7 +9,6 @@ const Dashbaord = ({ route }: { route: string }) => {
 	return (
 		<div className="dashboard">
 			{route === 'ROOT' && <Home />} {route === 'FRIENDS' && <Friends />}{' '}
-			{route === 'MESSAGES' && <Messages />}
 		</div>
 	);
 };

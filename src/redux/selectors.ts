@@ -39,5 +39,8 @@ export const UISelectors: RootSelectors['ui'] = {
 		return useSelector(
 			(state: RootState) => state.ui.currentlyViewedProfile
 		);
+	},
+	useSelectDashboardRoute() {
+		return useSelector((state: RootState) => state.ui.dashboardRoute);
 	}
 };

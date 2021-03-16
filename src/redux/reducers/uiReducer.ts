@@ -7,7 +7,8 @@ export const initialUIState: UIState = {
 	changelogs: [],
 	currentChatGroup: undefined,
 	currentChat: undefined,
-	currentlyViewedProfile: undefined
+	currentlyViewedProfile: undefined,
+	dashboardRoute: 'ROOT'
 };
 
 export const uiReducer = (
@@ -44,6 +45,9 @@ export const uiReducer = (
 		}
 		case UIActionConstants.SET_CURRENT_PROFILE_VIEW: {
 			return { ...state, currentlyViewedProfile: action.payload };
+		}
+		case UIActionConstants.SET_DASHBOARD_ROUTE: {
+			return { ...state, dashboardRoute: action.payload };
 		}
 		default:
 			return state;

@@ -73,6 +73,7 @@ export type UIState = {
 				}>[];
 		  }
 		| undefined;
+	dashboardRoute: 'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS';
 };
 
 export interface RootState {

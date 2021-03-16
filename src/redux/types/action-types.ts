@@ -42,7 +42,13 @@ export enum UIActionConstants {
 	SET_CURRENT_CHATGROUP = 'SET_CURRENT_CHATGROUP',
 	SET_CURRENT_CHAT = 'SET_CURRENT_CHAT',
 	CLEAR_CURRENT_CHAT = 'CLEAR_CURRENT_CHAT',
-	SET_CURRENT_PROFILE_VIEW = 'SET_CURRENT_PROFILE_VIEW'
+	SET_CURRENT_PROFILE_VIEW = 'SET_CURRENT_PROFILE_VIEW',
+	SET_DASHBOARD_ROUTE = 'SET_DASHBOARD_ROUTE'
+}
+
+export interface SetDashboardRoute {
+	type: UIActionConstants.SET_DASHBOARD_ROUTE;
+	payload: UIState['dashboardRoute'];
 }
 
 export interface SetCurrentProfileView {
@@ -108,5 +114,6 @@ export type RootActions = {
 		useSetCurrentProfile(): (
 			profile: UIState['currentlyViewedProfile']
 		) => void;
+		useSetDashboardRoute(): (route: UIState['dashboardRoute']) => void;
 	};
 };
