@@ -43,7 +43,11 @@ const Home = () => {
 				{data && !error && (
 					<div className="content">
 						{data.getNotifications.map((notif, key) => (
-							<Notification notif={notif} refetch={refetch} />
+							<Notification
+								notif={notif}
+								refetch={refetch}
+								key={key}
+							/>
 						))}
 					</div>
 				)}
