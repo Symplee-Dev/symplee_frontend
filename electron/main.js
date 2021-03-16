@@ -9,7 +9,7 @@ const createWindow = () => {
 		width: 600,
 		height: 600,
 		show: false,
-		frame: process.env.NODE_ENV === 'production' ? false : true
+		frame: app.isPackaged ? false : true
 	});
 	mainWindow.loadURL(
 		!app.isPackaged
@@ -24,7 +24,7 @@ const createWindow = () => {
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
 
-		if (process.env.NODE_ENV === 'production') {
+		if (app.isPackaged) {
 			const server = 'https://hazel.symplee.app';
 			const feed = `${server}/update/${
 				process.platform
