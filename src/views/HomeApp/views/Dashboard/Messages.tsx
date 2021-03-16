@@ -26,6 +26,9 @@ const Messages = () => {
 	const { data, refetch: refetchDMS, loading: dmLoading } = useGetDMsQuery({
 		variables: { userId }
 	});
+
+	const user = useSelector((state: RootState) => state.user.user?.username)!;
+
 	const [anchor, setAnchor] = useState<any | null>(null);
 	const { data: friendData, loading, refetch } = useGetAcceptedFriendsQuery({
 		variables: { userId },
@@ -83,8 +86,8 @@ const Messages = () => {
 				variables: {
 					dm: {
 						isPublic: false,
-						name: `${users.map((u, key, arr) =>
-							key < arr.length
+						name: `${user}, ${users.map((u, key, arr) =>
+							key < arr.length - 1
 								? u?.friend?.username + ', '
 								: u?.friend?.username
 						)}`,
@@ -96,7 +99,6 @@ const Messages = () => {
 				}
 			}).then(d => {
 				refetchDMS();
-				history.push('/dm/' + d.data?.createDM.id);
 			});
 		}
 	};
@@ -267,7 +269,12 @@ const Messages = () => {
 									className="dm-button"
 									key={key}
 									onClick={() =>
-										history.push('/dm/' + dm?.id)
+										history.push(
+											'/dm/' +
+												dm?.id +
+												'/message/' +
+												dm?.chats[0]?.id
+										)
 									}
 								>
 									<p>{dm?.name}</p>

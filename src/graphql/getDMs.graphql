@@ -3,5 +3,9 @@ query GetDMs($userId: Int!) {
 		name
 		id
 		avatar
+
+		chats {
+			id
+		}
 	}
 }

@@ -138,10 +138,16 @@ const HomeApp = () => {
 							<Messages />
 						</div>
 					</Route>
-					<Route exact path="/dm/:id">
-						<div style={{ height: '100vh' }}>
+					<Route exact path="/dm/:groupId/message/:chatId">
+						<div
+							style={{
+								height: '100vh'
+							}}
+						>
 							<Messages />
 						</div>
+						<Chat isDm={true} />
+						<ChatMembersBar />
 					</Route>
 					<Route exact path="/user/profile/:id">
 						<PublicProfile />

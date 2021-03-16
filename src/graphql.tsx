@@ -811,7 +811,7 @@ export type GetDMsQueryVariables = Exact<{
 }>;
 
 
-export type GetDMsQuery = { getDMS: Array<Maybe<{ name: string, id: number, avatar?: Maybe<string> }>> };
+export type GetDMsQuery = { getDMS: Array<Maybe<{ name: string, id: number, avatar?: Maybe<string>, chats: Array<Maybe<{ id: number }>> }>> };
 
 export type GetFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -1510,6 +1510,9 @@ export const GetDMsDocument = gql`
     name
     id
     avatar
+    chats {
+      id
+    }
   }
 }
     `;
