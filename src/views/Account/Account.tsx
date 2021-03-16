@@ -7,29 +7,29 @@ import {
 	LinearProgress,
 	Snackbar
 } from '@material-ui/core';
-import randomHex from 'random-hex';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
 import { useUpdateUserMutation } from '../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { Alert } from '@material-ui/lab';
 import { ProfileInfo } from './ProfileInfo';
+import { UserName } from './UserName';
+import { AvatarContainer } from './AvatarContainer';
 
 interface AccountProps {
-	user: {
-		name: string;
-		username: string;
-		email: string;
-		key: string;
-		createdAt: string;
-		avatar?: string;
-	};
+	user: UserProps;
+}
+export interface UserProps {
+	name: string;
+	username: string;
+	email: string;
+	key: string;
+	createdAt: string;
+	avatar?: string;
 }
 
-interface FormProps {
+export interface FormProps {
 	name: string;
 	username: string;
 	email: string;
@@ -48,9 +48,10 @@ const Account = ({ user }: AccountProps) => {
 
 	const [updateUser] = useUpdateUserMutation();
 
-	const [notifState, setNotifState] = useState<
-		Record<'title' | 'value', string | boolean>
-	>({ title: '', value: false });
+	const [notifState, setNotifState] = useState<{
+		title: string;
+		value: boolean;
+	}>({ title: '', value: false });
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
@@ -70,25 +71,32 @@ const Account = ({ user }: AccountProps) => {
 		});
 	};
 
-	const handleImageUpload = async e => {
+	const handleImageUpload = async (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
 		const files = e.target.files;
-		const data = new FormData();
+		if (files) {
+			const data = new FormData();
 
-		data.append('file', files[0]);
-		data.append(
-			'upload_preset',
-			process.env.REACT_APP_CLOUDINARY_UPLOAD_TARGET ?? ''
-		);
-		data.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY ?? '');
-		data.append('timestamp', Date.now().toString());
-		setImageLoading(true);
-		const res = await axios.post(
-			'https://api.cloudinary.com/v1_1/boltchat/image/upload',
-			data
-		);
+			data.append('file', files[0]);
+			data.append(
+				'upload_preset',
+				process.env.REACT_APP_CLOUDINARY_UPLOAD_TARGET ?? ''
+			);
+			data.append(
+				'api_key',
+				process.env.REACT_APP_CLOUDINARY_API_KEY ?? ''
+			);
+			data.append('timestamp', Date.now().toString());
+			setImageLoading(true);
+			const res = await axios.post(
+				'https://api.cloudinary.com/v1_1/boltchat/image/upload',
+				data
+			);
 
-		setFormState({ ...formState, avatar: res.data.url });
-		setImageLoading(false);
+			setFormState({ ...formState, avatar: res.data.url });
+			setImageLoading(false);
+		}
 	};
 
 	return (
@@ -103,75 +111,14 @@ const Account = ({ user }: AccountProps) => {
 				<div className="top">
 					<div className="form-container">
 						<div className="top-top">
-							<div className="username-container">
-								<div
-									style={{
-										display: 'flex',
-										alignItems: 'center'
-									}}
-								>
-									<h2 className="username">
-										{user.username}
-										<span style={{ fontWeight: 'bold' }}>
-											{' '}
-											#{user.key}
-										</span>
-									</h2>
-									<Tooltip
-										placement="top"
-										title="Verified Member"
-										className="verified"
-									>
-										<VerifiedUserIcon />
-									</Tooltip>
-								</div>
-							</div>
+							<UserName user={user} />
 							<ProfileInfo user={user} />
-							<div className="avatar-container">
-								<div className="avatar-icon">
-									<Avatar
-										style={
-											!formState.avatar
-												? {
-														background: randomHex.generate()
-												  }
-												: undefined
-										}
-										src={formState.avatar}
-									>
-										{!formState.avatar && user.username[0]}
-									</Avatar>
-								</div>
-								<div className="change-avatar-root">
-									{!imageLoading ? (
-										<label className="file-upload-root">
-											<input
-												onChange={handleImageUpload}
-												type="file"
-												accept="image/*"
-												style={{ border: 'none' }}
-											/>
-											Change Avatar{' '}
-											<CloudUploadIcon
-												style={{
-													marginLeft: '0.5rem'
-												}}
-											/>
-										</label>
-									) : (
-										<>
-											<LinearProgress
-												color="primary"
-												style={{
-													marginTop: '1rem',
-													marginBottom: '0.5rem'
-												}}
-											/>
-											<p>Uploading Image...</p>
-										</>
-									)}
-								</div>
-							</div>
+							<AvatarContainer
+								user={user}
+								formState={formState}
+								imageLoading={imageLoading}
+								handleImageUpload={handleImageUpload}
+							/>
 						</div>
 						<div className="top-bottom">
 							<h2>Profile Details</h2>

@@ -1,6 +1,10 @@
 import Moment from 'react-moment';
+import { UserProps } from './Account';
 
-export const ProfileInfo = ({ user }) => {
+interface ProfileInfoProps {
+	user: UserProps;
+}
+export const ProfileInfo = ({ user }: ProfileInfoProps) => {
 	return (
 		<div className="profile-info">
 			<div>
