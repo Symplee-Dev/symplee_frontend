@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, autoUpdater } = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -23,6 +23,15 @@ const createWindow = () => {
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
+
+		if (process.env.NODE_ENV === 'production') {
+			const server = 'https://hazel.symplee.app';
+			const feed = `${server}/update/${
+				process.platform
+			}/${app.getVersion()}`;
+
+			autoUpdater.setFeedURL(feed);
+		}
 	});
 
 	mainWindow.on('closed', () => {
