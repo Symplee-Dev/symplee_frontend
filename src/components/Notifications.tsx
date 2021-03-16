@@ -88,6 +88,7 @@ const Notifications = () => {
 					key={key}
 					anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
 					open={true}
+					autoHideDuration={3000}
 					onClose={() => removeFromMailbox(n.id)}
 					message={
 						<div className="new-mail">
