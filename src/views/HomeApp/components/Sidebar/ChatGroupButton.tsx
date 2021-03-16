@@ -22,7 +22,7 @@ const ChatGroupButton = ({ path, group }: ChatGroupProps) => {
 		>
 			<Tooltip placement="right" title={group.name}>
 				<Avatar variant="rounded" src={group.image} alt={group.name}>
-					{group.name[0].toUpperCase()}
+					{group.name[0] && group.name[0].toUpperCase()}
 				</Avatar>
 			</Tooltip>
 		</div>
