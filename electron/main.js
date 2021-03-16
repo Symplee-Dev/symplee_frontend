@@ -2,6 +2,8 @@ const { app, BrowserWindow, autoUpdater, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 
+const log = require('electron-log');
+
 let mainWindow;
 
 const createWindow = () => {
@@ -31,7 +33,10 @@ const createWindow = () => {
 	});
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+	createWindow();
+	log.info('starting');
+});
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
@@ -45,16 +50,17 @@ app.on('activate', () => {
 	}
 });
 
-if (app.isPackaged) {
-	const server = 'https://hazel.symplee.app';
-	const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
+const server = 'https://hazel.symplee.app';
+const feed = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-	autoUpdater.setFeedURL(feed);
+autoUpdater.setFeedURL(feed);
 
-	setInterval(() => {
-		autoUpdater.checkForUpdates();
-	}, 60000);
-}
+setInterval(() => {
+	autoUpdater.checkForUpdates();
+}, 60000);
+
+autoUpdater.on('update-available', () => log.info('Update available'));
+autoUpdater.on('update-not-available', () => log.info('Update not available'));
 
 autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 	const dialogOpts = {
@@ -72,6 +78,6 @@ autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
 });
 
 autoUpdater.on('error', message => {
-	console.error('There was a problem updating the application');
-	console.error(message);
+	log.error('There was a problem updating the application');
+	log.error(message);
 });
