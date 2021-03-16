@@ -37,6 +37,7 @@ export type Query = {
   getAcceptedFriends: Array<Maybe<UserFriend>>;
   getPendingFriends: Array<Maybe<UserFriend>>;
   getBlockedFriends: Array<Maybe<UserFriend>>;
+  getDMS: Array<Maybe<ChatGroup>>;
 };
 
 
@@ -113,6 +114,11 @@ export type QueryGetBlockedFriendsArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type QueryGetDmsArgs = {
+  userId: Scalars['Int'];
+};
+
 export type GetProfileReturn = {
   user: User;
   relatedGroups: Array<Maybe<ChatGroup>>;
@@ -128,6 +134,7 @@ export type Mutation = {
   verifyEmail: Scalars['Boolean'];
   createChat: Chat;
   createChatGroup: ChatGroup;
+  createDM: ChatGroup;
   addNewChangeLog: ChangeLog;
   editChangeLog?: Maybe<ChangeLog>;
   sendFeedback: AppFeedback;
@@ -201,6 +208,11 @@ export type MutationCreateChatArgs = {
 
 export type MutationCreateChatGroupArgs = {
   chatGroup: CreateChatGroupInput;
+};
+
+
+export type MutationCreateDmArgs = {
+  dm: CreateDmInput;
 };
 
 
@@ -353,6 +365,10 @@ export type MutationUnblockUserArgs = {
   otherUserId: Scalars['Int'];
 };
 
+export type ChatGroupType =
+  | 'CHAT_GROUP'
+  | 'DM';
+
 export type ErrorCode =
   | 'ALREADY_FAILURE'
   | 'SUCCESS';
@@ -486,6 +502,7 @@ export type CreateChatInput = {
   userId: Scalars['Int'];
   icon: Scalars['String'];
   chatGroupId: Scalars['Int'];
+  type?: Maybe<Scalars['String']>;
 };
 
 export type CreateChatGroupInput = {
@@ -493,6 +510,16 @@ export type CreateChatGroupInput = {
   isPublic: Scalars['Boolean'];
   userId: Scalars['Int'];
   avatar?: Maybe<Scalars['String']>;
+  type?: Maybe<ChatGroupType>;
+};
+
+export type CreateDmInput = {
+  name: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+  userId: Scalars['Int'];
+  avatar?: Maybe<Scalars['String']>;
+  type?: Maybe<ChatGroupType>;
+  includes: Array<Scalars['Int']>;
 };
 
 export type LoginInput = {
@@ -604,6 +631,7 @@ export type ChatGroup = {
   createdBy: Scalars['Int'];
   avatar?: Maybe<Scalars['String']>;
   members: Array<User>;
+  type?: Maybe<ChatGroupType>;
 };
 
 export type Chat = {
@@ -665,23 +693,6 @@ export type UserMailbox = {
   title: Scalars['String'];
   goTo: Scalars['String'];
   userId: Scalars['Int'];
-};
-
-export type UserDm = {
-  id: Scalars['Int'];
-  userId: Scalars['Int'];
-  users: Array<Scalars['Int']>;
-  messages: Array<Maybe<UserDmMessages>>;
-};
-
-export type UserDmMessages = {
-  id: Scalars['Int'];
-  body: Scalars['String'];
-  authorUsername: Scalars['String'];
-  authorId: Scalars['Int'];
-  author: User;
-  createdAt: Scalars['String'];
-  dmId: Scalars['Int'];
 };
 
 export type CacheControlScope =
@@ -752,6 +763,13 @@ export type CreateChatGroupMutationVariables = Exact<{
 
 export type CreateChatGroupMutation = { createChatGroup: { id: number } };
 
+export type CreateDmMutationVariables = Exact<{
+  dm: CreateDmInput;
+}>;
+
+
+export type CreateDmMutation = { createDM: { id: number } };
+
 export type DeclineFriendMutationVariables = Exact<{
   notificationId: Scalars['Int'];
   invite: DeclineFriendInput;
@@ -787,6 +805,13 @@ export type MessageSentSubscriptionVariables = Exact<{
 
 
 export type MessageSentSubscription = { messageSent: { id: number, body: string, chatId: number, createdAt: string, author: { id: number, username: string, avatar?: Maybe<string> } } };
+
+export type GetDMsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type GetDMsQuery = { getDMS: Array<Maybe<{ name: string, id: number, avatar?: Maybe<string>, chats: Array<Maybe<{ id: number }>> }>> };
 
 export type GetFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -1270,6 +1295,38 @@ export function useCreateChatGroupMutation(baseOptions?: Apollo.MutationHookOpti
 export type CreateChatGroupMutationHookResult = ReturnType<typeof useCreateChatGroupMutation>;
 export type CreateChatGroupMutationResult = Apollo.MutationResult<CreateChatGroupMutation>;
 export type CreateChatGroupMutationOptions = Apollo.BaseMutationOptions<CreateChatGroupMutation, CreateChatGroupMutationVariables>;
+export const CreateDmDocument = gql`
+    mutation CreateDM($dm: CreateDMInput!) {
+  createDM(dm: $dm) {
+    id
+  }
+}
+    `;
+export type CreateDmMutationFn = Apollo.MutationFunction<CreateDmMutation, CreateDmMutationVariables>;
+
+/**
+ * __useCreateDmMutation__
+ *
+ * To run a mutation, you first call `useCreateDmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDmMutation, { data, loading, error }] = useCreateDmMutation({
+ *   variables: {
+ *      dm: // value for 'dm'
+ *   },
+ * });
+ */
+export function useCreateDmMutation(baseOptions?: Apollo.MutationHookOptions<CreateDmMutation, CreateDmMutationVariables>) {
+        return Apollo.useMutation<CreateDmMutation, CreateDmMutationVariables>(CreateDmDocument, baseOptions);
+      }
+export type CreateDmMutationHookResult = ReturnType<typeof useCreateDmMutation>;
+export type CreateDmMutationResult = Apollo.MutationResult<CreateDmMutation>;
+export type CreateDmMutationOptions = Apollo.BaseMutationOptions<CreateDmMutation, CreateDmMutationVariables>;
 export const DeclineFriendDocument = gql`
     mutation DeclineFriend($notificationId: Int!, $invite: DeclineFriendInput!) {
   declineFriend(notificationId: $notificationId, invite: $invite)
@@ -1447,6 +1504,44 @@ export function useMessageSentSubscription(baseOptions: Apollo.SubscriptionHookO
       }
 export type MessageSentSubscriptionHookResult = ReturnType<typeof useMessageSentSubscription>;
 export type MessageSentSubscriptionResult = Apollo.SubscriptionResult<MessageSentSubscription>;
+export const GetDMsDocument = gql`
+    query GetDMs($userId: Int!) {
+  getDMS(userId: $userId) {
+    name
+    id
+    avatar
+    chats {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDMsQuery__
+ *
+ * To run a query within a React component, call `useGetDMsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDMsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDMsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetDMsQuery(baseOptions: Apollo.QueryHookOptions<GetDMsQuery, GetDMsQueryVariables>) {
+        return Apollo.useQuery<GetDMsQuery, GetDMsQueryVariables>(GetDMsDocument, baseOptions);
+      }
+export function useGetDMsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDMsQuery, GetDMsQueryVariables>) {
+          return Apollo.useLazyQuery<GetDMsQuery, GetDMsQueryVariables>(GetDMsDocument, baseOptions);
+        }
+export type GetDMsQueryHookResult = ReturnType<typeof useGetDMsQuery>;
+export type GetDMsLazyQueryHookResult = ReturnType<typeof useGetDMsLazyQuery>;
+export type GetDMsQueryResult = Apollo.QueryResult<GetDMsQuery, GetDMsQueryVariables>;
 export const GetFriendsDocument = gql`
     query GetFriends($userId: Int!, $friendId: Int!) {
   getFriends(userId: $userId, friendId: $friendId) {

@@ -69,10 +69,10 @@ const Friends = () => {
 												<Tooltip
 													placement="top"
 													title="View Profile"
+													key={key}
 												>
 													<div
 														className="friend"
-														key={key}
 														onClick={() =>
 															history.push(
 																'/user/profile/' +
@@ -119,12 +119,12 @@ const Friends = () => {
 							<>
 								{data?.getAcceptedFriends.map((f, key) => (
 									<Tooltip
+										key={key}
 										placement="top"
 										title="View Profile"
 									>
 										<div
 											className="friend"
-											key={key}
 											onClick={() =>
 												history.push(
 													'/user/profile/' +

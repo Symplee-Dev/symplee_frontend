@@ -6,9 +6,7 @@ const DashboardSidebar = ({
 	setRoute
 }: {
 	route: string;
-	setRoute: React.Dispatch<
-		React.SetStateAction<'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS'>
-	>;
+	setRoute: (route: 'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS') => void;
 }) => {
 	const history = useHistory();
 
@@ -32,7 +30,7 @@ const DashboardSidebar = ({
 					<div
 						className={`tab ${route === 'MESSAGES' && 'active'}`}
 						onClick={() => {
-							history.push('/');
+							history.push('/dm');
 							setRoute('MESSAGES');
 						}}
 					>

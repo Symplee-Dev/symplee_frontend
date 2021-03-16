@@ -13,7 +13,7 @@ import {
 // import { useChangeLog } from '../../hooks/useChangeLog';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
-import { UserActions } from '../../redux/actions/index';
+import { UserActions, UIActions } from '../../redux/actions/index';
 import ChatGroupSidebar from './components/ChatGroupSidebar/ChatGroupSidebar';
 import Chat from './views/Chat/Chat';
 import './index.scss';
@@ -22,7 +22,7 @@ import ChatGroupIndex from './views/ChatGroup/index';
 import SidebarFooter from './components/SidebarFooter/SidebarFooter';
 import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 import { UISelectors } from '../../redux/selectors';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
 import SendInviteModal from './components/SendInviteModal/SendInviteModal';
 import Dashbaord from './views/Dashboard/Dashboard';
@@ -30,6 +30,7 @@ import DashboardSidebar from './components/DashboardSidebar/DashboardSidebar';
 import PublicProfileSidebar from './views/PublicProfile/PublicProfileSidebar';
 import PublicProfile from './views/PublicProfile/PublicProfile';
 import Discover from './views/Discover/Discover';
+import Messages from './views/Dashboard/Messages';
 
 const HomeApp = () => {
 	// remove padding for home app
@@ -55,10 +56,8 @@ const HomeApp = () => {
 
 	const [creatingGroup, setCreatingGroup] = useState(false);
 	const [creatingInvite, setCreatingInvite] = useState(false);
-	const [dashboardRoute, setDashboardRoute] = useState<
-		'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS'
-	>('ROOT');
-
+	const setDashboardRoute = UIActions.useSetDashboardRoute();
+	const dashboardRoute = UISelectors.useSelectDashboardRoute();
 	// const [
 	// 	getChangeLog,
 	// 	{ data: changeLog, loading: changeLogLoading }
@@ -100,7 +99,8 @@ const HomeApp = () => {
 								/>
 							)}
 						{(location.pathname === '/' ||
-							location.pathname.includes('/discover')) && (
+							location.pathname.includes('/discover') ||
+							location.pathname.includes('/dm')) && (
 							<DashboardSidebar
 								route={dashboardRoute}
 								setRoute={setDashboardRoute}
@@ -132,6 +132,22 @@ const HomeApp = () => {
 					</Route> */}
 					<Route exact path="/discover">
 						<Discover />
+					</Route>
+					<Route exact path="/dm">
+						<div style={{ height: '100vh' }}>
+							<Messages />
+						</div>
+					</Route>
+					<Route exact path="/dm/:groupId/message/:chatId">
+						<div
+							style={{
+								height: '100vh'
+							}}
+						>
+							<Messages />
+						</div>
+						<Chat isDm={true} />
+						<ChatMembersBar />
 					</Route>
 					<Route exact path="/user/profile/:id">
 						<PublicProfile />

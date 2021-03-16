@@ -11,9 +11,9 @@ import { Dispatch, SetStateAction } from 'react';
 const PublicProfileSidebar = ({
 	setDashboardRoute
 }: {
-	setDashboardRoute: Dispatch<
-		SetStateAction<'FRIENDS' | 'ROOT' | 'MESSAGES' | 'TEAMS'>
-	>;
+	setDashboardRoute: (
+		route: 'FRIENDS' | 'ROOT' | 'MESSAGES' | 'TEAMS'
+	) => void;
 }) => {
 	const currentProfile = UISelectors.useSelectCurrentProfile()!;
 	const userId = UserSelectors.useSelectUserId()!;

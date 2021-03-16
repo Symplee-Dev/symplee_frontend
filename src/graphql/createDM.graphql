@@ -1,0 +1,5 @@
+mutation CreateDM($dm: CreateDMInput!) {
+	createDM(dm: $dm) {
+		id
+	}
+}
