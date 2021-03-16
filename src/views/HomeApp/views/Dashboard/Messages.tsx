@@ -70,6 +70,7 @@ const Messages = () => {
 				title: 'One friend must be selected',
 				type: 'error'
 			});
+			return;
 		}
 
 		if (friendData) {
@@ -184,7 +185,7 @@ const Messages = () => {
 											value={friendSearchString}
 											onChange={e => handleFilter(e)}
 											type="text"
-											placeholder="Search for a chat"
+											placeholder="Search for a friend"
 											className="dm-searchbar"
 										/>
 										<h4>Friends</h4>

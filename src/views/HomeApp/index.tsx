@@ -22,7 +22,7 @@ import ChatGroupIndex from './views/ChatGroup/index';
 import SidebarFooter from './components/SidebarFooter/SidebarFooter';
 import ChatMembersBar from './components/ChatMembers/ChatMembersBar';
 import { UISelectors } from '../../redux/selectors';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import NewGroupModal from './components/NewGroup/NewGroupModal';
 import SendInviteModal from './components/SendInviteModal/SendInviteModal';
 import Dashbaord from './views/Dashboard/Dashboard';
