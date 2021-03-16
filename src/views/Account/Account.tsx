@@ -9,18 +9,16 @@ import {
 } from '@material-ui/core';
 import randomHex from 'random-hex';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import Moment from 'react-moment';
 import { useState, useEffect } from 'react';
 import UndoIcon from '@material-ui/icons/Undo';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
-import { useUpdateUserMutation } from '../../../graphql';
+import { useUpdateUserMutation } from '../../graphql';
 import { useSelector, RootStateOrAny } from 'react-redux';
 import { Alert } from '@material-ui/lab';
+import { ProfileInfo } from './ProfileInfo';
 
-const Account = ({
-	user
-}: {
+interface AccountProps {
 	user: {
 		name: string;
 		username: string;
@@ -29,22 +27,30 @@ const Account = ({
 		createdAt: string;
 		avatar?: string;
 	};
-}) => {
-	const [formState, setFormState] = useState<{
-		name: string;
-		username: string;
-		email: string;
-		avatar: string | undefined;
-	}>({ name: '', username: '', email: '', avatar: undefined });
+}
 
-	const [imageLoading, setImageLoading] = useState(false);
+interface FormProps {
+	name: string;
+	username: string;
+	email: string;
+	avatar: string | undefined;
+}
+
+const Account = ({ user }: AccountProps) => {
+	const [formState, setFormState] = useState<FormProps>({
+		name: '',
+		username: '',
+		email: '',
+		avatar: undefined
+	});
+
+	const [imageLoading, setImageLoading] = useState<boolean>(false);
 
 	const [updateUser] = useUpdateUserMutation();
 
-	const [notifState, setNotifState] = useState<{
-		title: string;
-		value: boolean;
-	}>({ title: '', value: false });
+	const [notifState, setNotifState] = useState<
+		Record<'title' | 'value', string | boolean>
+	>({ title: '', value: false });
 
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
@@ -105,7 +111,11 @@ const Account = ({
 									}}
 								>
 									<h2 className="username">
-										{user.username}#{user.key}
+										{user.username}
+										<span style={{ fontWeight: 'bold' }}>
+											{' '}
+											#{user.key}
+										</span>
 									</h2>
 									<Tooltip
 										placement="top"
@@ -115,30 +125,22 @@ const Account = ({
 										<VerifiedUserIcon />
 									</Tooltip>
 								</div>
-
-								<div className="joined">
-									<h6>
-										Joined{' '}
-										<Moment fromNow={true} ago>
-											{new Date(user.createdAt)}
-										</Moment>{' '}
-										ago
-									</h6>
-								</div>
 							</div>
+							<ProfileInfo user={user} />
 							<div className="avatar-container">
 								<div className="avatar-icon">
-									{!formState.avatar ? (
-										<Avatar
-											style={{
-												background: randomHex.generate()
-											}}
-										>
-											{user.username[0]}
-										</Avatar>
-									) : (
-										<Avatar src={formState.avatar} />
-									)}
+									<Avatar
+										style={
+											!formState.avatar
+												? {
+														background: randomHex.generate()
+												  }
+												: undefined
+										}
+										src={formState.avatar}
+									>
+										{!formState.avatar && user.username[0]}
+									</Avatar>
 								</div>
 								<div className="change-avatar-root">
 									{!imageLoading ? (
