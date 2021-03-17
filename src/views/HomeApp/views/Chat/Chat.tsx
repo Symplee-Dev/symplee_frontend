@@ -4,7 +4,9 @@ import {
 	useSendMessageMutation,
 	useMessageSentSubscription,
 	Maybe,
-	useGetBlockedFriendsQuery
+	useGetBlockedFriendsQuery,
+	useMessageDeletedSubscription,
+	useMessageEditedSubscription
 } from '../../../../graphql';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -41,7 +43,7 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 
 	useMessageSentSubscription({
 		variables: { chatId: Number(params.chatId) },
-		onSubscriptionData(data) {
+		onSubscriptionData: data => {
 			console.log('received message');
 			if (data.subscriptionData.data?.messageSent)
 				if (blockedFriendsData) {
@@ -64,6 +66,36 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 						data.subscriptionData.data?.messageSent
 					]);
 				}
+		}
+	});
+
+	useMessageEditedSubscription({
+		variables: { chatId: Number(params.chatId) },
+		onSubscriptionData: ({ subscriptionData }) => {
+			const data = subscriptionData.data;
+			if (!!data) {
+				setMessages([
+					...messages.map(message => {
+						return message?.id === data.messageEdited.id
+							? { ...message, body: data.messageEdited.body }
+							: message;
+					})
+				]);
+			}
+		}
+	});
+
+	useMessageDeletedSubscription({
+		variables: { chatId: Number(params.chatId) },
+		onSubscriptionData: ({ subscriptionData }) => {
+			const data = subscriptionData.data;
+			if (data) {
+				setMessages([
+					...messages.filter(
+						message => message && message.id !== data.messageDeleted
+					)
+				]);
+			}
 		}
 	});
 
@@ -169,7 +201,7 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 		});
 	};
 
-	const { data } = useGetMessagesQuery({
+	const { data, refetch } = useGetMessagesQuery({
 		variables: { chatId: Number(params.chatId) },
 		onCompleted() {
 			if (data) {

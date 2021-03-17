@@ -641,6 +641,7 @@ export type Chat = {
   createdById: Scalars['Int'];
   messages: Array<Maybe<MessagesChats>>;
   icon: Scalars['String'];
+  mode: Scalars['String'];
 };
 
 export type MessagesChats = {
@@ -785,6 +786,20 @@ export type DeclineInviteMutationVariables = Exact<{
 
 export type DeclineInviteMutation = { declineInvite: boolean };
 
+export type DeleteMessageMutationVariables = Exact<{
+  messageId: Scalars['Int'];
+}>;
+
+
+export type DeleteMessageMutation = { deleteMessage: boolean };
+
+export type EditMessageMutationVariables = Exact<{
+  messageInput: InEditMessage;
+}>;
+
+
+export type EditMessageMutation = { editMessage: { id: number, body: string, authorUsername: string, authorId: number, chatId: number, createdAt: string } };
+
 export type GetAcceptedFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
 }>;
@@ -881,6 +896,20 @@ export type MailboxUpdateSubscriptionVariables = Exact<{
 
 
 export type MailboxUpdateSubscription = { mailboxUpdate: { id: string, body: string, title: string, goTo: string } };
+
+export type MessageDeletedSubscriptionVariables = Exact<{
+  chatId: Scalars['Int'];
+}>;
+
+
+export type MessageDeletedSubscription = { messageDeleted: number };
+
+export type MessageEditedSubscriptionVariables = Exact<{
+  chatId: Scalars['Int'];
+}>;
+
+
+export type MessageEditedSubscription = { messageEdited: { id: number, body: string, createdAt: string, author: { id: number, username: string, avatar?: Maybe<string> } } };
 
 export type RemoveFriendMutationVariables = Exact<{
   friendId: Scalars['Int'];
@@ -1388,6 +1417,73 @@ export function useDeclineInviteMutation(baseOptions?: Apollo.MutationHookOption
 export type DeclineInviteMutationHookResult = ReturnType<typeof useDeclineInviteMutation>;
 export type DeclineInviteMutationResult = Apollo.MutationResult<DeclineInviteMutation>;
 export type DeclineInviteMutationOptions = Apollo.BaseMutationOptions<DeclineInviteMutation, DeclineInviteMutationVariables>;
+export const DeleteMessageDocument = gql`
+    mutation DeleteMessage($messageId: Int!) {
+  deleteMessage(messageId: $messageId)
+}
+    `;
+export type DeleteMessageMutationFn = Apollo.MutationFunction<DeleteMessageMutation, DeleteMessageMutationVariables>;
+
+/**
+ * __useDeleteMessageMutation__
+ *
+ * To run a mutation, you first call `useDeleteMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMessageMutation, { data, loading, error }] = useDeleteMessageMutation({
+ *   variables: {
+ *      messageId: // value for 'messageId'
+ *   },
+ * });
+ */
+export function useDeleteMessageMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMessageMutation, DeleteMessageMutationVariables>) {
+        return Apollo.useMutation<DeleteMessageMutation, DeleteMessageMutationVariables>(DeleteMessageDocument, baseOptions);
+      }
+export type DeleteMessageMutationHookResult = ReturnType<typeof useDeleteMessageMutation>;
+export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMutation>;
+export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
+export const EditMessageDocument = gql`
+    mutation EditMessage($messageInput: InEditMessage!) {
+  editMessage(message: $messageInput) {
+    id
+    body
+    authorUsername
+    authorId
+    chatId
+    createdAt
+  }
+}
+    `;
+export type EditMessageMutationFn = Apollo.MutationFunction<EditMessageMutation, EditMessageMutationVariables>;
+
+/**
+ * __useEditMessageMutation__
+ *
+ * To run a mutation, you first call `useEditMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editMessageMutation, { data, loading, error }] = useEditMessageMutation({
+ *   variables: {
+ *      messageInput: // value for 'messageInput'
+ *   },
+ * });
+ */
+export function useEditMessageMutation(baseOptions?: Apollo.MutationHookOptions<EditMessageMutation, EditMessageMutationVariables>) {
+        return Apollo.useMutation<EditMessageMutation, EditMessageMutationVariables>(EditMessageDocument, baseOptions);
+      }
+export type EditMessageMutationHookResult = ReturnType<typeof useEditMessageMutation>;
+export type EditMessageMutationResult = Apollo.MutationResult<EditMessageMutation>;
+export type EditMessageMutationOptions = Apollo.BaseMutationOptions<EditMessageMutation, EditMessageMutationVariables>;
 export const GetAcceptedFriendsDocument = gql`
     query GetAcceptedFriends($userId: Int!) {
   getAcceptedFriends(userId: $userId) {
@@ -1888,6 +1984,69 @@ export function useMailboxUpdateSubscription(baseOptions: Apollo.SubscriptionHoo
       }
 export type MailboxUpdateSubscriptionHookResult = ReturnType<typeof useMailboxUpdateSubscription>;
 export type MailboxUpdateSubscriptionResult = Apollo.SubscriptionResult<MailboxUpdateSubscription>;
+export const MessageDeletedDocument = gql`
+    subscription MessageDeleted($chatId: Int!) {
+  messageDeleted(chatId: $chatId)
+}
+    `;
+
+/**
+ * __useMessageDeletedSubscription__
+ *
+ * To run a query within a React component, call `useMessageDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageDeletedSubscription({
+ *   variables: {
+ *      chatId: // value for 'chatId'
+ *   },
+ * });
+ */
+export function useMessageDeletedSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageDeletedSubscription, MessageDeletedSubscriptionVariables>) {
+        return Apollo.useSubscription<MessageDeletedSubscription, MessageDeletedSubscriptionVariables>(MessageDeletedDocument, baseOptions);
+      }
+export type MessageDeletedSubscriptionHookResult = ReturnType<typeof useMessageDeletedSubscription>;
+export type MessageDeletedSubscriptionResult = Apollo.SubscriptionResult<MessageDeletedSubscription>;
+export const MessageEditedDocument = gql`
+    subscription MessageEdited($chatId: Int!) {
+  messageEdited(chatId: $chatId) {
+    id
+    body
+    createdAt
+    author {
+      id
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useMessageEditedSubscription__
+ *
+ * To run a query within a React component, call `useMessageEditedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageEditedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageEditedSubscription({
+ *   variables: {
+ *      chatId: // value for 'chatId'
+ *   },
+ * });
+ */
+export function useMessageEditedSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageEditedSubscription, MessageEditedSubscriptionVariables>) {
+        return Apollo.useSubscription<MessageEditedSubscription, MessageEditedSubscriptionVariables>(MessageEditedDocument, baseOptions);
+      }
+export type MessageEditedSubscriptionHookResult = ReturnType<typeof useMessageEditedSubscription>;
+export type MessageEditedSubscriptionResult = Apollo.SubscriptionResult<MessageEditedSubscription>;
 export const RemoveFriendDocument = gql`
     mutation RemoveFriend($friendId: Int!, $userId: Int!) {
   removeFriend(friendId: $friendId, userId: $userId)
