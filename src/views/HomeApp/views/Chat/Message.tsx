@@ -1,9 +1,20 @@
-import { Avatar, makeStyles, Popover } from '@material-ui/core';
-import { Maybe, useDeleteMessageMutation } from '../../../../graphql';
+import {
+	Avatar,
+	Button,
+	Input,
+	InputAdornment,
+	makeStyles,
+	Popover
+} from '@material-ui/core';
+import {
+	Maybe,
+	useDeleteMessageMutation,
+	useEditMessageMutation
+} from '../../../../graphql';
 import Moment from 'react-moment';
 import MoreVertSharpIcon from '@material-ui/icons/MoreVertSharp';
 import { UserSelectors } from '../../../../redux/selectors';
-import { MouseEvent, useState } from 'react';
+import { FormEvent, MouseEvent, useState } from 'react';
 import UserPopover from '../../components/UserPopOver/UserPopover';
 
 interface MessageProps {
@@ -17,6 +28,12 @@ interface MessageProps {
 }
 
 const useStyle = makeStyles({
+	form: { width: '98%' },
+	editInput: {
+		width: '100%',
+		background: '#dfdfdf',
+		padding: '.5em 1em'
+	},
 	popover: {
 		padding: '1em'
 	},
@@ -33,12 +50,25 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 	const userId = UserSelectors.useSelectUserId();
 	const [showBubble, setShowBubble] = useState(false);
 	const [popoverRef, setPopoverRef] = useState<SVGSVGElement | null>(null);
-
+	const [editingMessage, setEditingMessage] = useState(false);
+	const [editMessageBody, setEditMessageBody] = useState<string>(() =>
+		message ? message?.body : ''
+	);
 	const [anchorEl, setAnchorEl] = useState<
 		(EventTarget & HTMLHeadingElement) | null
 	>(null);
 
-	const [deleteMessage, { data, loading }] = useDeleteMessageMutation({
+	const id = message ? message.id : -1;
+	const [editMessage] = useEditMessageMutation();
+	const handleSubmitEdit = (e: FormEvent) => {
+		e.preventDefault();
+		editMessage({
+			variables: { messageInput: { body: editMessageBody, id } }
+		});
+		setEditingMessage(false);
+	};
+
+	const [deleteMessage] = useDeleteMessageMutation({
 		variables: { messageId: message ? message.id : -1 }
 	});
 
@@ -99,7 +129,24 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 					userId === message.author.id && setShowBubble(false)
 				}
 			>
-				<p>{message.body}</p>
+				{editingMessage ? (
+					<form onSubmit={handleSubmitEdit}>
+						<Input
+							className={classes.editInput}
+							value={editMessageBody}
+							onChange={e => {
+								setEditMessageBody(e.target.value);
+							}}
+							endAdornment={
+								<InputAdornment position="end">
+									<Button type="submit">Send</Button>
+								</InputAdornment>
+							}
+						/>
+					</form>
+				) : (
+					<p>{message.body}</p>
+				)}
 				<div
 					className="bubbles"
 					style={{ opacity: showBubble ? '1' : '0' }}
@@ -121,7 +168,10 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 									horizontal: 'left'
 								}}
 							>
-								<p className={classes.popoverItem}>
+								<p
+									className={classes.popoverItem}
+									onClick={e => setEditingMessage(true)}
+								>
 									Edit Message
 								</p>
 								<p

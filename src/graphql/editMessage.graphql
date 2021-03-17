@@ -1,0 +1,10 @@
+mutation EditMessage($messageInput: InEditMessage!) {
+	editMessage(message: $messageInput) {
+		id
+		body
+		authorUsername
+		authorId
+		chatId
+		createdAt
+	}
+}

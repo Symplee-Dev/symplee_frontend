@@ -1,0 +1,12 @@
+subscription MessageEdited($chatId: Int!) {
+	messageEdited(chatId: $chatId) {
+		id
+		body
+		createdAt
+		author {
+			id
+			username
+			avatar
+		}
+	}
+}
