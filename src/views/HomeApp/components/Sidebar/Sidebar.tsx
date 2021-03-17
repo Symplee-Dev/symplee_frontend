@@ -32,17 +32,19 @@ const Sidebar = ({
 			</div>
 			<hr />
 
-			{chatGroups.map((chatGroup, key) => (
-				<ChatGroupButton
-					path={path}
-					key={key}
-					group={{
-						id: chatGroup.id,
-						image: chatGroup.avatar,
-						name: chatGroup.name
-					}}
-				/>
-			))}
+			<>
+				{chatGroups.map((chatGroup, key) => (
+					<ChatGroupButton
+						path={path}
+						key={key}
+						group={{
+							id: chatGroup.id,
+							image: chatGroup.avatar,
+							name: chatGroup.name
+						}}
+					/>
+				))}
+			</>
 		</div>
 	);
 };
