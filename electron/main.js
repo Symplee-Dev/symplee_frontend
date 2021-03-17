@@ -1,8 +1,19 @@
-const { app, BrowserWindow } = require('electron');
+const {
+	app,
+	BrowserWindow,
+	Menu,
+	Tray,
+	ipcMain,
+	Notification
+} = require('electron');
 const path = require('path');
 const url = require('url');
 
+const { getDoNotDisturb } = require('electron-notification-state');
+
 const log = require('electron-log');
+
+const iconPath = path.join(__dirname, 'favicon.png');
 
 const { autoUpdater } = require('electron-updater');
 
@@ -11,14 +22,6 @@ require('dotenv').config();
 autoUpdater.logger = log;
 
 log.warn('GH_TOKEN', process.env.GH_TOKEN);
-
-autoUpdater.setFeedURL({
-	provider: 'github',
-	repo: 'symplee_frontend',
-	owner: 'Symplee-Dev',
-	private: true,
-	token: process.env.GH_TOKEN
-});
 
 log.info('starting app...');
 
@@ -56,6 +59,35 @@ autoUpdater.on('update-downloaded', info => {
 
 let mainWindow;
 
+let appIcon = null;
+
+function destroy() {
+	appIcon.destroy();
+}
+
+app.whenReady().then(() => {
+	appIcon = new Tray(iconPath);
+
+	const contextMenu = Menu.buildFromTemplate([
+		{
+			label: 'Show App',
+			click: function () {
+				mainWindow.show();
+			}
+		},
+		{
+			label: 'Quit',
+			click: function () {
+				app.isQuiting = true;
+				destroy();
+				app.quit();
+			}
+		}
+	]);
+	appIcon.setContextMenu(contextMenu);
+	appIcon.setToolTip('Symplee');
+});
+
 const createWindow = () => {
 	mainWindow = new BrowserWindow({
 		width: 1440,
@@ -78,9 +110,19 @@ const createWindow = () => {
 		mainWindow.show();
 	});
 
-	mainWindow.on('closed', () => {
-		mainWindow = null;
+	mainWindow.on('close', function (event) {
+		event.preventDefault();
+		mainWindow.hide();
 	});
+
+	mainWindow.on('minimize', function (event) {
+		event.preventDefault();
+		mainWindow.hide();
+	});
+
+	// mainWindow.on('closed', () => {
+	// 	mainWindow = null;
+	// });
 };
 
 app.on('ready', async () => {
@@ -97,6 +139,14 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
 	if (mainWindow === null) {
 		createWindow();
+	}
+});
+
+ipcMain.on('new-notification', data => {
+	if (!getDoNotDisturb()) {
+		const notif = new Notification({ title: data.title, body: data.body });
+
+		notif.addListener('click', () => app.show());
 	}
 });
 

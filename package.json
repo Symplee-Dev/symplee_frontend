@@ -1,6 +1,6 @@
 {
-	"name": "frontend",
-	"version": "0.1.2",
+	"name": "symplee",
+	"version": "0.1.3",
 	"private": true,
 	"main": "electron/main.js",
 	"homepage": "./",
@@ -10,7 +10,19 @@
 		"files": [
 			"build/**/*",
 			"node_modules/**/*"
-		]
+		],
+		"win": {
+			"icon": "public/favicon.png",
+			"publish": [
+				{
+					"provider": "github",
+					"repo": "symplee_frontend",
+					"owner": "Symplee-Dev",
+					"private": true,
+					"token": "TOKEN"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -43,6 +55,7 @@
 		"comlink": "^4.3.0",
 		"dotenv": "^8.2.0",
 		"electron-log": "^4.3.2",
+		"electron-notification-state": "^1.0.4",
 		"electron-updater": "^4.3.8",
 		"emoji-picker-react": "^3.4.2",
 		"framer-motion": "^3.3.0",

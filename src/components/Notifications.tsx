@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import './style.scss';
+import { createNotification } from '../utils/createNotification';
 
 const Notifications = () => {
 	const notifications = useSelector(
@@ -53,6 +54,10 @@ const Notifications = () => {
 						]);
 					}
 				} else {
+					createNotification(
+						d.subscriptionData.data.mailboxUpdate.title,
+						d.subscriptionData.data.mailboxUpdate.body
+					);
 					setMailbox([
 						...mailbox,
 						d.subscriptionData.data.mailboxUpdate
