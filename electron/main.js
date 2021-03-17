@@ -58,8 +58,8 @@ let mainWindow;
 
 const createWindow = () => {
 	mainWindow = new BrowserWindow({
-		width: 600,
-		height: 600,
+		width: 1440,
+		height: 1080,
 		show: false,
 		// frame: app.isPackaged ? false : true
 		frame: true
