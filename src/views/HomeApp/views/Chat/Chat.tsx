@@ -16,13 +16,13 @@ import Message from './Message';
 import NewChatBar from './NewChatBar';
 import { UIActions } from '../../../../redux/actions/index';
 import noMessages from '../../../../assets/no_messages.svg';
-import { CircularProgress, debounce } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import {
 	useUserTypingSubscriptionSubscription,
 	useSendUserTypingMutation
 } from '../../../../graphql';
 
-const Chat = () => {
+const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
 
 	const thisChat = useSelector((state: RootState) =>

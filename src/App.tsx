@@ -33,7 +33,7 @@ const App = () => {
 	const path = useReactPath();
 
 	useEffect(() => {
-		if (!path.includes('/chat')) {
+		if (!path.includes('/chat') || !path.includes('/dm')) {
 			clearChat();
 		}
 	}, [path, clearChat]);

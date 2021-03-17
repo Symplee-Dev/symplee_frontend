@@ -7,11 +7,13 @@ import PublicSharpIcon from '@material-ui/icons/PublicSharp';
 import AccountBoxSharpIcon from '@material-ui/icons/AccountBoxSharp';
 import { UserActions } from '../../../../redux/actions/index';
 import { Tooltip } from '@material-ui/core';
+import { useHistory } from 'react-router';
 
 type ClickType = 'LOGOUT' | 'SETTINGS' | 'PUBLIC' | 'ACCOUNT';
 
 const SidebarFooter = () => {
 	const logout = UserActions.useLogout();
+	const history = useHistory();
 
 	const handleGroup = (type: ClickType) => {
 		switch (type) {
@@ -26,6 +28,7 @@ const SidebarFooter = () => {
 				break;
 			}
 			case 'ACCOUNT': {
+				history.push('/you');
 				break;
 			}
 			default: {
@@ -50,7 +53,7 @@ const SidebarFooter = () => {
 			<div className="footer-icon">
 				<PublicSharpIcon />
 			</div>
-			<div className="footer-icon">
+			<div className="footer-icon" onClick={() => handleGroup('ACCOUNT')}>
 				<AccountBoxSharpIcon />
 			</div>
 		</div>

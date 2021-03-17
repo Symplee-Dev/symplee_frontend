@@ -33,17 +33,7 @@ const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
 			}`}
 		>
 			<div className="chat-top">
-				<Avatar
-					style={{
-						background: 'gray',
-						width: '25px',
-						height: '25px',
-						fontSize: '1rem'
-					}}
-					alt={chat.name}
-				>
-					{chat.icon}
-				</Avatar>
+				{chat.icon}
 				<p>#{chat.name}</p>
 			</div>
 			<p className="label">Text Channel</p>
