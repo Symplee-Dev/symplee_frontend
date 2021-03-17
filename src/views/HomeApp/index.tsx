@@ -3,7 +3,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import { Route, Switch, useLocation } from 'react-router';
 // import HomeAppRoot from './views/HomeAppRoot';
 import { CircularProgress } from '@material-ui/core';
-// import Account from './views/Account';
+import Account from '../Account/Account';
 import {
 	// useChangeLogsLazyQuery,
 	useToggleUserOnlineMutation
@@ -119,9 +119,10 @@ const HomeApp = () => {
 					<Route exact path="/group/:groupId">
 						<ChatGroupIndex authorId={user.id} />
 					</Route>
-					{/* <Route exact path="/you">
+					<Route exact path="/you">
 						<Account user={user} />
 					</Route>
+					{/* 
 					<Route exact path="/group/create">
 						<CreateGroup />
 					</Route>
