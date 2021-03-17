@@ -63,7 +63,7 @@ const ChatGroupSidebar = ({
 						</div>
 					</div>
 					<hr />
-					{group.chats.map((chat, key) => (
+					{group.chats.map((chat, key): JSX.Element => (
 						<ChatGroupSidebarChat chat={chat} key={key} />
 					))}
 				</div>

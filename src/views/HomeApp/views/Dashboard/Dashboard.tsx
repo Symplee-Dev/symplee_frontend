@@ -3,7 +3,7 @@ import './style.scss';
 import Home from './Home';
 import Friends from './Friends';
 
-import Messages from './Messages';
+// import Messages from './Messages';
 
 const Dashbaord = ({ route }: { route: string }) => {
 	return (

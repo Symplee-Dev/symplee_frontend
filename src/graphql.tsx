@@ -748,7 +748,7 @@ export type ChatGroupQueryVariables = Exact<{
 }>;
 
 
-export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, avatar?: Maybe<string>, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean }>> } };
+export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, avatar?: Maybe<string>, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean, mode: string }>> } };
 
 export type CreateChatMutationVariables = Exact<{
   chat: CreateChatInput;
@@ -1229,6 +1229,7 @@ export const ChatGroupDocument = gql`
       name
       icon
       isPublic
+      mode
     }
     createdBy
   }

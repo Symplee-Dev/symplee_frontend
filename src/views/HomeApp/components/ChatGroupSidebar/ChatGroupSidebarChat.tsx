@@ -10,6 +10,7 @@ interface ChatGroupSidebarChatProps {
 		name: string;
 		icon: string;
 		isPublic: boolean;
+		mode: string;
 	}>;
 }
 
@@ -36,7 +37,7 @@ const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
 				{chat.icon}
 				<p>#{chat.name}</p>
 			</div>
-			<p className="label">Text Channel</p>
+			<p className="label">{chat.mode}</p>
 		</div>
 	);
 };
