@@ -1,7 +1,7 @@
 .account {
 	width: 100%;
 	.banner {
-		background-color: #3E4756;
+		background-color: #3e4756;
 		width: 100%;
 		height: 200px;
 		box-sizing: border-box;
@@ -41,7 +41,7 @@
 			display: flex;
 			align-items: center;
 
-			.form-container{
+			.form-container {
 				display: flex;
 				flex-direction: column;
 				width: 100%;
@@ -50,7 +50,7 @@
 			.change-avatar-root {
 				.file-upload-root {
 					transition: 0.3s;
-					margin-top: .2rem;
+					margin-top: 0.2rem;
 					font-size: 1rem;
 					display: flex;
 					align-items: center;
@@ -70,9 +70,9 @@
 				display: flex;
 				align-items: center;
 
-				.username-container{
+				.username-container {
 					display: flex;
-					align-items: start;
+					align-items: flex-start;
 					flex-direction: column;
 					align-self: start;
 				}
@@ -83,41 +83,37 @@
 				}
 
 				.verified {
-					margin-left: .2rem;
+					margin-left: 0.2rem;
 					color: #4fbe19;
 				}
 
-				.user-email{
-					h6{
+				.user-email {
+					h6 {
 						font-weight: normal;
 					}
 				}
 
-				.profile-info{
+				.profile-info {
 					padding-top: 3%;
 				}
-
-				
 			}
-			.avatar-container{
+			.avatar-container {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				margin: auto 0 auto auto;
-
 			}
-			.avatar-icon{
-				div{
+			.avatar-icon {
+				div {
 					height: 4.5rem;
 					width: 4.5rem;
 				}
 			}
-
 		}
 
 		.top-bottom {
 			margin-top: 1.2rem;
- 			background-color: darken($color: gray, $amount: 10);
+			background-color: darken($color: gray, $amount: 10);
 			padding: 1.2rem;
 			border-radius: 0.4rem;
 			display: flex;
@@ -152,7 +148,7 @@
 
 			.input-field {
 				color: white;
-			}	
+			}
 		}
 		button {
 			background-color: #bb86fc;
