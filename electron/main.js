@@ -120,9 +120,10 @@ const createWindow = () => {
 		mainWindow.hide();
 	});
 
-	// mainWindow.on('closed', () => {
-	// 	mainWindow = null;
-	// });
+	mainWindow.on('closed', () => {
+		destroy();
+		mainWindow = null;
+	});
 };
 
 app.on('ready', async () => {
