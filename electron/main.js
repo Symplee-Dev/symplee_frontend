@@ -8,6 +8,7 @@ const {
 } = require('electron');
 const path = require('path');
 const url = require('url');
+const notifier = require('node-notifier');
 
 const { getDoNotDisturb } = require('electron-notification-state');
 
@@ -60,6 +61,7 @@ autoUpdater.on('update-downloaded', info => {
 let mainWindow;
 
 let appIcon = null;
+let focused = false;
 
 function destroy() {
 	appIcon.destroy();
@@ -94,7 +96,11 @@ const createWindow = () => {
 		height: 1080,
 		show: false,
 		// frame: app.isPackaged ? false : true
-		frame: true
+		frame: true,
+		webPreferences: {
+			contextIsolation: true,
+			preload: path.resolve(__dirname, 'preload.js')
+		}
 	});
 	mainWindow.loadURL(
 		!app.isPackaged
@@ -108,21 +114,27 @@ const createWindow = () => {
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
+		focused = true;
 	});
 
-	mainWindow.on('close', function (event) {
-		event.preventDefault();
-		mainWindow.hide();
-	});
+	// mainWindow.on('close', function (event) {
+	// 	event.preventDefault();
+	// 	mainWindow.minm();
+	// });
 
 	mainWindow.on('minimize', function (event) {
 		event.preventDefault();
-		mainWindow.hide();
+		mainWindow.minimize();
+		focused = false;
 	});
 
 	mainWindow.on('closed', () => {
 		destroy();
 		mainWindow = null;
+	});
+
+	mainWindow.on('focus', function (e) {
+		focused = true;
 	});
 };
 
@@ -143,12 +155,31 @@ app.on('activate', () => {
 	}
 });
 
-ipcMain.on('new-notification', data => {
+ipcMain.on('new-notification', function (e, data) {
 	if (!getDoNotDisturb()) {
-		const notif = new Notification({ title: data.title, body: data.body });
+		if (mainWindow.isFocused() === false) {
+			const notif = new Notification({
+				title: data.title,
+				body: data.body
+			});
 
-		notif.addListener('click', () => app.show());
+			notif.show();
+
+			notif.on('click', () => {
+				mainWindow.show();
+				mainWindow.focus();
+			});
+		}
 	}
+});
+
+notifier.on('click', function () {
+	app.show();
+	mainWindow.show();
+});
+
+ipcMain.on('test', (event, arg) => {
+	log.info('testtttttttttttttt');
 });
 
 // const server = 'https://hazel.symplee.app';

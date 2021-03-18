@@ -16,6 +16,7 @@ import Notifications from './components/Notifications';
 import { useReactPath } from './hooks/useReactPath';
 import { useEffect } from 'react';
 import { UIActions } from './redux/actions/index';
+import appRuntime from './appRuntime';
 
 const theme = createMuiTheme({
 	palette: {
