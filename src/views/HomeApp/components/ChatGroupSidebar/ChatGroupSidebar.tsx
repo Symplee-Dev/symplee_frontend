@@ -7,6 +7,7 @@ import ChatGroupSidebarChat from './ChatGroupSidebarChat';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import HomeSharpIcon from '@material-ui/icons/HomeSharp';
 import LinkSharpIcon from '@material-ui/icons/LinkSharp';
+import { useState } from 'react';
 
 const ChatGroupSidebar = ({
 	setCreatingInvite
@@ -15,6 +16,24 @@ const ChatGroupSidebar = ({
 }) => {
 	const group = UISelectors.useSelectCurrentChatGroup();
 	const userId = UserSelectors.useSelectUserId();
+
+	const [el, setEl] = useState<HTMLDivElement | null>(null);
+
+	const pos = localStorage.getItem('CG_SIDEBAR_SCROLLPOS');
+	if (pos !== null) {
+		if (el) {
+			el.scrollTop = parseInt(pos, 10);
+		}
+	}
+
+	const handleSet = () => {
+		if (el) {
+			localStorage.setItem(
+				'CG_SIDEBAR_SCROLLPOS',
+				el.scrollTop.toString()
+			);
+		}
+	};
 
 	if (!group)
 		return (
@@ -53,7 +72,7 @@ const ChatGroupSidebar = ({
 					</button>
 				)}
 				<h4>Channels</h4>
-				<div className="sidebar-chats">
+				<div className="sidebar-chats" ref={el => setEl(el)}>
 					<div className="chats-actions">
 						<div className="sidebar-btn">
 							<CreateSharpIcon />
@@ -63,9 +82,15 @@ const ChatGroupSidebar = ({
 						</div>
 					</div>
 					<hr />
-					{group.chats.map((chat, key) => (
-						<ChatGroupSidebarChat chat={chat} key={key} />
-					))}
+					<>
+						{group.chats.map((chat, key) => (
+							<ChatGroupSidebarChat
+								chat={chat}
+								key={key}
+								onClick={handleSet}
+							/>
+						))}
+					</>
 				</div>
 			</div>
 		</div>

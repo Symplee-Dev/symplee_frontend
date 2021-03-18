@@ -1,5 +1,4 @@
 import { Maybe } from '../../../../graphql';
-import { Avatar } from '@material-ui/core';
 import { useReactPath } from '../../../../hooks/useReactPath';
 import { useHistory } from 'react-router';
 import { UISelectors } from '../../../../redux/selectors';
@@ -11,9 +10,10 @@ interface ChatGroupSidebarChatProps {
 		icon: string;
 		isPublic: boolean;
 	}>;
+	onClick: () => void;
 }
 
-const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
+const ChatGroupSidebarChat = ({ chat, onClick }: ChatGroupSidebarChatProps) => {
 	const path = useReactPath();
 
 	const history = useHistory();
@@ -22,12 +22,12 @@ const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
 
 	if (!chat) return null;
 
-	console.log(path);
 	return (
 		<div
-			onClick={() =>
-				history.push('/group/' + group?.id + '/chat/' + chat.id)
-			}
+			onClick={() => {
+				onClick();
+				history.push('/group/' + group?.id + '/chat/' + chat.id);
+			}}
 			className={`sidebar-chat ${
 				path.includes('/chat/' + chat.id) && 'sidebar-chat-active'
 			}`}

@@ -64,6 +64,7 @@ const Messages = () => {
 	>([]);
 
 	useEffect(() => {
+		refetchDMS();
 		refetch();
 	}, []);
 
@@ -155,7 +156,8 @@ const Messages = () => {
 						<div
 							style={{ display: 'flex', alignItems: 'center' }}
 							onClick={e => {
-								console.log(e.currentTarget);
+								refetch();
+
 								setAnchor(e.currentTarget);
 							}}
 						>
