@@ -117,11 +117,6 @@ const createWindow = () => {
 		focused = true;
 	});
 
-	// mainWindow.on('close', function (event) {
-	// 	event.preventDefault();
-	// 	mainWindow.minm();
-	// });
-
 	mainWindow.on('minimize', function (event) {
 		event.preventDefault();
 		mainWindow.minimize();
@@ -130,7 +125,6 @@ const createWindow = () => {
 
 	mainWindow.on('closed', () => {
 		destroy();
-		mainWindow = null;
 	});
 
 	mainWindow.on('focus', function (e) {
