@@ -39,10 +39,22 @@ const Sidebar = ({
 
 	return (
 		<div className="sidebar" ref={el => setEl(el)}>
-			<div className="sidebar-btn" onClick={() => history.push('/')}>
+			<div
+				className="sidebar-btn"
+				onClick={() => {
+					handleSet();
+					history.push('/');
+				}}
+			>
 				<DashboardSharpIcon />
 			</div>
-			<div className="sidebar-btn" onClick={() => setCreatingGroup(true)}>
+			<div
+				className="sidebar-btn"
+				onClick={() => {
+					handleSet();
+					setCreatingGroup(true);
+				}}
+			>
 				<AddSharpIcon />
 			</div>
 			<hr />
