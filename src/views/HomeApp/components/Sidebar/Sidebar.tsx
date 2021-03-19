@@ -8,7 +8,7 @@ import DashboardSharpIcon from '@material-ui/icons/DashboardSharp';
 import { RootState } from '../../../../redux/types/state-types';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const Sidebar = ({
 	setCreatingGroup

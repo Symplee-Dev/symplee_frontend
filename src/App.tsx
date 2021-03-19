@@ -16,7 +16,7 @@ import Notifications from './components/Notifications';
 import { useReactPath } from './hooks/useReactPath';
 import { useEffect } from 'react';
 import { UIActions } from './redux/actions/index';
-import { useSelectChatGroups } from './redux/selectors';
+import { useSelectChatGroups, UISelectors } from './redux/selectors';
 
 const theme = createMuiTheme({
 	palette: {
