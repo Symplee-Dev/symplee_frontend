@@ -1,0 +1,55 @@
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.logo {
+		display: flex;
+		align-items: center;
+		color: #009eff;
+		h1 {
+			margin-right: 1rem;
+			font-size: 1.5rem;
+		}
+
+		svg {
+			height: 25px;
+			width: 25px;
+		}
+	}
+
+	.nav-links {
+		a {
+			color: #3e4756;
+			font-weight: 400;
+			text-decoration: none;
+			margin-left: 3rem;
+			transition: 0.2s;
+		}
+
+		a:hover {
+			color: #009eff;
+		}
+
+		button {
+			font-family: 'Poppins';
+			margin-left: 3rem;
+			width: 250px;
+			height: 35px;
+			background: none;
+			font-weight: 500;
+			border: 1px solid #009eff;
+			transition: 0.2s;
+		}
+
+		button:hover {
+			cursor: pointer;
+			background: #3e4756;
+			color: white;
+		}
+
+		button:focus {
+			border: none;
+		}
+	}
+}

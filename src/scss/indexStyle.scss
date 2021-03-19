@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700&display=swap');
-@import './Navbar.scss';
+// @import './Navbar.scss';
 @import './ChatGroup.scss';
 @import './ErrorPage.scss';
 @import './ChangeLog.scss';
-@import './Home.scss';
+// @import './Home.scss';
 
 @import './HomeApp/Account.scss';
 @import './HomeApp/HomeApp.scss';
-@import './Onboarding/Login.scss';
-@import './Onboarding/Register.scss';
+// @import './Onboarding/Login.scss';
+// @import './Onboarding/Register.scss';
 @import './HomeApp/CreateGroup.scss';
 @import './HomeApp/MembersBar.scss';
 
@@ -18,8 +18,7 @@
 }
 
 body {
-	background-color: #212121;
-	color: white;
+	color: black;
 	font-family: 'Poppins', sans-serif;
 	max-width: 1440px;
 	margin: 0 auto;
