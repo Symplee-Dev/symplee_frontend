@@ -20,7 +20,8 @@
 
 	.nav-links {
 		a {
-			color: #3e4756;
+			color: white;
+
 			font-weight: 400;
 			text-decoration: none;
 			margin-left: 3rem;
@@ -37,15 +38,18 @@
 			width: 250px;
 			height: 35px;
 			background: none;
+			color: black;
+			background: white;
 			font-weight: 500;
-			border: 1px solid #009eff;
 			transition: 0.2s;
+			border: none;
 		}
 
 		button:hover {
 			cursor: pointer;
-			background: #3e4756;
+			background: none;
 			color: white;
+			border: 1px solid #009eff;
 		}
 
 		button:focus {
