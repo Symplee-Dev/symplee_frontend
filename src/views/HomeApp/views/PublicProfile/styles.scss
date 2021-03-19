@@ -1,6 +1,6 @@
 .public-profile-sidebar {
 	min-width: 250px;
-	height: 93vh;
+	height: 95vh;
 	display: flex;
 	flex-direction: column;
 	background: #3e4756;
@@ -56,7 +56,7 @@
 
 .public-profile {
 	background: #eeeeee;
-	width: 50%;
+	width: 100%;
 
 	.profile-skeleton {
 		background: #2b2e30;
@@ -125,16 +125,16 @@
 	}
 
 	.related-groups-main {
+		margin-top: 1rem;
 		background: white;
 		color: black;
 		overflow-y: scroll;
-		height: 60%;
-		box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-		width: 90%;
+		height: 100vh;
+		width: 100%;
 		margin: 0 auto;
-		margin-top: 1rem;
 		box-sizing: border-box;
 		padding: 1rem;
+		padding-bottom: 2rem;
 
 		.title {
 			font-weight: 400;
@@ -143,9 +143,8 @@
 		}
 
 		.group {
-			margin-top: 2rem;
+			margin-top: 1rem;
 			box-sizing: border-box;
-
 			padding: 1rem;
 			margin-bottom: 1rem;
 			display: flex;
@@ -166,6 +165,14 @@
 		.group-container {
 			display: flex;
 			flex-direction: column;
+			box-sizing: border-box;
+			padding-bottom: 2rem;
+			margin-bottom: 0.5rem;
+			width: 100%;
+			background: #eeeeee;
+			padding-left: 1rem;
+			padding-right: 1rem;
+
 			button {
 				width: 100%;
 				height: 35px;

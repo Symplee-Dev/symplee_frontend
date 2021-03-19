@@ -1,6 +1,6 @@
 import appRuntime from '../appRuntime';
 
-function isElectron() {
+export function isElectron() {
 	// Renderer process
 	if (
 		typeof window !== 'undefined' &&

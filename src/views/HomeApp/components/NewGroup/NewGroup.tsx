@@ -20,10 +20,12 @@ import { UserActions } from '../../../../redux/actions/index';
 
 const NewGroup = ({
 	group,
-	setGroup
+	setGroup,
+	close
 }: {
 	group: { isPublic: boolean; name: string; avatar: undefined | string };
 	setGroup: (input) => void;
+	close: () => void;
 }) => {
 	const [avatarMode, setAvatarMode] = useState<'URL' | 'UPLOAD' | 'NONE'>(
 		'NONE'

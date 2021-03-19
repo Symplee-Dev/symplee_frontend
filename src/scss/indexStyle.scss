@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700&display=swap');
-@import './Navbar.scss';
+// @import './Navbar.scss';
 @import './ChatGroup.scss';
 @import './ErrorPage.scss';
 @import './ChangeLog.scss';
-@import './Home.scss';
+// @import './Home.scss';
 
 @import './HomeApp/Account.scss';
 @import './HomeApp/HomeApp.scss';
-@import './Onboarding/Login.scss';
-@import './Onboarding/Register.scss';
+// @import './Onboarding/Login.scss';
+// @import './Onboarding/Register.scss';
 @import './HomeApp/CreateGroup.scss';
 @import './HomeApp/MembersBar.scss';
 
@@ -18,11 +18,12 @@
 }
 
 body {
-	background-color: #212121;
 	color: white;
 	font-family: 'Poppins', sans-serif;
 	max-width: 1440px;
 	margin: 0 auto;
 	padding: 1.2rem;
 	font-size: 100%;
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='5000' height='5000' preserveAspectRatio='none' viewBox='0 0 5000 5000'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1094%26quot%3b)' fill='none'%3e%3crect width='5000' height='5000' x='0' y='0' fill='rgba(62%2c 71%2c 86%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c2381.648C436.706%2c2417.997%2c705.23%2c1907.45%2c1065.707%2c1658.272C1411.13%2c1419.5%2c1853.922%2c1304.67%2c2074.734%2c947.499C2306.647%2c572.371%2c2449.459%2c83.095%2c2294.878%2c-329.954C2142.872%2c-736.125%2c1593.823%2c-807.537%2c1298.922%2c-1125.522C1019.125%2c-1427.222%2c994.884%2c-1948.896%2c625.444%2c-2130.068C249.084%2c-2314.634%2c-231.365%2c-2249.848%2c-604.575%2c-2058.992C-956.59%2c-1878.975%2c-1070.837%2c-1450.324%2c-1313.757%2c-1138.377C-1540.716%2c-846.927%2c-1892.246%2c-642.887%2c-1985.638%2c-285.492C-2082.995%2c87.077%2c-2022.548%2c502.302%2c-1829.565%2c835.534C-1643.67%2c1156.527%2c-1240.801%2c1250.447%2c-957.482%2c1489.871C-617.467%2c1777.208%2c-443.632%2c2344.722%2c0%2c2381.648' fill='%23282e38'%3e%3c/path%3e%3cpath d='M5000 7244.126C5412.686 7257.252 5722.9 6881.2029999999995 6035.971 6612.002 6311.626 6374.974 6582.691 6120.9580000000005 6704.54 5778.437 6821.119 5450.729 6681.965 5103.662 6696.183 4756.126 6714.5419999999995 4307.367 6995.855 3844.395 6800.2 3440.117 6599.079 3024.545 6126.9 2800.789 5685.066 2666.879 5240.995 2532.292 4757.171 2529.466 4321.384 2688.847 3899.909 2842.994 3567.1620000000003 3167.8019999999997 3309.925 3535.541 3070.075 3878.425 2996.5209999999997 4289.823 2914.464 4700.145 2827.728 5133.866 2592.821 5615.755 2817.759 5996.596 3044.294 6380.141 3618.815 6326.346 4005.532 6547.4220000000005 4364.175 6752.4490000000005 4587.098 7230.993 5000 7244.126' fill='%23546074'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1094'%3e%3crect width='5000' height='5000' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+	background-size: cover;
 }

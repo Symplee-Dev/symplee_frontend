@@ -8,6 +8,7 @@ import DashboardSharpIcon from '@material-ui/icons/DashboardSharp';
 import { RootState } from '../../../../redux/types/state-types';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { useState } from 'react';
 
 const Sidebar = ({
 	setCreatingGroup
@@ -15,6 +16,7 @@ const Sidebar = ({
 	setCreatingGroup: (input: boolean) => void;
 }) => {
 	const path = useReactPath();
+	const [el, setEl] = useState<HTMLDivElement | null>(null);
 
 	const chatGroups = useSelector(
 		(state: RootState) => state.user.user?.chatGroups ?? []
@@ -22,12 +24,37 @@ const Sidebar = ({
 
 	const history = useHistory();
 
+	const pos = localStorage.getItem('SIDEBAR_SCROLLPOS');
+	if (pos !== null) {
+		if (el) {
+			el.scrollTop = parseInt(pos, 10);
+		}
+	}
+
+	const handleSet = () => {
+		if (el) {
+			localStorage.setItem('SIDEBAR_SCROLLPOS', el.scrollTop.toString());
+		}
+	};
+
 	return (
-		<div className="sidebar">
-			<div className="sidebar-btn" onClick={() => history.push('/')}>
+		<div className="sidebar" ref={el => setEl(el)}>
+			<div
+				className="sidebar-btn"
+				onClick={() => {
+					handleSet();
+					history.push('/');
+				}}
+			>
 				<DashboardSharpIcon />
 			</div>
-			<div className="sidebar-btn" onClick={() => setCreatingGroup(true)}>
+			<div
+				className="sidebar-btn"
+				onClick={() => {
+					handleSet();
+					setCreatingGroup(true);
+				}}
+			>
 				<AddSharpIcon />
 			</div>
 			<hr />
@@ -35,6 +62,7 @@ const Sidebar = ({
 			<>
 				{chatGroups.map((chatGroup, key) => (
 					<ChatGroupButton
+						onClick={handleSet}
 						path={path}
 						key={key}
 						group={{

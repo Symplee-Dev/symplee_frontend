@@ -74,7 +74,11 @@ const NewGroupModal = ({ open, setOpen }: NewGroupModalProps) => {
 					</div>
 				)}
 				{route === 'new-group' && (
-					<NewGroup group={newGroup} setGroup={setNewGroup} />
+					<NewGroup
+						group={newGroup}
+						setGroup={setNewGroup}
+						close={() => setOpen(false)}
+					/>
 				)}
 
 				{route === 'enter-code' && <EnterCode setOpen={setOpen} />}

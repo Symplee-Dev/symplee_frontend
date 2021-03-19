@@ -11,7 +11,7 @@ import {
 // import CreateGroup from './views/CreateGroup';
 // import ChangeLogModal from './ChangeLogModal';
 // import { useChangeLog } from '../../hooks/useChangeLog';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 import { UserActions, UIActions } from '../../redux/actions/index';
 import ChatGroupSidebar from './components/ChatGroupSidebar/ChatGroupSidebar';
@@ -31,8 +31,18 @@ import PublicProfileSidebar from './views/PublicProfile/PublicProfileSidebar';
 import PublicProfile from './views/PublicProfile/PublicProfile';
 import Discover from './views/Discover/Discover';
 import Messages from './views/Dashboard/Messages';
+import { useScroll } from '../../hooks/useKeepInView';
+import { Maybe } from '../../graphql';
 
-const HomeApp = () => {
+const HomeApp = ({
+	chatGroups
+}: {
+	chatGroups: {
+		name: string;
+		id: number;
+		avatar?: Maybe<string>;
+	}[];
+}) => {
 	// remove padding for home app
 	document.body.classList.add('body-app');
 

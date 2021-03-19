@@ -65,7 +65,6 @@ const PublicProfile = () => {
 
 					<div className="related-groups-main">
 						<h3 className="title">Mutual Groups</h3>
-						<hr />
 						<>
 							{data.getProfile.relatedGroups.map((g, key) =>
 								g?.isPublic ? (

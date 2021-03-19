@@ -16,7 +16,7 @@ import Notifications from './components/Notifications';
 import { useReactPath } from './hooks/useReactPath';
 import { useEffect } from 'react';
 import { UIActions } from './redux/actions/index';
-import appRuntime from './appRuntime';
+import { useSelectChatGroups, UISelectors } from './redux/selectors';
 
 const theme = createMuiTheme({
 	palette: {
@@ -30,14 +30,22 @@ const App = () => {
 	const location = useLocation();
 	const authenticated = useLocalToken();
 	const clearChat = UIActions.useClearCurrentChat();
+	const clearGroup = UIActions.useClearCurrentChatGroup();
 
 	const path = useReactPath();
 
+	const chatGroups = useSelectChatGroups();
+
 	useEffect(() => {
-		if (!path.includes('/chat') || !path.includes('/dm')) {
+		if (
+			!path.includes('/chat') &&
+			!path.includes('/dm') &&
+			!path.includes('/group')
+		) {
 			clearChat();
+			clearGroup();
 		}
-	}, [path, clearChat]);
+	}, [path, clearChat, clearGroup]);
 
 	return (
 		<ErrorBoundary
@@ -60,7 +68,11 @@ const App = () => {
 						</Route>
 
 						<Route path="/">
-							{authenticated ? <HomeApp /> : <Home />}
+							{authenticated ? (
+								<HomeApp chatGroups={chatGroups ?? []} />
+							) : (
+								<Home />
+							)}
 						</Route>
 					</Switch>
 				</AnimatePresence>

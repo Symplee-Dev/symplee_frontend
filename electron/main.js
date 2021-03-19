@@ -94,9 +94,12 @@ const createWindow = () => {
 	mainWindow = new BrowserWindow({
 		width: 1440,
 		height: 1080,
-		show: false,
-		// frame: app.isPackaged ? false : true
-		frame: true,
+		show: true,
+		icon: iconPath,
+		titleBarStyle: 'hidden',
+		darkTheme: true,
+		title: 'Symplee',
+
 		webPreferences: {
 			contextIsolation: true,
 			preload: path.resolve(__dirname, 'preload.js')
@@ -111,6 +114,8 @@ const createWindow = () => {
 					slashes: true
 			  })
 	);
+
+	mainWindow.setMenuBarVisibility(false);
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();

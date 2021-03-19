@@ -214,7 +214,16 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 					)
 				);
 			}
-			setCurrentChat(thisChat);
+			if (thisChat) {
+				setCurrentChat(thisChat);
+			} else {
+				setCurrentChat({
+					icon: '',
+					isPublic: false,
+					name: '',
+					id: Number(params.chatId)
+				});
+			}
 		},
 		nextFetchPolicy: 'network-only',
 		fetchPolicy: 'network-only'

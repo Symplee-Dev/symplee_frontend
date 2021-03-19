@@ -25,6 +25,7 @@ import {
 } from '../types/action-types';
 import { useEffect } from 'react';
 import { SetDashboardRoute } from '../types/action-types';
+import { UISelectors } from '../selectors';
 import {
 	SetLoggedOut,
 	SetUserId,
