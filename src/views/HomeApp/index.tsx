@@ -33,6 +33,7 @@ import Discover from './views/Discover/Discover';
 import Messages from './views/Dashboard/Messages';
 import { useScroll } from '../../hooks/useKeepInView';
 import { Maybe } from '../../graphql';
+import CallRoom from './views/CallRoom/index';
 
 const HomeApp = ({
 	chatGroups
@@ -131,6 +132,9 @@ const HomeApp = ({
 					</Route>
 					<Route exact path="/you">
 						<Account user={user} />
+					</Route>
+					<Route exact path="/testing">
+						<CallRoom />
 					</Route>
 					{/* 
 					<Route exact path="/group/create">

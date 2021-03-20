@@ -7,3 +7,6 @@ User-agent: *
 Allow: /
 
 Sitemap: http://www.example.com/sitemap.xml
+
+connect-src wss://global.vss.twilio.com wss://sdkgw.us1.twilio.com
+media-src mediastream:
