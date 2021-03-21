@@ -38,6 +38,7 @@ export type Query = {
   getPendingFriends: Array<Maybe<UserFriend>>;
   getBlockedFriends: Array<Maybe<UserFriend>>;
   getDMS: Array<Maybe<ChatGroup>>;
+  getSettings: Array<Maybe<Settings>>;
 };
 
 
@@ -119,6 +120,11 @@ export type QueryGetDmsArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type QueryGetSettingsArgs = {
+  userId: Scalars['Int'];
+};
+
 export type GetProfileReturn = {
   user: User;
   relatedGroups: Array<Maybe<ChatGroup>>;
@@ -162,6 +168,7 @@ export type Mutation = {
   inviteByLink: Scalars['Boolean'];
   blockUser: Scalars['Boolean'];
   unblockUser: Scalars['Boolean'];
+  editOrAddSettings: Scalars['Boolean'];
 };
 
 
@@ -365,6 +372,17 @@ export type MutationUnblockUserArgs = {
   otherUserId: Scalars['Int'];
 };
 
+
+export type MutationEditOrAddSettingsArgs = {
+  userId: Scalars['Int'];
+  setting: Array<SettingInput>;
+};
+
+export type SettingInput = {
+  type: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type ChatGroupType =
   | 'CHAT_GROUP'
   | 'DM';
@@ -502,7 +520,7 @@ export type CreateChatInput = {
   userId: Scalars['Int'];
   icon: Scalars['String'];
   chatGroupId: Scalars['Int'];
-  type?: Maybe<Scalars['String']>;
+  mode: Scalars['String'];
 };
 
 export type CreateChatGroupInput = {
@@ -620,6 +638,36 @@ export type User = {
   verified: Scalars['Boolean'];
   avatar?: Maybe<Scalars['String']>;
   is_online: Scalars['Boolean'];
+};
+
+export type DefaultBoolean =
+  | 'T'
+  | 'F';
+
+export type PreferredTheme =
+  | 'Light'
+  | 'Dark';
+
+export type FontSize =
+  | 'Small'
+  | 'Medium'
+  | 'Large';
+
+export type Language =
+  | 'English';
+
+export type Settings = {
+  PREFERRED_THEME?: Maybe<PreferredTheme>;
+  FONT_SIZE?: Maybe<FontSize>;
+  LANGUAGE?: Maybe<Language>;
+  DYSLEXIC_FONT?: Maybe<DefaultBoolean>;
+  SEARCHABLE?: Maybe<DefaultBoolean>;
+  RECEIVE_NON_FRIEND_MESSAGES?: Maybe<DefaultBoolean>;
+  HIDE_PROFILE_NON_FRIENDS?: Maybe<DefaultBoolean>;
+  MUTE_ALL?: Maybe<DefaultBoolean>;
+  ONLY_MENTIONS?: Maybe<DefaultBoolean>;
+  MESSAGE_NOTIFICATIONS?: Maybe<DefaultBoolean>;
+  FOCUS_ON_CALL?: Maybe<DefaultBoolean>;
 };
 
 export type ChatGroup = {
@@ -748,7 +796,7 @@ export type ChatGroupQueryVariables = Exact<{
 }>;
 
 
-export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, avatar?: Maybe<string>, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean }>> } };
+export type ChatGroupQuery = { chatGroup: { id: number, name: string, isPublic: boolean, createdAt: string, avatar?: Maybe<string>, createdBy: number, chats: Array<Maybe<{ id: number, name: string, icon: string, isPublic: boolean, mode: string }>> } };
 
 export type CreateChatMutationVariables = Exact<{
   chat: CreateChatInput;
@@ -1229,6 +1277,7 @@ export const ChatGroupDocument = gql`
       name
       icon
       isPublic
+      mode
     }
     createdBy
   }

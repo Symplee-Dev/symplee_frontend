@@ -17,6 +17,7 @@ import NewChatBar from './NewChatBar';
 import { UIActions } from '../../../../redux/actions/index';
 import noMessages from '../../../../assets/no_messages.svg';
 import { CircularProgress } from '@material-ui/core';
+import Call from '../CallRoom/Call/Call';
 import {
 	useUserTypingSubscriptionSubscription,
 	useSendUserTypingMutation
@@ -24,6 +25,35 @@ import {
 
 const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
+
+	const { data, refetch } = useGetMessagesQuery({
+		variables: { chatId: Number(params.chatId) },
+		onCompleted() {
+			if (data) {
+				setMessages(
+					data.getMessages.filter(
+						msg =>
+							!blockedFriendsData?.getBlockedFriends.find(
+								f => f?.friend?.id === msg?.author.id
+							)
+					)
+				);
+			}
+			if (thisChat) {
+				setCurrentChat(thisChat);
+			} else {
+				setCurrentChat({
+					icon: '',
+					isPublic: false,
+					name: '',
+					id: Number(params.chatId),
+					mode: ''
+				});
+			}
+		},
+		nextFetchPolicy: 'network-only',
+		fetchPolicy: 'network-only'
+	});
 
 	const thisChat = useSelector((state: RootState) =>
 		state.ui.currentChatGroup?.chats.find(
@@ -201,34 +231,6 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 		});
 	};
 
-	const { data, refetch } = useGetMessagesQuery({
-		variables: { chatId: Number(params.chatId) },
-		onCompleted() {
-			if (data) {
-				setMessages(
-					data.getMessages.filter(
-						msg =>
-							!blockedFriendsData?.getBlockedFriends.find(
-								f => f?.friend?.id === msg?.author.id
-							)
-					)
-				);
-			}
-			if (thisChat) {
-				setCurrentChat(thisChat);
-			} else {
-				setCurrentChat({
-					icon: '',
-					isPublic: false,
-					name: '',
-					id: Number(params.chatId)
-				});
-			}
-		},
-		nextFetchPolicy: 'network-only',
-		fetchPolicy: 'network-only'
-	});
-
 	useEffect(() => {
 		if (end && firstLoad) {
 			end.scrollIntoView({ behavior: 'auto' });
@@ -239,6 +241,10 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 			end.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [messages, end, firstLoad]);
+
+	if (thisChat?.mode !== 'text chat') {
+		return <Call />;
+	}
 
 	if (messages.length < 1 && !data) {
 		return (

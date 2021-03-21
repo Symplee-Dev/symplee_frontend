@@ -10,6 +10,7 @@ query ChatGroup($id: Int!) {
 			name
 			icon
 			isPublic
+			mode
 		}
 		createdBy
 	}

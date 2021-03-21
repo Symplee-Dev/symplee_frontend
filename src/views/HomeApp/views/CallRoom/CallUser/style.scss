@@ -1,0 +1,16 @@
+.call-user {
+	box-sizing: border-box;
+	min-width: 400px;
+	height: 300px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #2b2e30;
+	margin-bottom: 1rem;
+	margin-right: 10px;
+	flex-grow: 1;
+
+	p {
+		margin-left: 1rem;
+	}
+}

@@ -47,6 +47,7 @@ export type UIState = {
 			name: string;
 			icon: string;
 			isPublic: boolean;
+			mode: string;
 		}>[];
 	};
 	currentChat?: Maybe<{
@@ -54,6 +55,7 @@ export type UIState = {
 		name: string;
 		icon: string;
 		isPublic: boolean;
+		mode: string;
 	}>;
 	currentlyViewedProfile?:
 		| {
