@@ -22,6 +22,7 @@ import {
 	useUserTypingSubscriptionSubscription,
 	useSendUserTypingMutation
 } from '../../../../graphql';
+import { logger } from '../../../../utils/logger';
 
 const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 	const params: { chatGroupId: string; chatId: string } = useParams();
@@ -242,7 +243,8 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 		}
 	}, [messages, end, firstLoad]);
 
-	if (thisChat?.mode !== 'text chat') {
+	if (thisChat && thisChat?.mode !== 'text chat') {
+		logger.info(thisChat?.mode);
 		return (
 			<Call
 				chatGroupId={Number(params.chatGroupId)}

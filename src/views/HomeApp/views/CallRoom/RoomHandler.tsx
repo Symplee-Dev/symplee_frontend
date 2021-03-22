@@ -64,6 +64,7 @@ export const useRoomHandler = ({
 	handler: typeof handler;
 	room: Room | undefined;
 	elements: JSX.Element[];
+	setRoom: React.Dispatch<React.SetStateAction<Room | undefined>>;
 } => {
 	const user = useSelector((state: RootState) => state.user.user)!;
 	console.log(user);
@@ -170,6 +171,7 @@ export const useRoomHandler = ({
 			});
 		},
 		participantDisconnected: (participant): void => {
+			logger.info('Leaving call');
 			logger.warning(
 				'Participant "%s" disconnected',
 				participant.identity
@@ -180,6 +182,32 @@ export const useRoomHandler = ({
 
 				for (const [key, val] of Object.entries(prev)) {
 					if (key !== participant.sid) {
+						result[key] = val;
+					}
+				}
+
+				return result;
+			});
+		},
+		disconnecting: () => {
+			localTrack?.disable();
+			localTrack?.stop();
+			localTrack?.detach().forEach(element => element.remove());
+			globalRoom?.localParticipant.videoTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+				//@ts-ignore
+
+				publication.track.detach().forEach(element => element.remove());
+				publication.track.stop();
+				publication.unpublish();
+			});
+
+			setElements(prev => {
+				let result = {};
+
+				for (const [key, val] of Object.entries(prev)) {
+					if (key !== 'local-user') {
 						result[key] = val;
 					}
 				}
@@ -254,5 +282,10 @@ export const useRoomHandler = ({
 		}
 	};
 
-	return { handler, room: globalRoom, elements: Object.values(elements) };
+	return {
+		handler,
+		room: globalRoom,
+		elements: Object.values(elements),
+		setRoom
+	};
 };

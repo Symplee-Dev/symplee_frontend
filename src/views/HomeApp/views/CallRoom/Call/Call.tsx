@@ -1,8 +1,8 @@
 import './style.scss';
 import CallBar from '../CallBar/CallBar';
-import CallUser from '../CallUser/CallUser';
 import { useRoomHandler } from '../RoomHandler';
 import { useEffect } from 'react';
+import { logger } from '../../../../../utils/logger';
 
 const Call = ({
 	chatGroupId,
@@ -11,7 +11,10 @@ const Call = ({
 	chatGroupId: number;
 	chatId: number;
 }) => {
-	const { handler, room, elements } = useRoomHandler({ chatGroupId, chatId });
+	const { handler, room, elements, setRoom } = useRoomHandler({
+		chatGroupId,
+		chatId
+	});
 
 	useEffect(() => {
 		if (!room) {
@@ -24,7 +27,13 @@ const Call = ({
 		<div className="call-room">
 			<CallBar
 				unMuteVideo={() => handler.unmuteVideo()}
-				disconnect={() => room?.disconnect()}
+				disconnect={() => {
+					if (room) {
+						const roo = room.disconnect();
+						setRoom(roo);
+						handler.disconnecting();
+					}
+				}}
 				muteVideo={() => handler.muteVideo()}
 			/>
 			<div className="call-members">{elements}</div>

@@ -8,6 +8,7 @@ import VideocamOffSharpIcon from '@material-ui/icons/VideocamOffSharp';
 import { CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useState } from 'react';
+import { logger } from '../../../../../utils/logger';
 
 const CallBar = ({
 	disconnect,
@@ -60,7 +61,9 @@ const CallBar = ({
 				<button
 					onClick={() => {
 						if (disconnect) {
+							logger.warning('Disconnecting');
 							disconnect();
+							window.location.replace('/');
 						}
 					}}
 				>
