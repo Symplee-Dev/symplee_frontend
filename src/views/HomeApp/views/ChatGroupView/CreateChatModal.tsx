@@ -4,6 +4,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	LinearProgress,
+	MenuItem,
+	Select,
 	TextField
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,31 +14,16 @@ import CheckIcon from '@material-ui/icons/Check';
 import { useState } from 'react';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import Picker from 'emoji-picker-react';
-import {
-	Exact,
-	useCreateChatMutation,
-	ChatGroupQuery
-} from '../../../../graphql';
-import { ApolloQueryResult } from '@apollo/client';
+import { useCreateChatMutation } from '../../../../graphql';
 
 const CreateChatModal = ({
 	open,
 	setOpen,
-	refetch,
 	chatGroupId
 }: {
 	chatGroupId: number;
 	open: boolean;
 	setOpen: (set: boolean) => void;
-	refetch: (
-		variables?:
-			| Partial<
-					Exact<{
-						id: number;
-					}>
-			  >
-			| undefined
-	) => Promise<ApolloQueryResult<ChatGroupQuery>>;
 }) => {
 	const userId = useSelector((state: RootStateOrAny) => state.user.userId);
 
@@ -47,7 +34,8 @@ const CreateChatModal = ({
 		isPublic: false,
 		userId: userId,
 		icon: '🌏',
-		chatGroupId: chatGroupId
+		chatGroupId: chatGroupId,
+		mode: 'text chat'
 	});
 
 	const handleSubmit = e => {
@@ -55,7 +43,6 @@ const CreateChatModal = ({
 
 		createChat({ variables: { chat: newChat } });
 		//@ts-ignore
-		refetch({ fetchPolicy: 'network-only' });
 		setOpen(false);
 	};
 
@@ -139,6 +126,20 @@ const CreateChatModal = ({
 					>
 						<CheckIcon />
 					</ToggleButton>
+					<Select
+						value={newChat.mode}
+						onChange={e =>
+							setNewChat({
+								...newChat,
+								mode: e.target.value as string
+							})
+						}
+					>
+						<MenuItem value="text chat">Text Chat</MenuItem>
+						<MenuItem value="Video and Voice">
+							Video And Voice
+						</MenuItem>
+					</Select>
 				</form>
 			</DialogContent>
 			<DialogActions>
