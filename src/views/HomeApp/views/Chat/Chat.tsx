@@ -243,7 +243,12 @@ const Chat = ({ isDm = false }: { isDm?: boolean }) => {
 	}, [messages, end, firstLoad]);
 
 	if (thisChat?.mode !== 'text chat') {
-		return <Call />;
+		return (
+			<Call
+				chatGroupId={Number(params.chatGroupId)}
+				chatId={Number(params.chatId)}
+			/>
+		);
 	}
 
 	if (messages.length < 1 && !data) {

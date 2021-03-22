@@ -1,3 +1,4 @@
+import { RemoteParticipant } from 'twilio-video';
 import { ChangeLog, Maybe } from '../../graphql';
 
 type UserFromQuery = {
@@ -76,6 +77,10 @@ export type UIState = {
 		  }
 		| undefined;
 	dashboardRoute: 'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS';
+};
+
+type CallState = {
+	participants: RemoteParticipant[];
 };
 
 export interface RootState {

@@ -1,11 +1,19 @@
-import { ConnectOptions, Room } from 'twilio-video';
+import {
+	ConnectOptions,
+	Participant,
+	RemoteParticipant,
+	Room,
+	Track
+} from 'twilio-video';
 import { logger } from '../../../../utils/logger';
 import { createRoomJWT } from '../../../../utils/createRoomJWT';
-import { connect as connectToRoom } from 'twilio-video';
-import { UserSelectors } from '../../../../redux/selectors';
-import { useState } from 'react';
+import { connect as connectToRoom, RemoteTrack } from 'twilio-video';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
+import CallUser from '../CallRoom/CallUser/CallUser';
+import { setegid } from 'node:process';
+import { createLocalVideoTrack } from 'twilio-video';
 
 // export class RoomHandler {
 // 	roomId!: number;
@@ -51,26 +59,56 @@ interface RoomHandlerInterface {
 export const useRoomHandler = ({
 	chatGroupId,
 	chatId
-}: RoomHandlerInterface): { handler: typeof handler; room: Room } => {
-	const user = useSelector((state: RootState) => state.user.user);
+}: RoomHandlerInterface): {
+	handler: typeof handler;
+	room: Room | undefined;
+	elements: JSX.Element[];
+} => {
+	const user = useSelector((state: RootState) => state.user.user)!;
+	console.log(user);
 	const accessToken = createRoomJWT(
 		`${chatGroupId}-${chatId}`,
 		`${user.username}#${user.key}`
 	);
-	const [room, setRoom] = useState<Room>();
-	const [elements, setElements] = useState<Element[]>();
+	const [globalRoom, setRoom] = useState<Room>();
+	const [elements, setElements] = useState<{ [id: string]: JSX.Element }>({});
 
 	const handler = {
 		connect: async (options: ConnectOptions): Promise<boolean> => {
-			const room = await connectToRoom(accessToken, options).catch(err =>
-				logger.error(err)
-			);
-
+			const room: Room = await connectToRoom(accessToken, {
+				...options,
+				name: `${chatGroupId}-${chatId}`,
+				video: { width: 300 }
+			}).catch(err => logger.error(err));
 			logger.success('Connected to room!');
 
 			setRoom(room);
 
-			room.participants.forEach(handler.participantConnected);
+			await createLocalVideoTrack().then(localVideoTrack => {
+				logger.warning(JSON.stringify(elements));
+				setElements(prev => {
+					return {
+						...prev,
+						'local-user': (
+							<CallUser
+								key="local-user"
+								id="local-user"
+								tracks={[]}
+							/>
+						)
+					};
+				});
+				logger.warning(JSON.stringify(elements));
+				const targetP = document.getElementById('local-user');
+
+				//@ts-ignore
+				// room.localParticipant.publishTrack(localVideoTrack);
+				targetP?.appendChild(localVideoTrack.attach());
+			});
+
+			if (room.participants) {
+				room.participants.forEach(handler.participantConnected);
+			}
 
 			room.on('participantConnected', handler.participantConnected);
 
@@ -83,42 +121,74 @@ export const useRoomHandler = ({
 			return true;
 		},
 
-		participantConnected: (participant): void => {
-			logger.info('Participant "%s" connected', participant.identity);
-			// const div = document.createElement('div');
-			// div.id = participant.sid;
-			// div.innerText = participant.identity;
+		participantConnected: (participant: RemoteParticipant): void => {
+			logger.info(participant.identity);
 
-			// participant.on('trackSubscribed', track =>
-			// 	handler.trackSubscribed(div, track)
-			// );
+			logger.warning(JSON.stringify(elements));
+			setElements(prev => {
+				return {
+					...prev,
+					[participant.sid]: (
+						<CallUser
+							key={participant.sid}
+							id={participant.sid}
+							tracks={[]}
+						/>
+					)
+				};
+			});
 
-			// participant.on('trackUnsubscribed', trackUnsubscribed);
+			participant.on('trackSubscribed', track => {
+				const targetP = document.getElementById(participant.sid);
 
-			// participant.tracks.forEach(publication => {
-			// 	if (publication.isSubscribed) {
-			// 		handler.trackSubscribed(div, publication.track);
-			// 	}
-			// });
+				//@ts-ignore
+				targetP?.appendChild(track.attach());
 
-			// document.getElementById('remote-media-div')?.appendChild(div);
+				// setElements({
+				// 	...elements,
+				// 	[participant.sid]: (
+				// 		<CallUser
+				// 			id={participant.sid}
+				// 			tracks={[
+				// 				...(targetP ? targetP.props.tracks : []),
+				// 				track
+				// 			]}
+				// 			key={participant.sid}
+				// 		></CallUser>
+				// 	)
+				// });
+			});
+
+			participant.on('trackUnsubscribed', handler.trackUnsubscribed);
+
+			const targetP = document.getElementById(participant.sid);
+
+			participant.tracks.forEach(publication => {
+				console.log(publication.track);
+
+				if (publication.isSubscribed) {
+					if (publication.track) {
+						//@ts-ignore
+						targetP?.appendChild(publication.track.attach());
+					}
+				}
+			});
 		},
 		participantDisconnected: (participant): void => {
 			logger.warning(
 				'Participant "%s" disconnected',
 				participant.identity
 			);
-
-			// document?.getElementById(participant.sid)?.remove();
+			// const target = document?.getElementById(participant.sid);
+			// if (target) {
+			// 	target.remove();
+			// }
+			delete elements[participant.sid];
 		},
-		trackSubscribed: (div, track): void => {
-			// div.appendChild(track.attach());
-		},
-
 		trackUnsubscribed: (track): void => {
-			// track.detach().forEach(element => element.remove());
+			track.detach().forEach(element => element.remove());
 		}
 	};
 
-	return { handler, room };
+	return { handler, room: globalRoom, elements: Object.values(elements) };
 };
