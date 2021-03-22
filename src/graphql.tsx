@@ -39,6 +39,7 @@ export type Query = {
   getBlockedFriends: Array<Maybe<UserFriend>>;
   getDMS: Array<Maybe<ChatGroup>>;
   getSettings: Array<Maybe<Settings>>;
+  getCallMembers: Array<User>;
 };
 
 
@@ -123,6 +124,11 @@ export type QueryGetDmsArgs = {
 
 export type QueryGetSettingsArgs = {
   userId: Scalars['Int'];
+};
+
+
+export type QueryGetCallMembersArgs = {
+  members: Array<Scalars['String']>;
 };
 
 export type GetProfileReturn = {
@@ -861,6 +867,13 @@ export type GetBlockedFriendsQueryVariables = Exact<{
 
 
 export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
+export type GetCallMembrsQueryVariables = Exact<{
+  members: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type GetCallMembrsQuery = { getCallMembers: Array<{ avatar?: Maybe<string> }> };
 
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
@@ -1612,6 +1625,39 @@ export function useGetBlockedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetBlockedFriendsQueryHookResult = ReturnType<typeof useGetBlockedFriendsQuery>;
 export type GetBlockedFriendsLazyQueryHookResult = ReturnType<typeof useGetBlockedFriendsLazyQuery>;
 export type GetBlockedFriendsQueryResult = Apollo.QueryResult<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>;
+export const GetCallMembrsDocument = gql`
+    query GetCallMembrs($members: [String!]!) {
+  getCallMembers(members: $members) {
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useGetCallMembrsQuery__
+ *
+ * To run a query within a React component, call `useGetCallMembrsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCallMembrsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCallMembrsQuery({
+ *   variables: {
+ *      members: // value for 'members'
+ *   },
+ * });
+ */
+export function useGetCallMembrsQuery(baseOptions: Apollo.QueryHookOptions<GetCallMembrsQuery, GetCallMembrsQueryVariables>) {
+        return Apollo.useQuery<GetCallMembrsQuery, GetCallMembrsQueryVariables>(GetCallMembrsDocument, baseOptions);
+      }
+export function useGetCallMembrsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCallMembrsQuery, GetCallMembrsQueryVariables>) {
+          return Apollo.useLazyQuery<GetCallMembrsQuery, GetCallMembrsQueryVariables>(GetCallMembrsDocument, baseOptions);
+        }
+export type GetCallMembrsQueryHookResult = ReturnType<typeof useGetCallMembrsQuery>;
+export type GetCallMembrsLazyQueryHookResult = ReturnType<typeof useGetCallMembrsLazyQuery>;
+export type GetCallMembrsQueryResult = Apollo.QueryResult<GetCallMembrsQuery, GetCallMembrsQueryVariables>;
 export const MessageSentDocument = gql`
     subscription MessageSent($chatId: Int!) {
   messageSent(chatId: $chatId) {

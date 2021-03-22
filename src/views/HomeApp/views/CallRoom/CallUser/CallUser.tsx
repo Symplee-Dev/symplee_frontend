@@ -2,15 +2,27 @@ import './style.scss';
 import { Avatar } from '@material-ui/core';
 import { RemoteTrack } from 'twilio-video';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux/types/state-types';
 
 interface CallUserProps {
 	id: string;
 	tracks?: RemoteTrack[];
+	identity?: string;
+	avatar?: string;
 }
 
-const CallUser = ({ id, tracks }: CallUserProps) => {
+const CallUser = ({
+	id,
+	tracks,
+	identity = '',
+	avatar = ''
+}: CallUserProps) => {
 	//@ts-ignore
 	const [hasVideo, setHasVideo] = useState(false);
+	const localAvatar = useSelector(
+		(state: RootState) => state.user.user?.avatar
+	);
 
 	useEffect(() => {
 		setInterval(() => {
@@ -31,10 +43,13 @@ const CallUser = ({ id, tracks }: CallUserProps) => {
 			{!tracks ||
 				(tracks && tracks.length < 1 && !hasVideo && (
 					<>
-						<Avatar src="http://res.cloudinary.com/boltchat/image/upload/v1615999060/kelxramti1fulwb4qimm.jpg" />
-						<p>NateTheDev#7069</p>
+						<Avatar
+							src={id === 'local-user' ? localAvatar : avatar}
+						>
+							{identity[0]}
+						</Avatar>
+						<p>{identity}</p>
 						{/* @ts-ignore */}
-						{tracks && tracks[0] ? tracks[0].attach() : null}
 					</>
 				))}
 		</div>

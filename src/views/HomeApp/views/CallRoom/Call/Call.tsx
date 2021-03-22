@@ -2,7 +2,6 @@ import './style.scss';
 import CallBar from '../CallBar/CallBar';
 import { useRoomHandler } from '../RoomHandler';
 import { useEffect } from 'react';
-import { logger } from '../../../../../utils/logger';
 
 const Call = ({
 	chatGroupId,
@@ -19,13 +18,22 @@ const Call = ({
 	useEffect(() => {
 		if (!room) {
 			console.log('here');
-			handler.connect({});
+			handler.connect({
+				audio: true,
+				video: {
+					width: 1920,
+					height: 1080,
+					frameRate: 60,
+					noiseSuppression: true
+				}
+			});
 		}
 	}, [room]);
 
 	return (
 		<div className="call-room">
 			<CallBar
+				participants={room ? room?.participants.size : 0}
 				unMuteVideo={() => handler.unmuteVideo()}
 				disconnect={() => {
 					if (room) {

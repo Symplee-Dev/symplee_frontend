@@ -13,11 +13,13 @@ import { logger } from '../../../../../utils/logger';
 const CallBar = ({
 	disconnect,
 	muteVideo,
-	unMuteVideo
+	unMuteVideo,
+	participants
 }: {
 	disconnect?: () => void;
 	muteVideo: () => void;
 	unMuteVideo: () => void;
+	participants: number;
 }) => {
 	const currentChat = UISelectors.useSelectCurrentChat()!;
 	const history = useHistory();
@@ -55,7 +57,7 @@ const CallBar = ({
 		<div className="call-bar">
 			<div className="left">
 				<h5>#{currentChat.name}</h5>
-				<p>2 members in the call</p>
+				<p>{participants + 1} members in the call</p>
 			</div>
 			<div className="middle">
 				<button

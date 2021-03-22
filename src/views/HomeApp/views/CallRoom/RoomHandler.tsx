@@ -9,48 +9,12 @@ import {
 import { logger } from '../../../../utils/logger';
 import { createRoomJWT } from '../../../../utils/createRoomJWT';
 import { connect as connectToRoom, RemoteTrack } from 'twilio-video';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/types/state-types';
 import CallUser from '../CallRoom/CallUser/CallUser';
-import { setegid } from 'node:process';
 import { createLocalVideoTrack } from 'twilio-video';
-
-// export class RoomHandler {
-// 	roomId!: number;
-// 	accessToken!: string;
-// 	room!: Room;
-// 	chatGroupId!: number;
-// 	chatId!: number;
-// 	userId!: number;
-
-// 	constructor({ chatGroupId, chatId, userId }: RoomHandlerInterface) {
-// 		this.chatGroupId = chatGroupId;
-// 		this.chatId = chatId;
-// 		this.userId = userId;
-// 		this.accessToken = createRoomJWT(`${chatGroupId}-${chatId}`, userId);
-// 	}
-
-// 	async connect(): Promise<boolean> {
-// 		await connectToRoom(this.accessToken, {
-// 			name: 'call'
-// 		}).then(room => {
-// 			room.participants.forEach(participantConnected);
-
-// 			room.on('participantConnected', p => {
-// 				participantConnected(p);
-// 			});
-
-// 			room.on('participantDisconnected', participantDisconnected);
-// 			room.once('disconnected', error =>
-// 				room.participants.forEach(participantDisconnected)
-// 			);
-// 		});
-
-// 		return true;
-// 	},
-
-// }
+import { useGetCallMembrsLazyQuery } from '../../../../graphql';
 
 interface RoomHandlerInterface {
 	chatGroupId: number;
@@ -75,6 +39,7 @@ export const useRoomHandler = ({
 	const [globalRoom, setRoom] = useState<Room>();
 	const [elements, setElements] = useState<{ [id: string]: JSX.Element }>({});
 	const [localTrack, setLocalTrack] = useState<LocalVideoTrack>();
+	const [getCallMembers, { data, loading }] = useGetCallMembrsLazyQuery();
 
 	const handler = {
 		connect: async (options: ConnectOptions): Promise<boolean> => {
@@ -96,6 +61,7 @@ export const useRoomHandler = ({
 							<CallUser
 								key="local-user"
 								id="local-user"
+								identity={`${user.username}#${user.key}`}
 								tracks={[]}
 							/>
 						)
@@ -124,10 +90,17 @@ export const useRoomHandler = ({
 			return true;
 		},
 
-		participantConnected: (participant: RemoteParticipant): void => {
+		participantConnected: async (participant: RemoteParticipant) => {
 			logger.info(participant.identity);
 
 			logger.warning(JSON.stringify(elements));
+
+			await getCallMembers({
+				variables: { members: [participant.identity] }
+			});
+
+			await data;
+
 			setElements(prev => {
 				return {
 					...prev,
@@ -135,6 +108,8 @@ export const useRoomHandler = ({
 						<CallUser
 							key={participant.sid}
 							id={participant.sid}
+							identity={participant.identity}
+							avatar={data?.getCallMembers[0].avatar}
 							tracks={[]}
 						/>
 					)
@@ -259,6 +234,7 @@ export const useRoomHandler = ({
 								<CallUser
 									key="local-user"
 									id="local-user"
+									identity={`${user.username}#${user.key}`}
 									tracks={[]}
 								/>
 							)
