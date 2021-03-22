@@ -7,10 +7,31 @@ import VideocamSharpIcon from '@material-ui/icons/VideocamSharp';
 import VideocamOffSharpIcon from '@material-ui/icons/VideocamOffSharp';
 import { CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import { useState } from 'react';
 
-const CallBar = () => {
+const CallBar = ({
+	disconnect,
+	muteVideo,
+	unMuteVideo
+}: {
+	disconnect?: () => void;
+	muteVideo: () => void;
+	unMuteVideo: () => void;
+}) => {
 	const currentChat = UISelectors.useSelectCurrentChat()!;
 	const history = useHistory();
+
+	const [videoMuted, setVideoMuted] = useState(false);
+
+	const handleVideoMute = () => {
+		if (videoMuted) {
+			setVideoMuted(false);
+			unMuteVideo();
+		} else {
+			setVideoMuted(true);
+			muteVideo();
+		}
+	};
 
 	if (!currentChat) {
 		return (
@@ -36,13 +57,19 @@ const CallBar = () => {
 				<p>2 members in the call</p>
 			</div>
 			<div className="middle">
-				<button onClick={() => history.goBack()}>
+				<button
+					onClick={() => {
+						if (disconnect) {
+							disconnect();
+						}
+					}}
+				>
 					Leave <ExitToAppSharpIcon />
 				</button>
 			</div>
 			<div className="right">
 				<MicSharpIcon />
-				<VideocamSharpIcon />
+				<VideocamSharpIcon onClick={handleVideoMute} />
 			</div>
 		</div>
 	);

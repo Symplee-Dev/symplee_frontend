@@ -22,7 +22,11 @@ const Call = ({
 
 	return (
 		<div className="call-room">
-			<CallBar />
+			<CallBar
+				unMuteVideo={() => handler.unmuteVideo()}
+				disconnect={() => room?.disconnect()}
+				muteVideo={() => handler.muteVideo()}
+			/>
 			<div className="call-members">{elements}</div>
 		</div>
 	);

@@ -1,5 +1,6 @@
 import {
 	ConnectOptions,
+	LocalVideoTrack,
 	Participant,
 	RemoteParticipant,
 	Room,
@@ -72,20 +73,21 @@ export const useRoomHandler = ({
 	);
 	const [globalRoom, setRoom] = useState<Room>();
 	const [elements, setElements] = useState<{ [id: string]: JSX.Element }>({});
+	const [localTrack, setLocalTrack] = useState<LocalVideoTrack>();
 
 	const handler = {
 		connect: async (options: ConnectOptions): Promise<boolean> => {
 			const room: Room = await connectToRoom(accessToken, {
 				...options,
-				name: `${chatGroupId}-${chatId}`,
-				video: { width: 300 }
+				name: `${chatGroupId}-${chatId}`
 			}).catch(err => logger.error(err));
 			logger.success('Connected to room!');
 
 			setRoom(room);
 
-			await createLocalVideoTrack().then(localVideoTrack => {
+			createLocalVideoTrack().then(localVideoTrack => {
 				logger.warning(JSON.stringify(elements));
+				setLocalTrack(localVideoTrack);
 				setElements(prev => {
 					return {
 						...prev,
@@ -101,8 +103,8 @@ export const useRoomHandler = ({
 				logger.warning(JSON.stringify(elements));
 				const targetP = document.getElementById('local-user');
 
-				//@ts-ignore
 				// room.localParticipant.publishTrack(localVideoTrack);
+
 				targetP?.appendChild(localVideoTrack.attach());
 			});
 
@@ -143,20 +145,6 @@ export const useRoomHandler = ({
 
 				//@ts-ignore
 				targetP?.appendChild(track.attach());
-
-				// setElements({
-				// 	...elements,
-				// 	[participant.sid]: (
-				// 		<CallUser
-				// 			id={participant.sid}
-				// 			tracks={[
-				// 				...(targetP ? targetP.props.tracks : []),
-				// 				track
-				// 			]}
-				// 			key={participant.sid}
-				// 		></CallUser>
-				// 	)
-				// });
 			});
 
 			participant.on('trackUnsubscribed', handler.trackUnsubscribed);
@@ -172,6 +160,13 @@ export const useRoomHandler = ({
 						targetP?.appendChild(publication.track.attach());
 					}
 				}
+				publication.on('subscribed', handler.handleTrackDisabled);
+			});
+		},
+		handleTrackDisabled: (track: RemoteTrack) => {
+			track.on('disabled', () => {
+				//@ts-ignore
+				track.detach().forEach(element => element.remove());
 			});
 		},
 		participantDisconnected: (participant): void => {
@@ -179,14 +174,83 @@ export const useRoomHandler = ({
 				'Participant "%s" disconnected',
 				participant.identity
 			);
-			// const target = document?.getElementById(participant.sid);
-			// if (target) {
-			// 	target.remove();
-			// }
-			delete elements[participant.sid];
+
+			setElements(prev => {
+				let result = {};
+
+				for (const [key, val] of Object.entries(prev)) {
+					if (key !== participant.sid) {
+						result[key] = val;
+					}
+				}
+
+				return result;
+			});
 		},
 		trackUnsubscribed: (track): void => {
 			track.detach().forEach(element => element.remove());
+		},
+		muteAudio: (): void => {
+			globalRoom?.localParticipant.audioTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+				publication.track.stop();
+				publication.unpublish();
+			});
+		},
+		unmuteAudio: (): void => {
+			globalRoom?.localParticipant.audioTracks.forEach(publication => {
+				publication.track.enable();
+				publication.track.restart();
+			});
+		},
+		muteVideo: (): void => {
+			logger.info('Disabling video');
+			localTrack?.disable();
+			localTrack?.stop();
+			localTrack?.detach().forEach(element => element.remove());
+			globalRoom?.localParticipant.videoTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+				//@ts-ignore
+
+				publication.track.detach().forEach(element => element.remove());
+				publication.track.stop();
+				publication.unpublish();
+			});
+		},
+		unmuteVideo: (): void => {
+			createLocalVideoTrack()
+				.then(localVideoTrack => {
+					setLocalTrack(localVideoTrack);
+
+					setElements(prev => {
+						return {
+							...prev,
+							'local-user': (
+								<CallUser
+									key="local-user"
+									id="local-user"
+									tracks={[]}
+								/>
+							)
+						};
+					});
+
+					const targetP = document.getElementById('local-user');
+
+					targetP?.appendChild(localVideoTrack.attach());
+
+					return globalRoom?.localParticipant.publishTrack(
+						localVideoTrack
+					);
+				})
+				.then(publication => {
+					console.log(
+						'Successfully unmuted your video:',
+						publication
+					);
+				});
 		}
 	};
 
