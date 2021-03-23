@@ -171,7 +171,6 @@ export const useRoomHandler = ({
 			globalRoom?.localParticipant.videoTracks.forEach(publication => {
 				logger.info(publication);
 				publication.track.disable();
-				//@ts-ignore
 
 				publication.track.detach().forEach(element => element.remove());
 				publication.track.stop();

@@ -14,17 +14,22 @@ const CallBar = ({
 	disconnect,
 	muteVideo,
 	unMuteVideo,
-	participants
+	participants,
+	muteAudio,
+	unMuteAudio
 }: {
 	disconnect?: () => void;
 	muteVideo: () => void;
 	unMuteVideo: () => void;
+	muteAudio: () => void;
+	unMuteAudio: () => void;
 	participants: number;
 }) => {
 	const currentChat = UISelectors.useSelectCurrentChat()!;
 	const history = useHistory();
 
 	const [videoMuted, setVideoMuted] = useState(false);
+	const [audioMuted, setAudioMuted] = useState(false);
 
 	const handleVideoMute = () => {
 		if (videoMuted) {
@@ -33,6 +38,16 @@ const CallBar = ({
 		} else {
 			setVideoMuted(true);
 			muteVideo();
+		}
+	};
+
+	const handleAudioMute = () => {
+		if (audioMuted) {
+			setAudioMuted(false);
+			unMuteAudio();
+		} else {
+			setAudioMuted(true);
+			muteAudio();
 		}
 	};
 
@@ -65,7 +80,7 @@ const CallBar = ({
 						if (disconnect) {
 							logger.warning('Disconnecting');
 							disconnect();
-							window.location.replace('/');
+							history.goBack();
 						}
 					}}
 				>
@@ -73,8 +88,16 @@ const CallBar = ({
 				</button>
 			</div>
 			<div className="right">
-				<MicSharpIcon />
-				<VideocamSharpIcon onClick={handleVideoMute} />
+				{audioMuted ? (
+					<MicOffSharpIcon onClick={handleAudioMute} />
+				) : (
+					<MicSharpIcon onClick={handleAudioMute} />
+				)}
+				{videoMuted ? (
+					<VideocamOffSharpIcon onClick={handleVideoMute} />
+				) : (
+					<VideocamSharpIcon onClick={handleVideoMute} />
+				)}
 			</div>
 		</div>
 	);

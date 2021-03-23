@@ -33,6 +33,8 @@ const Call = ({
 	return (
 		<div className="call-room">
 			<CallBar
+				muteAudio={handler.muteAudio}
+				unMuteAudio={handler.unmuteAudio}
 				participants={room ? room?.participants.size : 0}
 				unMuteVideo={() => handler.unmuteVideo()}
 				disconnect={() => {
