@@ -18,22 +18,42 @@ const NavBar: React.FC<NavBarProps> = () => {
 	};
 	return (
 		<motion.div exit={{ opacity: 0 }} className="nav">
-			<div className="logo">
-				<h1>Symplee</h1>
+			<div className="left">
 				<FontAwesomeIcon
 					icon={faInbox}
 					onClick={e => handleRoute(e, '/')}
 				/>
 			</div>
-			<div className="nav-links">
+			<div className="middle">
+				<div className="link">
+					<Link to="/">Home</Link>
+				</div>
+				<div className="link">
+					<Link to="/">Pricing</Link>
+				</div>
+
+				<div className="link">
+					<Link to="/">Downloads</Link>
+				</div>
+
+				<div className="link">
+					<Link to="/">Support</Link>
+				</div>
+			</div>
+			<div className="right">
+				<button>Sign In</button>
+				<button className="sign-up">SIGN UP</button>
+			</div>
+
+			{/* <div className="nav-links">
 				<Link to="/">Home</Link>
 				<Link to="/login">Login</Link>
-				{/* <Link to="/faq">FAQ</Link>
-				<Link to="/downloads">Downloads</Link> */}
+				<Link to="/faq">FAQ</Link>
+				<Link to="/downloads">Downloads</Link>
 				<button onClick={e => handleRoute(e, '/signup')}>
 					Get Started
 				</button>
-			</div>
+			</div> */}
 		</motion.div>
 	);
 };
