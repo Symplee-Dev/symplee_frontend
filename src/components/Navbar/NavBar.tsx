@@ -6,11 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './style.scss';
+import { useReactPath } from '../../hooks/useReactPath';
 
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = () => {
 	const history = useHistory();
+
+	const path = useReactPath();
 
 	const handleRoute = (e: React.MouseEvent, route: string) => {
 		e.preventDefault();
@@ -26,7 +29,9 @@ const NavBar: React.FC<NavBarProps> = () => {
 			</div>
 			<div className="middle">
 				<div className="link">
-					<Link to="/">Home</Link>
+					<Link to="/" className={path === '/' ? 'active' : ''}>
+						Home
+					</Link>
 				</div>
 				<div className="link">
 					<Link to="/">Pricing</Link>
@@ -42,7 +47,7 @@ const NavBar: React.FC<NavBarProps> = () => {
 			</div>
 			<div className="right">
 				<button>Sign In</button>
-				<button className="sign-up">SIGN UP</button>
+				<button className="sign-up">Sign Up</button>
 			</div>
 
 			{/* <div className="nav-links">

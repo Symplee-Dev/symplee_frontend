@@ -1,5 +1,6 @@
 .nav {
-	background: white;
+	margin: 0 auto;
+	max-width: 1440px;
 	height: 8vh;
 	display: flex;
 	justify-content: space-evenly;
@@ -28,6 +29,10 @@
 				transition: ease-in-out 0.2s;
 			}
 
+			.active {
+				color: #009eff;
+			}
+
 			a:hover {
 				color: #009eff;
 			}
@@ -41,11 +46,12 @@
 			margin-left: 1rem;
 			width: 125px;
 			height: 35px;
-			border-radius: 0.5rem;
+			border-radius: 0.2rem;
 			border: none;
 			background: none;
 			font-weight: 600;
 			font-size: 0.8rem;
+			color: white;
 		}
 
 		.sign-up {
