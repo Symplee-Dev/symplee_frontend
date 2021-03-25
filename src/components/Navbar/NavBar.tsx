@@ -46,8 +46,13 @@ const NavBar: React.FC<NavBarProps> = () => {
 				</div>
 			</div>
 			<div className="right">
-				<button>Sign In</button>
-				<button className="sign-up">Sign Up</button>
+				<button onClick={() => history.push('/login')}>Sign In</button>
+				<button
+					className="sign-up"
+					onClick={() => history.push('/signup')}
+				>
+					Sign Up
+				</button>
 			</div>
 
 			{/* <div className="nav-links">

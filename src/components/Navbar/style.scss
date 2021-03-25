@@ -52,6 +52,17 @@
 			font-weight: 600;
 			font-size: 0.8rem;
 			color: white;
+			transition: 0.3s;
+		}
+
+		button:hover {
+			opacity: 0.5;
+			cursor: pointer;
+		}
+
+		button:focus {
+			border: none;
+			outline: none;
 		}
 
 		.sign-up {

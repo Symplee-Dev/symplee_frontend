@@ -38,6 +38,7 @@
 
 			.action-buttons {
 				margin-top: 2rem;
+				width: 50%;
 				display: flex;
 				justify-content: space-between;
 
@@ -46,8 +47,7 @@
 					color: white;
 					border: none;
 					border-radius: 0.2rem;
-					margin-right: 1.5rem;
-					width: 200px;
+					width: 45%;
 					padding: 1rem;
 					height: 55px;
 					font-family: 'Work Sans';
@@ -55,12 +55,23 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
+					transition: 0.2s;
 
 					svg {
 						color: white;
 						width: 50%;
 						height: 150%;
 					}
+				}
+
+				button:hover {
+					opacity: 0.5;
+					cursor: pointer;
+				}
+
+				button:focus {
+					border: none;
+					outline: none;
 				}
 			}
 		}
