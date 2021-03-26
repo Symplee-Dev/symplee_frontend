@@ -2,9 +2,9 @@ import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import App from './App';
+import App from './V1.0.5/App';
 
-import './scss/indexStyle.scss';
+// import './scss/indexStyle.scss';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/index';
 

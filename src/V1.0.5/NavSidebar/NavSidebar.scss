@@ -1,0 +1,51 @@
+.nav-sidebar {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	background: #1c1a21;
+	color: white;
+	text-align: center;
+	padding: 1rem;
+
+	hr {
+		width: 80%;
+		margin: 0 auto;
+		background: #999a9e;
+		color: #999a9e;
+		border: 0.5px solid #999a9e;
+		outline: #999a9e;
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.top,
+	.bottom {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.icon {
+			color: #999a9e;
+			margin-top: 1rem;
+			margin-bottom: 1.5rem;
+			font-size: 1.5rem;
+			transition: 0.2s;
+		}
+
+		.active {
+			color: white;
+		}
+
+		.icon:hover {
+			cursor: pointer;
+			opacity: 0.5;
+		}
+	}
+
+	.top {
+		.logo {
+			margin-bottom: 1rem;
+		}
+	}
+}
