@@ -1,12 +1,13 @@
 import React, { FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import NavBar from '../../../components/NavBar';
+import NavBar from '../../../components/Navbar/NavBar';
 import FadeIn from 'react-fade-in';
 import { LinearProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useSignupMutation } from '../../../graphql';
 import { useRegister, onRegisterSubmit } from '../../../hooks/useRegisterForm';
 import { createTextField } from '../createTextField';
+import './style.scss';
 
 const Register = () => {
 	const [signup, { data, loading, error }] = useSignupMutation();

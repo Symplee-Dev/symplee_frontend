@@ -4,12 +4,15 @@ import { useHistory } from 'react-router';
 interface ChatGroupProps {
 	path: string;
 	group: { image?: string; name: string; id: number };
+	onClick: () => void;
 }
 
-const ChatGroupButton = ({ path, group }: ChatGroupProps) => {
+const ChatGroupButton = ({ path, group, onClick }: ChatGroupProps) => {
 	const history = useHistory();
 
 	const handleRoute = () => {
+		onClick();
+
 		history.push('/group/' + group.id);
 	};
 

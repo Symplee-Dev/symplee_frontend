@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import { RootState } from './types/state-types';
 import { RootSelectors } from './types/selector-types';
 
@@ -43,4 +43,11 @@ export const UISelectors: RootSelectors['ui'] = {
 	useSelectDashboardRoute() {
 		return useSelector((state: RootState) => state.ui.dashboardRoute);
 	}
+};
+
+export const useSelectChatGroups = () => {
+	return useSelector(
+		(state: RootState) => state.user.user?.chatGroups,
+		shallowEqual
+	);
 };

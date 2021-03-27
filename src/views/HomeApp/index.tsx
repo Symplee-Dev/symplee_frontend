@@ -31,8 +31,20 @@ import PublicProfileSidebar from './views/PublicProfile/PublicProfileSidebar';
 import PublicProfile from './views/PublicProfile/PublicProfile';
 import Discover from './views/Discover/Discover';
 import Messages from './views/Dashboard/Messages';
+import { Maybe } from '../../graphql';
+import CallRoom from './views/CallRoom/test';
+import { Call } from '@material-ui/icons';
+// import CreateChatModal from './views/ChatGroupView/CreateChatModal';
 
-const HomeApp = () => {
+const HomeApp = ({
+	chatGroups
+}: {
+	chatGroups: {
+		name: string;
+		id: number;
+		avatar?: Maybe<string>;
+	}[];
+}) => {
 	// remove padding for home app
 	document.body.classList.add('body-app');
 
@@ -58,6 +70,7 @@ const HomeApp = () => {
 	const [creatingInvite, setCreatingInvite] = useState(false);
 	const setDashboardRoute = UIActions.useSetDashboardRoute();
 	const dashboardRoute = UISelectors.useSelectDashboardRoute();
+	const currentChat = UISelectors.useSelectCurrentChat();
 	// const [
 	// 	getChangeLog,
 	// 	{ data: changeLog, loading: changeLogLoading }
@@ -83,6 +96,7 @@ const HomeApp = () => {
 						setOpen={setCreatingGroup}
 					/>
 				)}
+
 				{creatingInvite && (
 					<SendInviteModal
 						open={creatingInvite}
@@ -122,6 +136,9 @@ const HomeApp = () => {
 					<Route exact path="/you">
 						<Account user={user} />
 					</Route>
+					<Route exact path="/testing">
+						<CallRoom />
+					</Route>
 					{/* 
 					<Route exact path="/group/create">
 						<CreateGroup />
@@ -157,6 +174,7 @@ const HomeApp = () => {
 						<ChatGroupIndex authorId={user.id} />
 
 						<Chat />
+
 						<ChatMembersBar />
 					</Route>
 					<Route exact path="/">

@@ -1,8 +1,20 @@
-const { app, BrowserWindow } = require('electron');
+const {
+	app,
+	BrowserWindow,
+	Menu,
+	Tray,
+	ipcMain,
+	Notification
+} = require('electron');
 const path = require('path');
 const url = require('url');
+const notifier = require('node-notifier');
+
+const { getDoNotDisturb } = require('electron-notification-state');
 
 const log = require('electron-log');
+
+const iconPath = path.join(__dirname, 'favicon.png');
 
 const { autoUpdater } = require('electron-updater');
 
@@ -11,14 +23,6 @@ require('dotenv').config();
 autoUpdater.logger = log;
 
 log.warn('GH_TOKEN', process.env.GH_TOKEN);
-
-autoUpdater.setFeedURL({
-	provider: 'github',
-	repo: 'symplee_frontend',
-	owner: 'Symplee-Dev',
-	private: true,
-	token: process.env.GH_TOKEN
-});
 
 log.info('starting app...');
 
@@ -56,13 +60,50 @@ autoUpdater.on('update-downloaded', info => {
 
 let mainWindow;
 
+let appIcon = null;
+let focused = false;
+
+function destroy() {
+	appIcon.destroy();
+}
+
+app.whenReady().then(() => {
+	appIcon = new Tray(iconPath);
+
+	const contextMenu = Menu.buildFromTemplate([
+		{
+			label: 'Show App',
+			click: function () {
+				mainWindow.show();
+			}
+		},
+		{
+			label: 'Quit',
+			click: function () {
+				app.isQuiting = true;
+				destroy();
+				app.quit();
+			}
+		}
+	]);
+	appIcon.setContextMenu(contextMenu);
+	appIcon.setToolTip('Symplee');
+});
+
 const createWindow = () => {
 	mainWindow = new BrowserWindow({
 		width: 1440,
 		height: 1080,
-		show: false,
-		// frame: app.isPackaged ? false : true
-		frame: true
+		show: true,
+		icon: iconPath,
+		titleBarStyle: 'hidden',
+		darkTheme: true,
+		title: 'Symplee',
+
+		webPreferences: {
+			contextIsolation: true,
+			preload: path.resolve(__dirname, 'preload.js')
+		}
 	});
 	mainWindow.loadURL(
 		!app.isPackaged
@@ -74,12 +115,25 @@ const createWindow = () => {
 			  })
 	);
 
+	mainWindow.setMenuBarVisibility(false);
+
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
+		focused = true;
+	});
+
+	mainWindow.on('minimize', function (event) {
+		event.preventDefault();
+		mainWindow.minimize();
+		focused = false;
 	});
 
 	mainWindow.on('closed', () => {
-		mainWindow = null;
+		destroy();
+	});
+
+	mainWindow.on('focus', function (e) {
+		focused = true;
 	});
 };
 
@@ -98,6 +152,33 @@ app.on('activate', () => {
 	if (mainWindow === null) {
 		createWindow();
 	}
+});
+
+ipcMain.on('new-notification', function (e, data) {
+	if (!getDoNotDisturb()) {
+		if (mainWindow.isFocused() === false) {
+			const notif = new Notification({
+				title: data.title,
+				body: data.body
+			});
+
+			notif.show();
+
+			notif.on('click', () => {
+				mainWindow.show();
+				mainWindow.focus();
+			});
+		}
+	}
+});
+
+notifier.on('click', function () {
+	app.show();
+	mainWindow.show();
+});
+
+ipcMain.on('test', (event, arg) => {
+	log.info('testtttttttttttttt');
 });
 
 // const server = 'https://hazel.symplee.app';

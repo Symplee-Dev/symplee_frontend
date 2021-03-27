@@ -57,6 +57,7 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 	const [anchorEl, setAnchorEl] = useState<
 		(EventTarget & HTMLHeadingElement) | null
 	>(null);
+	const [showTime, setShowTime] = useState(false);
 
 	const id = message ? message.id : -1;
 	const [editMessage] = useEditMessageMutation();
@@ -122,12 +123,14 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 					cursor: showBubble ? 'pointer' : 'initial'
 				}}
 				className="body"
-				onMouseEnter={() =>
-					userId === message.author.id && setShowBubble(true)
-				}
-				onMouseLeave={() =>
-					userId === message.author.id && setShowBubble(false)
-				}
+				onMouseEnter={() => {
+					setShowTime(true);
+					userId === message.author.id && setShowBubble(true);
+				}}
+				onMouseLeave={() => {
+					setShowTime(false);
+					userId === message.author.id && setShowBubble(false);
+				}}
 			>
 				{editingMessage ? (
 					<form onSubmit={handleSubmitEdit}>
@@ -145,7 +148,23 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 						/>
 					</form>
 				) : (
-					<p>{message.body}</p>
+					<div
+						style={{
+							display: 'flex',
+							width: '100%',
+							alignItems: 'center'
+						}}
+					>
+						<p>{message.body}</p>
+						{showTime && (
+							<p style={{ color: 'gray', fontSize: '0.8rem' }}>
+								<Moment fromNow ago>
+									{message.createdAt}
+								</Moment>{' '}
+								ago
+							</p>
+						)}
+					</div>
 				)}
 				<div
 					className="bubbles"

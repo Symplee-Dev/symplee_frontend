@@ -1,5 +1,4 @@
 import { Maybe } from '../../../../graphql';
-import { Avatar } from '@material-ui/core';
 import { useReactPath } from '../../../../hooks/useReactPath';
 import { useHistory } from 'react-router';
 import { UISelectors } from '../../../../redux/selectors';
@@ -10,11 +9,12 @@ interface ChatGroupSidebarChatProps {
 		name: string;
 		icon: string;
 		isPublic: boolean;
-		mode: string;
+		mode?: string;
 	}>;
+	onClick: () => void;
 }
 
-const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
+const ChatGroupSidebarChat = ({ chat, onClick }: ChatGroupSidebarChatProps) => {
 	const path = useReactPath();
 
 	const history = useHistory();
@@ -23,12 +23,12 @@ const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
 
 	if (!chat) return null;
 
-	console.log(path);
 	return (
 		<div
-			onClick={() =>
-				history.push('/group/' + group?.id + '/chat/' + chat.id)
-			}
+			onClick={() => {
+				onClick();
+				history.push('/group/' + group?.id + '/chat/' + chat.id);
+			}}
 			className={`sidebar-chat ${
 				path.includes('/chat/' + chat.id) && 'sidebar-chat-active'
 			}`}
@@ -37,7 +37,11 @@ const ChatGroupSidebarChat = ({ chat }: ChatGroupSidebarChatProps) => {
 				{chat.icon}
 				<p>#{chat.name}</p>
 			</div>
-			<p className="label">{chat.mode}</p>
+			{chat.mode === 'text chat' ? (
+				<p className="label">Text Channel</p>
+			) : (
+				<p className="label">Voice And Video</p>
+			)}
 		</div>
 	);
 };

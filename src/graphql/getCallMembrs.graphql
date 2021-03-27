@@ -1,0 +1,5 @@
+query GetCallMembrs($members: [String!]!) {
+	getCallMembers(members: $members) {
+		avatar
+	}
+}

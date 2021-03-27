@@ -1,7 +1,7 @@
 import './style.scss';
 import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
-import NavBar from '../../components/NavBar';
+import NavBar from '../../components/Navbar/NavBar';
 import { useVerifyEmailMutation } from '../../graphql';
 import { useEffect, useState } from 'react';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';

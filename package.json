@@ -1,6 +1,6 @@
 {
-	"name": "frontend",
-	"version": "0.1.2",
+	"name": "symplee",
+	"version": "0.1.5",
 	"private": true,
 	"main": "electron/main.js",
 	"homepage": "./",
@@ -10,7 +10,19 @@
 		"files": [
 			"build/**/*",
 			"node_modules/**/*"
-		]
+		],
+		"win": {
+			"icon": "public/favicon.png",
+			"publish": [
+				{
+					"provider": "github",
+					"repo": "symplee_frontend",
+					"owner": "Symplee-Dev",
+					"private": true,
+					"token": "TOKEN"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -42,7 +54,9 @@
 		"axios": "^0.21.1",
 		"comlink": "^4.3.0",
 		"dotenv": "^8.2.0",
+		"electron-json-storage": "^4.4.0",
 		"electron-log": "^4.3.2",
+		"electron-notification-state": "^1.0.4",
 		"electron-updater": "^4.3.8",
 		"emoji-picker-react": "^3.4.2",
 		"framer-motion": "^3.3.0",
@@ -51,6 +65,7 @@
 		"logrocket": "^1.0.14",
 		"logrocket-react": "^4.0.1",
 		"moment": "^2.29.1",
+		"node-notifier": "^9.0.1",
 		"random-hex": "^1.0.2",
 		"react": "^17.0.1",
 		"react-color-log": "^1.0.4",
@@ -68,6 +83,8 @@
 		"sass": "^1.32.7",
 		"styled-components": "^5.2.1",
 		"subscriptions-transport-ws": "^0.9.18",
+		"twilio": "^3.58.0",
+		"twilio-video": "^2.13.1",
 		"typescript": "^4.1.2",
 		"v4": "^0.0.1",
 		"web-vitals": "^1.0.1",
@@ -111,6 +128,7 @@
 		"@types/react-router": "^5.1.11",
 		"@types/react-router-dom": "^5.1.7",
 		"@types/styled-components": "^5.1.7",
+		"@types/twilio-video": "^2.7.3",
 		"electron": "^12.0.1",
 		"electron-builder": "^22.10.5",
 		"typesafe-actions": "^5.1.0"

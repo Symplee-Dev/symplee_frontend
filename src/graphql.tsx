@@ -38,6 +38,8 @@ export type Query = {
   getPendingFriends: Array<Maybe<UserFriend>>;
   getBlockedFriends: Array<Maybe<UserFriend>>;
   getDMS: Array<Maybe<ChatGroup>>;
+  getSettings: Array<Maybe<Settings>>;
+  getCallMembers: Array<User>;
 };
 
 
@@ -119,6 +121,16 @@ export type QueryGetDmsArgs = {
   userId: Scalars['Int'];
 };
 
+
+export type QueryGetSettingsArgs = {
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetCallMembersArgs = {
+  members: Array<Scalars['String']>;
+};
+
 export type GetProfileReturn = {
   user: User;
   relatedGroups: Array<Maybe<ChatGroup>>;
@@ -162,6 +174,7 @@ export type Mutation = {
   inviteByLink: Scalars['Boolean'];
   blockUser: Scalars['Boolean'];
   unblockUser: Scalars['Boolean'];
+  editOrAddSettings: Scalars['Boolean'];
 };
 
 
@@ -365,6 +378,17 @@ export type MutationUnblockUserArgs = {
   otherUserId: Scalars['Int'];
 };
 
+
+export type MutationEditOrAddSettingsArgs = {
+  userId: Scalars['Int'];
+  setting: Array<SettingInput>;
+};
+
+export type SettingInput = {
+  type: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type ChatGroupType =
   | 'CHAT_GROUP'
   | 'DM';
@@ -502,7 +526,7 @@ export type CreateChatInput = {
   userId: Scalars['Int'];
   icon: Scalars['String'];
   chatGroupId: Scalars['Int'];
-  type?: Maybe<Scalars['String']>;
+  mode: Scalars['String'];
 };
 
 export type CreateChatGroupInput = {
@@ -620,6 +644,36 @@ export type User = {
   verified: Scalars['Boolean'];
   avatar?: Maybe<Scalars['String']>;
   is_online: Scalars['Boolean'];
+};
+
+export type DefaultBoolean =
+  | 'T'
+  | 'F';
+
+export type PreferredTheme =
+  | 'Light'
+  | 'Dark';
+
+export type FontSize =
+  | 'Small'
+  | 'Medium'
+  | 'Large';
+
+export type Language =
+  | 'English';
+
+export type Settings = {
+  PREFERRED_THEME?: Maybe<PreferredTheme>;
+  FONT_SIZE?: Maybe<FontSize>;
+  LANGUAGE?: Maybe<Language>;
+  DYSLEXIC_FONT?: Maybe<DefaultBoolean>;
+  SEARCHABLE?: Maybe<DefaultBoolean>;
+  RECEIVE_NON_FRIEND_MESSAGES?: Maybe<DefaultBoolean>;
+  HIDE_PROFILE_NON_FRIENDS?: Maybe<DefaultBoolean>;
+  MUTE_ALL?: Maybe<DefaultBoolean>;
+  ONLY_MENTIONS?: Maybe<DefaultBoolean>;
+  MESSAGE_NOTIFICATIONS?: Maybe<DefaultBoolean>;
+  FOCUS_ON_CALL?: Maybe<DefaultBoolean>;
 };
 
 export type ChatGroup = {
@@ -813,6 +867,13 @@ export type GetBlockedFriendsQueryVariables = Exact<{
 
 
 export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+
+export type GetCallMembrsQueryVariables = Exact<{
+  members: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type GetCallMembrsQuery = { getCallMembers: Array<{ avatar?: Maybe<string> }> };
 
 export type MessageSentSubscriptionVariables = Exact<{
   chatId: Scalars['Int'];
@@ -1564,6 +1625,39 @@ export function useGetBlockedFriendsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetBlockedFriendsQueryHookResult = ReturnType<typeof useGetBlockedFriendsQuery>;
 export type GetBlockedFriendsLazyQueryHookResult = ReturnType<typeof useGetBlockedFriendsLazyQuery>;
 export type GetBlockedFriendsQueryResult = Apollo.QueryResult<GetBlockedFriendsQuery, GetBlockedFriendsQueryVariables>;
+export const GetCallMembrsDocument = gql`
+    query GetCallMembrs($members: [String!]!) {
+  getCallMembers(members: $members) {
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useGetCallMembrsQuery__
+ *
+ * To run a query within a React component, call `useGetCallMembrsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCallMembrsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCallMembrsQuery({
+ *   variables: {
+ *      members: // value for 'members'
+ *   },
+ * });
+ */
+export function useGetCallMembrsQuery(baseOptions: Apollo.QueryHookOptions<GetCallMembrsQuery, GetCallMembrsQueryVariables>) {
+        return Apollo.useQuery<GetCallMembrsQuery, GetCallMembrsQueryVariables>(GetCallMembrsDocument, baseOptions);
+      }
+export function useGetCallMembrsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCallMembrsQuery, GetCallMembrsQueryVariables>) {
+          return Apollo.useLazyQuery<GetCallMembrsQuery, GetCallMembrsQueryVariables>(GetCallMembrsDocument, baseOptions);
+        }
+export type GetCallMembrsQueryHookResult = ReturnType<typeof useGetCallMembrsQuery>;
+export type GetCallMembrsLazyQueryHookResult = ReturnType<typeof useGetCallMembrsLazyQuery>;
+export type GetCallMembrsQueryResult = Apollo.QueryResult<GetCallMembrsQuery, GetCallMembrsQueryVariables>;
 export const MessageSentDocument = gql`
     subscription MessageSent($chatId: Int!) {
   messageSent(chatId: $chatId) {
