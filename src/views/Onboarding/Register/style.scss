@@ -68,6 +68,19 @@
 			margin-bottom: 1.2rem;
 		}
 
+		.tos_agreement {
+			margin: 1em 0;
+
+			input {
+				margin-right: 1em;
+			}
+
+			span,
+			a {
+				display: inline;
+			}
+		}
+
 		a {
 			display: block;
 			margin-top: 2rem;

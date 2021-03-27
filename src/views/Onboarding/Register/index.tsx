@@ -1,9 +1,9 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '../../../components/Navbar/NavBar';
 import FadeIn from 'react-fade-in';
 import { LinearProgress } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSignupMutation } from '../../../graphql';
 import { useRegister, onRegisterSubmit } from '../../../hooks/useRegisterForm';
 import { createTextField } from '../createTextField';
@@ -11,6 +11,7 @@ import './style.scss';
 
 const Register = () => {
 	const [signup, { data, loading, error }] = useSignupMutation();
+	const [agreement, setAgreement] = useState(false);
 
 	const { registerCredentials, setRegisterCredentials } = useRegister(
 		loading,
@@ -18,6 +19,8 @@ const Register = () => {
 		data
 	);
 
+	const params = useParams();
+	console.log(params);
 	const onChange = event => {
 		setRegisterCredentials({
 			...registerCredentials,
@@ -26,7 +29,7 @@ const Register = () => {
 	};
 
 	const onSubmit = (e: FormEvent) => {
-		onRegisterSubmit(e, registerCredentials, signup);
+		if (agreement) onRegisterSubmit(e, registerCredentials, signup);
 	};
 
 	return (
@@ -68,6 +71,21 @@ const Register = () => {
 							'Password',
 							'password'
 						)}
+
+						<div className="tos_agreement">
+							<input
+								type="checkbox"
+								checked={agreement}
+								onChange={() => setAgreement(!agreement)}
+							/>
+							<span>
+								I have read and agreed to the{' '}
+								<a href="/terms" target="blank">
+									terms and conditions
+								</a>
+								.
+							</span>
+						</div>
 
 						<Link to="/login">Already have an account?</Link>
 

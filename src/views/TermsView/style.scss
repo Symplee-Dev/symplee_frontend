@@ -1,0 +1,53 @@
+.tos {
+	.tos_conatainer {
+		box-sizing: border-box;
+		position: relative;
+		box-shadow: inset 0 0 5px #000;
+		width: 90vw;
+		height: 85vh;
+		overflow-y: hidden;
+		margin: 0em auto;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		article {
+			height: 90%;
+			overflow-y: scroll;
+			box-sizing: border-box;
+			z-index: 0;
+			padding: 2em;
+			scroll-padding: 1em;
+			* {
+				margin: 1em 0;
+			}
+			h1 {
+				font-size: 2em;
+			}
+			h2 {
+				margin-top: 1em;
+			}
+
+			.tos_contactUs,
+			.tos_updateTimeStamp,
+			h1,
+			h2 {
+				text-align: center;
+			}
+
+			ul {
+				list-style: none;
+				padding: 0 10%;
+				li {
+					margin: 0 0 0.75em;
+				}
+			}
+
+			.tos_userGeneratedContributions,
+			#tos_prohibitedActivites {
+				list-style: decimal;
+			}
+		}
+	}
+}

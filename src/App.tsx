@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Login from './views/Onboarding/Login';
 import Home from '../src/views/Home';
 import Register from './views/Onboarding/Register';
+import TermsView from './views/TermsView';
 
 import { AnimatePresence } from 'framer-motion';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
@@ -62,7 +63,7 @@ const App = () => {
 						<Route exact path="/signup">
 							<Register />
 						</Route>
-
+						<Route exact path="/terms" component={TermsView} />
 						<Route exact path="/auth/verify/:token">
 							<EmailVerificationScreen />
 						</Route>

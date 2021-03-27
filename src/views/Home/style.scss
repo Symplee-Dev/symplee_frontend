@@ -151,3 +151,21 @@
 		}
 	}
 }
+
+footer {
+	width: 100vw;
+	padding: 1em;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-evenly;
+
+	p {
+		margin: 0.25em 0;
+	}
+
+	#ToS-link {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}
