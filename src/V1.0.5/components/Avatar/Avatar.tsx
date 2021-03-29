@@ -4,11 +4,13 @@ import './Avatar.scss';
 export const Avatar = ({
 	src,
 	fallback,
-	hasStatus
+	hasStatus,
+	className = 'small'
 }: {
 	src: string;
 	fallback: string;
 	hasStatus: boolean;
+	className?: 'small' | 'medium' | 'large';
 }) => {
 	if (hasStatus) {
 		return (
@@ -20,7 +22,7 @@ export const Avatar = ({
 					horizontal: 'right'
 				}}
 			>
-				<UserAvatar src={src}>
+				<UserAvatar src={src} className={className}>
 					<p>{fallback}</p>
 				</UserAvatar>
 			</Badge>

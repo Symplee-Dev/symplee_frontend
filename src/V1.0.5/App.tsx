@@ -9,10 +9,12 @@ import { DesktopWindowBar } from './DesktopWindowBar';
 
 import './index.scss';
 import { isElectron } from '../utils/createNotification';
+import { UserActions } from '../redux/actions/index';
 
 const App = () => {
 	const location = useLocation();
 	const authenticated = useLocalToken();
+	UserActions.useGetUser();
 
 	if (!authenticated) {
 		<ErrorBoundary

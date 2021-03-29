@@ -82,7 +82,7 @@ export const UserActions: RootActions['user'] = {
 
 		const dispatch = useDispatch();
 
-		const token = useSelector((state: RootState) => state.user.token);
+		const token = localStorage.getItem('bolttoken')!;
 
 		const userReduxId: { userId: number } = decode(token);
 
