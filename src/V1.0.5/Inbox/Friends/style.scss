@@ -1,0 +1,105 @@
+.friends {
+	background: #212529;
+	width: 100%;
+	height: 100%;
+	padding: 2rem;
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+
+	display: flex;
+	flex-direction: column;
+
+	justify-content: space-between;
+
+	.recents {
+		h4 {
+			font-weight: 300;
+			font-size: 2rem;
+		}
+
+		.no-recents {
+			margin-top: 2rem;
+			font-size: 1.2rem;
+		}
+	}
+
+	.friends-list {
+		height: 65%;
+		overflow: hidden;
+		.header {
+			h4 {
+				font-weight: 300;
+				font-size: 2rem;
+				margin-right: 1rem;
+			}
+			display: flex;
+			align-items: center;
+		}
+
+		.header-btns {
+			margin-top: 1rem;
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 2rem;
+
+			.left {
+				display: flex;
+				.btn {
+					margin-right: 1rem;
+				}
+			}
+
+			.right {
+				.btn {
+					width: 150px;
+				}
+			}
+		}
+
+		.users {
+			overflow-y: scroll;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+
+			.user {
+				padding: 1rem;
+
+				.left {
+					display: flex;
+					align-items: center;
+					.right {
+						margin-left: 1rem;
+						h5 {
+							font-weight: 400;
+							margin-bottom: 0.5rem;
+						}
+
+						p {
+							font-weight: 300;
+							font-size: 0.8rem;
+							opacity: 0.5;
+						}
+					}
+				}
+
+				.hr {
+					padding-top: 5px;
+
+					hr {
+						opacity: 0.1;
+					}
+				}
+			}
+		}
+
+		::-webkit-scrollbar {
+			width: 0; /* Remove scrollbar space */
+			background: transparent; /* Optional: just make scrollbar invisible */
+		}
+		/* Optional: show position indicator in red */
+		::-webkit-scrollbar-thumb {
+			background: #ff0000;
+		}
+	}
+}

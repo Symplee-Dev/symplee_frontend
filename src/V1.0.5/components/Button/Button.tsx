@@ -6,6 +6,7 @@ interface ButtonProps {
 	color?: 'main' | 'success' | 'danger';
 	size?: 'small' | 'medium' | 'large';
 	style?: React.CSSProperties;
+	className?: string;
 }
 
 export const Button = ({
@@ -13,7 +14,8 @@ export const Button = ({
 	color = 'main',
 	size = 'medium',
 	content,
-	style = {}
+	style = {},
+	className = ''
 }: ButtonProps) => {
 	const buttonColors = {
 		main: '#116294',
