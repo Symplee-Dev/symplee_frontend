@@ -1,6 +1,7 @@
 import { Maybe } from '../../../graphql';
 import { Avatar } from '../../components/Avatar/Avatar';
 import Moment from 'react-moment';
+import { Button } from '../../components';
 
 interface UserProps {
 	friend: Maybe<{
@@ -20,27 +21,43 @@ const User = ({ type, friend }: UserProps) => {
 	if (!friend || !friend?.friend) return null;
 
 	return (
-		<div className="user">
-			<div className="left">
-				<Avatar
-					fallback={friend.friend.username[0]}
-					hasStatus={true}
-					src={friend.friend.avatar as string}
-				/>
+		<>
+			<div className="user">
+				<div className="left">
+					<Avatar
+						fallback={friend.friend.username[0]}
+						hasStatus={true}
+						src={friend.friend.avatar as string}
+					/>
+					<div className="right">
+						<h5>
+							{friend.friend.username}#{friend.friend.key}
+						</h5>
+						<p>
+							Became friends{' '}
+							<Moment fromNow>{friend.friendsSince}</Moment>
+						</p>
+					</div>
+				</div>
 				<div className="right">
-					<h5>
-						{friend.friend.username}#{friend.friend.key}
-					</h5>
-					<p>
-						Became friends{' '}
-						<Moment fromNow>{friend.friendsSince}</Moment>
-					</p>
+					<Button
+						clickHandler={() => alert('not implemented')}
+						content="Message"
+						size="small"
+						color="success"
+					/>
+					<Button
+						clickHandler={() => alert('not implemented')}
+						content="View"
+						size="small"
+						color="main"
+					/>
 				</div>
 			</div>
 			<div className="hr">
 				<hr />
 			</div>
-		</div>
+		</>
 	);
 };
 

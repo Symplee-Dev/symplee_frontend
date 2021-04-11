@@ -1,36 +1,42 @@
 import { Avatar } from '../../components/Avatar/Avatar';
 import Button from '../../components/Button/Button';
+import { Maybe } from 'graphql/jsutils/Maybe';
 import Moment from 'react-moment';
 
 interface RecentProps {
-	avatar: string;
-	name: string;
-	username: string;
-	key: string;
-	createdAt: string;
+	user: {
+		friendsSince: string;
+		friend?: Maybe<{
+			id: number;
+			username: string;
+			key: string;
+			is_online: boolean;
+			avatar?: Maybe<string>;
+		}>;
+	};
 }
 
-const Recent = ({ ...user }: RecentProps) => {
+const Recent = ({ user }: RecentProps) => {
 	return (
 		<div className="recent">
 			<Avatar
-				src={user.avatar ?? ''}
-				fallback={user.name[0]}
+				src={user.friend?.avatar ?? ''}
+				fallback={user.friend?.username[0] ?? ''}
 				hasStatus={true}
 				className="large"
 			/>
 			<h4>
-				{user.username}#{user.key}
+				{user.friend?.username}#{user.friend?.key}
 			</h4>
-			<p className="subtitle">{user.name}</p>
-
 			<p className="subtitle">
-				Joined <Moment fromNow>{user.createdAt}</Moment>
+				Became friends <Moment fromNow>{user.friendsSince}</Moment>
 			</p>
+
 			<Button
 				clickHandler={() => alert('Not implemented')}
-				content="Update"
+				content="Message"
 				size="large"
+				color="success"
 			/>
 		</div>
 	);

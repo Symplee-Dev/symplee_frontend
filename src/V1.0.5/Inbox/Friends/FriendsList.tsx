@@ -42,6 +42,7 @@ const FriendsList = () => {
 				<h4>Friends</h4>
 				<FontAwesomeIcon icon={faUserFriends} />
 			</div>
+
 			<div className="header-btns">
 				<div className="left">
 					<Button
@@ -76,11 +77,21 @@ const FriendsList = () => {
 					/>
 				</div>
 			</div>
+
 			<div className="users">
 				{friends.map(f => (
 					<User friend={f} type="FRIEND" />
 				))}
 			</div>
+			<p
+				style={{
+					marginTop: '1rem',
+					opacity: 0.5,
+					textAlign: 'center'
+				}}
+			>
+				{friends.length} friends
+			</p>
 		</div>
 	);
 };

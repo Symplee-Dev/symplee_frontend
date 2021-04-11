@@ -15,10 +15,13 @@ import { useReactPath } from '../../hooks/useReactPath';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 
+import NotificationPopout from './NotificationPopout';
+
 export const NavSidebar = () => {
 	const [hasTeams] = useState(false);
 	const path = useReactPath();
 	const user = useSelector((state: RootState) => state.user.user)!;
+	const [notifAnchor, setNotifAnchor] = useState<any | null>(null);
 
 	if (!user) return null;
 
@@ -51,11 +54,19 @@ export const NavSidebar = () => {
 			</div>
 			<div className="bottom">
 				<FontAwesomeIcon icon={faQuestionCircle} className="icon" />
-				<FontAwesomeIcon icon={faBell} className="icon" />
+				<FontAwesomeIcon
+					icon={faBell}
+					className="icon"
+					onClick={e => setNotifAnchor(e.currentTarget)}
+				/>
 				<Avatar
 					fallback={user.name[0]}
 					hasStatus={true}
 					src={user.avatar ?? ''}
+				/>
+				<NotificationPopout
+					anchor={notifAnchor}
+					setAnchor={setNotifAnchor}
 				/>
 			</div>
 		</div>
