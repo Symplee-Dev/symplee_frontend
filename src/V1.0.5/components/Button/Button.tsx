@@ -3,7 +3,7 @@ import './style.scss';
 interface ButtonProps {
 	clickHandler: () => void;
 	content: JSX.Element | string;
-	color?: 'main' | 'success' | 'danger';
+	color?: 'main' | 'success' | 'danger' | 'lightmain';
 	size?: 'small' | 'medium' | 'large';
 	style?: React.CSSProperties;
 	className?: string;
@@ -20,7 +20,8 @@ export const Button = ({
 	const buttonColors = {
 		main: '#116294',
 		success: '#4EA688',
-		danger: '#E2372B'
+		danger: '#E2372B',
+		lightmain: '#0C96EB'
 	};
 
 	return (

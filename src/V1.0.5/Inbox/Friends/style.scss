@@ -25,14 +25,18 @@
 		.recent-list {
 			margin-top: 1rem;
 			display: flex;
-			justify-content: space-between;
+			height: 100%;
 
 			.recent {
-				width: 20%;
-				height: 250px;
+				margin-right: 2rem;
+				width: 250px;
 				border-radius: 0.5rem;
 				padding: 1rem;
 				background: #141418;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 
 				h4 {
 					font-weight: 700;
@@ -53,8 +57,8 @@
 	}
 
 	.friends-list {
-		height: 65%;
 		overflow: hidden;
+		height: 60%;
 		.header {
 			h4 {
 				font-weight: 300;
@@ -87,7 +91,7 @@
 
 		.users {
 			overflow-y: scroll;
-			height: 75%;
+			height: 70%;
 			display: flex;
 			flex-direction: column;
 

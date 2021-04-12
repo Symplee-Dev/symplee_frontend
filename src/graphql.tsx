@@ -866,7 +866,7 @@ export type GetBlockedFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean, avatar?: Maybe<string> }> }>> };
 
 export type GetCallMembrsQueryVariables = Exact<{
   members: Array<Scalars['String']> | Scalars['String'];
@@ -1595,6 +1595,7 @@ export const GetBlockedFriendsDocument = gql`
       username
       key
       is_online
+      avatar
     }
     blockedBy
   }

@@ -33,27 +33,42 @@ const User = ({ type, friend }: UserProps) => {
 						<h5>
 							{friend.friend.username}#{friend.friend.key}
 						</h5>
-						<p>
-							Became friends{' '}
-							<Moment fromNow>{friend.friendsSince}</Moment>
-						</p>
+						{type === 'FRIEND' && (
+							<p>
+								Became friends{' '}
+								<Moment fromNow>{friend.friendsSince}</Moment>
+							</p>
+						)}
 					</div>
 				</div>
-				<div className="right">
-					<Button
-						clickHandler={() => alert('not implemented')}
-						content="Message"
-						size="small"
-						color="success"
-					/>
-					<Button
-						clickHandler={() => alert('not implemented')}
-						content="View"
-						size="small"
-						color="main"
-					/>
-				</div>
+				{type === 'FRIEND' && (
+					<div className="right">
+						<Button
+							clickHandler={() => alert('not implemented')}
+							content="Message"
+							size="small"
+							color="success"
+						/>
+						<Button
+							clickHandler={() => alert('not implemented')}
+							content="View"
+							size="small"
+							color="main"
+						/>
+					</div>
+				)}
+				{type === 'BLOCKED' && (
+					<div className="right">
+						<Button
+							clickHandler={() => alert('not implemented')}
+							content="Unblock"
+							size="small"
+							color="danger"
+						/>
+					</div>
+				)}
 			</div>
+
 			<div className="hr">
 				<hr />
 			</div>
