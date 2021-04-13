@@ -34,8 +34,8 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 				</div>
 				<div className="groups">
 					{groups?.map((group, key) => (
-						<>
-							<div className="group" key={key}>
+						<div key={key}>
+							<div className="group">
 								<div>
 									<Avatar
 										className="small"
@@ -53,7 +53,7 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 								/>
 							</div>
 							<hr />
-						</>
+						</div>
 					))}
 				</div>
 			</div>

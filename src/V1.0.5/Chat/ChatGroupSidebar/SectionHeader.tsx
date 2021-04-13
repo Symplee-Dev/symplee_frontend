@@ -4,13 +4,18 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 type SectionHeaderProps = {
 	actionHandler: () => void;
 	content: string;
+	hasAction?: boolean;
 };
 
-const SectionHeader = ({ actionHandler, content }: SectionHeaderProps) => {
+const SectionHeader = ({
+	actionHandler,
+	content,
+	hasAction = false
+}: SectionHeaderProps) => {
 	return (
 		<div className="section-header">
 			<p>{content}</p>
-			<FontAwesomeIcon icon={faPlus} className="heder-icon" />
+			{hasAction && <FontAwesomeIcon icon={faPlus} className="header-icon" />}
 		</div>
 	);
 };

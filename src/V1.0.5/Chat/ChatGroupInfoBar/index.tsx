@@ -5,13 +5,25 @@ import './style.scss';
 import { useState } from 'react';
 import ChatGroupInfoSwitch from '../ChatGroupInfoSwitch/ChatGroupInfoSwitch';
 
-const ChatGroupInfoBar = () => {
+type ChatGroupInfoBarProps = {
+	name: string;
+	avatar?: string;
+};
+
+const ChatGroupInfoBar = ({ name, avatar }: ChatGroupInfoBarProps) => {
 	const [anchor, setAnchor] = useState<any | null>(null);
 
 	return (
 		<div className="chat-group-info-bar">
-			<Avatar fallback={'S'} hasStatus={false} src={''} className="large" />
-			<h4>Symplee Dev</h4>
+			<div className="left">
+				<Avatar
+					fallback={name[0]}
+					hasStatus={false}
+					src={avatar ?? ''}
+					className="large"
+				/>
+				<h4>{name}</h4>
+			</div>
 			<FontAwesomeIcon
 				icon={faChevronDown}
 				className="down"

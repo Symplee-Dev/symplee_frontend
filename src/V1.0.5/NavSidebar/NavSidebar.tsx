@@ -8,10 +8,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './NavSidebar.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Avatar } from '../components';
 import { faInbox } from '@fortawesome/free-solid-svg-icons';
-import { useReactPath } from '../../hooks/useReactPath';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 
@@ -21,10 +20,7 @@ import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
 export const NavSidebar = () => {
-	const lastChatId = useSelector(
-		(state: RootState) => state.user.user?.chatGroups[0].id
-	);
-
+	const [lastChatId, setLastChatId] = useState(-1);
 	const [hasTeams] = useState(false);
 	const path = useLocation().pathname;
 	const user = useSelector((state: RootState) => state.user.user)!;
@@ -33,6 +29,12 @@ export const NavSidebar = () => {
 	const [userAnchor, setUserAnchor] = useState<any | null>(null);
 
 	const history = useHistory();
+
+	useEffect(() => {
+		setLastChatId(
+			parseInt(localStorage.getItem('LAST_SELECTED_GROUP') ?? '-1') ?? -1
+		);
+	}, []);
 
 	if (!user) return null;
 
@@ -47,7 +49,10 @@ export const NavSidebar = () => {
 					className={`icon ${path === '/' ? 'active' : ''}`}
 				/>
 				<FontAwesomeIcon
-					onClick={() => history.push(`/chat/${lastChatId}`)}
+					onClick={() => {
+						console.log(lastChatId);
+						history.push(`/chat/${lastChatId}`);
+					}}
 					icon={faComment}
 					className={`icon ${path.includes('chat') ? 'active' : ''}`}
 				/>
@@ -57,9 +62,7 @@ export const NavSidebar = () => {
 				/>
 				<FontAwesomeIcon
 					icon={faGlobeAmericas}
-					className={`icon ${
-						path.includes('discover') ? 'active' : ''
-					}`}
+					className={`icon ${path.includes('discover') ? 'active' : ''}`}
 				/>
 				{hasTeams && <hr />}
 			</div>
@@ -81,10 +84,7 @@ export const NavSidebar = () => {
 					/>
 				</div>
 				<UserPopout anchor={userAnchor} setAnchor={setUserAnchor} />
-				<NotificationPopout
-					anchor={notifAnchor}
-					setAnchor={setNotifAnchor}
-				/>
+				<NotificationPopout anchor={notifAnchor} setAnchor={setNotifAnchor} />
 			</div>
 		</div>
 	);
