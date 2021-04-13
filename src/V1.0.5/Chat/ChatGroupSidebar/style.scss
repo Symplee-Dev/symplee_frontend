@@ -1,3 +1,30 @@
 .chat-group-sidebar {
 	background: #141418;
+
+	.content {
+		padding: 1rem;
+
+		.searchbar {
+			margin-top: 1rem;
+		}
+
+		.sections {
+			margin-top: 50px;
+			.section-header {
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				display: flex;
+				justify-content: space-between;
+				color: white;
+				font-family: 'Work Sans', sans-serif;
+
+				p {
+					font-weight: 500;
+					opacity: 0.4;
+					letter-spacing: 1px;
+					font-size: 0.9rem;
+				}
+			}
+		}
+	}
 }
