@@ -49,7 +49,7 @@ export const Searchbar = ({
 				placeholder={placeHolder}
 				type="text"
 				value={value}
-				onChange={e => setValue(e.target.value)}
+				onChange={e => setValue(e)}
 			/>
 		</div>
 	);

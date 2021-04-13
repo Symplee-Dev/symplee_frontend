@@ -7,10 +7,44 @@ import './style.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/types/state-types';
 import Button from '../../components/Button/Button';
-import { Avatar } from '../../components';
+import { Avatar, Searchbar } from '../../components';
+import { useHistory } from 'react-router';
+import { useState } from 'react';
+import { UISelectors } from '../../../redux/selectors';
+import { Maybe } from '../../../graphql';
 
 const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 	const groups = useSelector((state: RootState) => state.user.user?.chatGroups);
+	const selectedId = UISelectors.useSelectCurrentChatGroup()!;
+
+	const [localGroups, setLocalGroups] = useState<
+		{
+			name: string;
+			id: number;
+			avatar?: Maybe<string>;
+		}[]
+	>([]);
+
+	const history = useHistory();
+
+	const [searchValue, setSearchValue] = useState('');
+
+	const handleFilter = e => {
+		setSearchValue(e.target.value);
+
+		if (e.target.value.length <= 0) {
+			if (groups) {
+				setLocalGroups(groups);
+			}
+		} else {
+			if (groups) {
+				const newGroups = groups?.filter(group =>
+					group.name.toLowerCase().includes(e.target.value.toLowerCase())
+				);
+				setLocalGroups(newGroups);
+			}
+		}
+	};
 
 	return (
 		<Popover
@@ -32,8 +66,13 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 					<p>Switch Channels</p>
 					<FontAwesomeIcon icon={faRandom} />
 				</div>
+				<Searchbar
+					setValue={handleFilter}
+					value={searchValue}
+					size="fullwidth"
+				/>
 				<div className="groups">
-					{groups?.map((group, key) => (
+					{localGroups.map((group, key) => (
 						<div key={key}>
 							<div className="group">
 								<div>
@@ -44,12 +83,18 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 										fallback={group.name[0]}
 									/>
 									<h4>{group.name}</h4>
+									{group.id === selectedId.id && (
+										<p className="selected">Selected</p>
+									)}
 								</div>
 								<Button
-									clickHandler={() => alert('Not implemented')}
 									content="Jump"
 									color="main"
 									size="small"
+									clickHandler={() => {
+										setAnchor(null);
+										history.push(`/chat/${group.id}`);
+									}}
 								/>
 							</div>
 							<hr />

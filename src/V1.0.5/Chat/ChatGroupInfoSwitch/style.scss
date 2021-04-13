@@ -5,6 +5,12 @@
 	height: 50vh;
 	background: #1c1a21;
 	font-family: 'Work Sans', sans-serif;
+	overflow: hidden;
+
+	.searchbar {
+		margin-top: 1rem;
+		width: 100%;
+	}
 
 	.header {
 		display: flex;
@@ -13,7 +19,7 @@
 
 	.groups {
 		padding: 0.5rem;
-		height: 100%;
+		height: 90%;
 		overflow-y: scroll;
 
 		.group {
@@ -26,6 +32,11 @@
 				margin-top: 1rem;
 				font-weight: 500;
 				font-size: 1rem;
+			}
+
+			.selected {
+				margin-top: 1rem;
+				opacity: 0.5;
 			}
 		}
 
