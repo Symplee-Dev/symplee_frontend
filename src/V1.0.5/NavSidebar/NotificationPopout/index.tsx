@@ -1,5 +1,5 @@
 import './style.scss';
-import { Popover, Tooltip } from '@material-ui/core';
+import { Popover, Tooltip, CircularProgress } from '@material-ui/core';
 import {
 	useGetNotificationsQuery,
 	useAcceptFriendMutation,
@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { UserActions, UIActions } from '../../../redux/actions/index';
 import { RootState } from '../../../redux/types/state-types';
 import { Maybe } from '../../../graphql';
+import { useEffect } from 'react';
 
 export interface PopoutProps {
 	anchor: any;
@@ -40,7 +41,9 @@ const NotificationPopout = ({ anchor, setAnchor }: PopoutProps) => {
 
 	const { data, loading, error, refetch } = useGetNotificationsQuery({
 		skip: !userId,
-		variables: { type: 'ALL', userId: userId! }
+		variables: { type: 'ALL', userId: userId! },
+		fetchPolicy: 'network-only',
+		nextFetchPolicy: 'network-only'
 	});
 
 	const [acceptFriend] = useAcceptFriendMutation();
@@ -133,6 +136,10 @@ const NotificationPopout = ({ anchor, setAnchor }: PopoutProps) => {
 		});
 	};
 
+	if (anchor) {
+		refetch();
+	}
+
 	return (
 		<Popover
 			style={{ marginLeft: '2rem' }}
@@ -148,12 +155,19 @@ const NotificationPopout = ({ anchor, setAnchor }: PopoutProps) => {
 				horizontal: 'left'
 			}}
 		>
+			{loading && <CircularProgress />}
 			<div className="notif-popover">
 				<div className="notifs">
-					{data && data.getNotifications.length > 1
+					{!loading && data && data.getNotifications.length > 1
 						? data.getNotifications
 								.map((notif, key) => (
-									<div className="notif" key={key}>
+									<div
+										className="notif"
+										key={key}
+										style={{
+											opacity: notif?.read ? 0.4 : 1
+										}}
+									>
 										<div className="left">
 											<p className="desc">
 												{notif?.description}

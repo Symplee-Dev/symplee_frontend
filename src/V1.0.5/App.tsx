@@ -35,11 +35,7 @@ const App = () => {
 			onReset={() => window.location.reload()}
 		>
 			{isElectron() && <DesktopWindowBar />}
-			<Switch location={location}>
-				<Route exact path="/">
-					<Home isElectron={isElectron()} />
-				</Route>
-			</Switch>
+			<Home isElectron={isElectron()} />
 		</ErrorBoundary>
 	);
 };

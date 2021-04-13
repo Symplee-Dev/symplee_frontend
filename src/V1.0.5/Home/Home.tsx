@@ -3,6 +3,7 @@ import { NavSidebar } from '../NavSidebar/NavSidebar';
 import { Route, Switch } from 'react-router';
 
 import { Inbox } from '../Inbox';
+import Chat from '../Chat/index';
 
 export const Home = ({ isElectron }: { isElectron: boolean }) => {
 	return (
@@ -10,6 +11,9 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 			<div className={`layout ${isElectron ? '' : 'layout-max'}`}>
 				<NavSidebar />
 				<Switch>
+					<Route exact path={`/chat/:lastchatid`}>
+						<Chat />
+					</Route>
 					<Route exact path="/">
 						<Inbox />
 					</Route>

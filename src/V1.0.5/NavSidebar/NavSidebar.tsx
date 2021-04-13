@@ -16,12 +16,23 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 
 import NotificationPopout from './NotificationPopout';
+import UserPopout from './UserPopout';
+import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 export const NavSidebar = () => {
+	const lastChatId = useSelector(
+		(state: RootState) => state.user.user?.chatGroups[0].id
+	);
+
 	const [hasTeams] = useState(false);
-	const path = useReactPath();
+	const path = useLocation().pathname;
 	const user = useSelector((state: RootState) => state.user.user)!;
+
 	const [notifAnchor, setNotifAnchor] = useState<any | null>(null);
+	const [userAnchor, setUserAnchor] = useState<any | null>(null);
+
+	const history = useHistory();
 
 	if (!user) return null;
 
@@ -31,14 +42,14 @@ export const NavSidebar = () => {
 				<FontAwesomeIcon icon={faSearch} className="icon" />
 				<hr />
 				<FontAwesomeIcon
+					onClick={() => history.push('/')}
 					icon={faInbox}
 					className={`icon ${path === '/' ? 'active' : ''}`}
 				/>
 				<FontAwesomeIcon
+					onClick={() => history.push(`/chat/${lastChatId}`)}
 					icon={faComment}
-					className={`icon ${
-						path.includes('groups') ? 'active' : ''
-					}`}
+					className={`icon ${path.includes('chat') ? 'active' : ''}`}
 				/>
 				<FontAwesomeIcon
 					icon={faUserFriends}
@@ -59,11 +70,17 @@ export const NavSidebar = () => {
 					className="icon"
 					onClick={e => setNotifAnchor(e.currentTarget)}
 				/>
-				<Avatar
-					fallback={user.name[0]}
-					hasStatus={true}
-					src={user.avatar ?? ''}
-				/>
+				<div
+					onClick={e => setUserAnchor(e.currentTarget)}
+					className="avatar-btn"
+				>
+					<Avatar
+						fallback={user.name[0]}
+						hasStatus={true}
+						src={user.avatar ?? ''}
+					/>
+				</div>
+				<UserPopout anchor={userAnchor} setAnchor={setUserAnchor} />
 				<NotificationPopout
 					anchor={notifAnchor}
 					setAnchor={setNotifAnchor}

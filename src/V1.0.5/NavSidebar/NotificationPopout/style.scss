@@ -28,7 +28,7 @@
 				width: 80%;
 
 				.desc {
-					font-size: 1rem;
+					font-size: 0.8rem;
 					font-weight: 700;
 					margin-bottom: 0.5rem;
 				}
@@ -43,6 +43,15 @@
 				width: 20%;
 				display: flex;
 				justify-content: space-evenly;
+
+				svg {
+					margin-right: 1rem;
+				}
+
+				svg:hover {
+					cursor: pointer;
+					opacity: 0.8;
+				}
 			}
 		}
 	}

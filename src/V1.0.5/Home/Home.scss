@@ -6,4 +6,10 @@
 	.layout-max > div {
 		height: 100vh;
 	}
+
+	.layout-max {
+		.chat-group-sidebar {
+			height: 100vh;
+		}
+	}
 }
