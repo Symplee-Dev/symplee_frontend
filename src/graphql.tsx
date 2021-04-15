@@ -924,7 +924,7 @@ export type GetPendingFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetPendingFriendsQuery = { getPendingFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetPendingFriendsQuery = { getPendingFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean, avatar?: Maybe<string> }> }>> };
 
 export type GetProfileQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -1905,6 +1905,7 @@ export const GetPendingFriendsDocument = gql`
       username
       key
       is_online
+      avatar
     }
   }
 }

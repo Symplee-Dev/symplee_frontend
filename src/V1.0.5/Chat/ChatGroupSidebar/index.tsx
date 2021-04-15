@@ -6,7 +6,7 @@ import SectionHeader from './SectionHeader';
 import NoContentMessage from './NoContentMessage';
 import { useParams } from 'react-router-dom';
 import { UIActions } from '../../../redux/actions/index';
-import { useChatGroupQuery } from '../../../graphql';
+import { useChatGroupQuery, Maybe } from '../../../graphql';
 import { UserSelectors } from '../../../redux/selectors';
 import { useSetLastSelectedGroup } from '../../../hooks/useSetLastSelectedGroup';
 import SectionChild from './SectionChild';
@@ -19,18 +19,26 @@ const ChatGroupSidebar = () => {
 
 	const authorId = UserSelectors.useSelectUserId()!;
 
+	const [localChats, setLocalChats] = useState<
+		Maybe<{
+			id: number;
+			name: string;
+			icon: string;
+			isPublic: boolean;
+			mode: string;
+		}>[]
+	>([]);
+
+	console.log('About to set', groupId);
 	useSetLastSelectedGroup(parseInt(groupId));
 
 	const { data, error, refetch } = useChatGroupQuery({
 		variables: { id: parseInt(groupId) },
 		onCompleted: d => {
+			console.log(d.chatGroup.id);
 			setCurrentChatGroup(d.chatGroup);
 		}
 	});
-
-	if (error) {
-		refetch();
-	}
 
 	const [searchValue, setSearchValue] = useState('');
 
@@ -42,6 +50,29 @@ const ChatGroupSidebar = () => {
 		}
 	}, [authorId, data?.chatGroup.createdBy]);
 
+	const handleFilter = e => {
+		setSearchValue(e.target.value);
+
+		if (e.target.value.length <= 0) {
+			if (data && data.chatGroup.chats) {
+				setLocalChats(data.chatGroup.chats);
+			}
+		} else {
+			if (data?.chatGroup.chats) {
+				const newChats = data.chatGroup.chats.filter(chat =>
+					chat?.name.toLowerCase().includes(e.target.value.toLowerCase())
+				);
+				setLocalChats(newChats);
+			}
+		}
+	};
+
+	useEffect(() => {
+		if (data?.chatGroup.chats) {
+			setLocalChats(data.chatGroup.chats);
+		}
+	}, [data?.chatGroup.chats]);
+
 	return (
 		<div className="chat-group-sidebar">
 			<ChatGroupInfoBar
@@ -52,7 +83,7 @@ const ChatGroupSidebar = () => {
 			<div className="content">
 				<Searchbar
 					value={searchValue}
-					setValue={setSearchValue}
+					setValue={e => handleFilter(e)}
 					size="fullwidth"
 				/>
 
@@ -70,23 +101,47 @@ const ChatGroupSidebar = () => {
 					/>
 
 					<div className="section-children">
-						{data?.chatGroup.chats
-							.filter(c => c?.mode === 'text chat')
+						{localChats
+							.filter(
+								c =>
+									c?.mode === 'text chat' &&
+									c.isPublic &&
+									localChats.includes(c)
+							)
 							.map((chat, key) => (
 								<SectionChild key={key} chat={chat} active={false} />
 							))}
 					</div>
 
 					{data?.chatGroup.chats &&
-						data?.chatGroup.chats.filter(c => c?.mode === 'text chat').length <
-							1 && <NoContentMessage />}
+						localChats.filter(
+							c =>
+								c?.mode === 'text chat' && c.isPublic && localChats.includes(c)
+						).length < 1 && <NoContentMessage />}
 
 					<SectionHeader
 						actionHandler={() => alert('not implemented')}
 						content="VOICE CHATS"
 						hasAction={isAuthor}
 					/>
-					<NoContentMessage />
+					<div className="section-children">
+						{localChats
+							.filter(
+								c =>
+									c?.mode.toLowerCase().includes('voice') &&
+									c.isPublic &&
+									localChats.includes(c)
+							)
+							.map((chat, key) => (
+								<SectionChild key={key} chat={chat} active={false} />
+							))}
+					</div>
+					{localChats &&
+						localChats.filter(
+							c =>
+								c?.mode.toLowerCase().includes('voice') &&
+								localChats.includes(c)
+						).length < 1 && <NoContentMessage />}
 
 					<SectionHeader
 						actionHandler={() => alert('not implemented')}

@@ -9,7 +9,7 @@ import { RootState } from '../../../redux/types/state-types';
 import Button from '../../components/Button/Button';
 import { Avatar, Searchbar } from '../../components';
 import { useHistory } from 'react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UISelectors } from '../../../redux/selectors';
 import { Maybe } from '../../../graphql';
 
@@ -45,6 +45,12 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 			}
 		}
 	};
+
+	useEffect(() => {
+		if (groups) {
+			setLocalGroups(groups);
+		}
+	}, [groups]);
 
 	return (
 		<Popover

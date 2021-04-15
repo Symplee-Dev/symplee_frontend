@@ -11,7 +11,7 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 			<div className={`layout ${isElectron ? '' : 'layout-max'}`}>
 				<NavSidebar />
 				<Switch>
-					<Route exact path={`/chat/:lastchatid`}>
+					<Route path={`/chat/:lastchatid`}>
 						<Chat />
 					</Route>
 					<Route exact path="/">

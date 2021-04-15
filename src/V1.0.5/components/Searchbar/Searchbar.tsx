@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 
 type SearchbarProps = {
 	value: string;
-	setValue: (val: string) => void;
+	setValue: (val: React.ChangeEvent<HTMLInputElement>) => void;
 	size: 'small' | 'medium' | 'fullwidth';
 	placeHolder?: string;
 };
