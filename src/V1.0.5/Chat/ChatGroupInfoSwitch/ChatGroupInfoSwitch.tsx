@@ -15,7 +15,7 @@ import { Maybe } from '../../../graphql';
 
 const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 	const groups = useSelector((state: RootState) => state.user.user?.chatGroups);
-	const selectedId = UISelectors.useSelectCurrentChatGroup()!;
+	const selectedId = UISelectors.useSelectCurrentChatGroup();
 
 	const [localGroups, setLocalGroups] = useState<
 		{
@@ -89,7 +89,7 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 										fallback={group.name[0]}
 									/>
 									<h4>{group.name}</h4>
-									{group.id === selectedId.id && (
+									{group.id === (selectedId?.id ?? -1) && (
 										<p className="selected">Selected</p>
 									)}
 								</div>

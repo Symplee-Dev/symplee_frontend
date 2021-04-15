@@ -1,24 +1,25 @@
 import { UIActions } from '../../../redux/actions/index';
 import './style.scss';
 
-const Channel = ({
-	chat
-}: {
-	chat:
-		| {
-				id: number;
-				name: string;
-				icon: string;
-				isPublic: boolean;
-				mode: string;
-		  }
-		| undefined;
-}) => {
+import TextChat from './TextChat';
+import { useParams } from 'react-router-dom';
+import { UISelectors } from '../../../redux/selectors';
+
+const Channel = () => {
+	const { chatId }: { chatId: string } = useParams();
 	const setCurrentChat = UIActions.useSetCurrentChat();
 
-	setCurrentChat(chat);
+	setCurrentChat(
+		UISelectors.useSelectCurrentChatGroup()?.chats.find(
+			c => c?.id === parseInt(chatId)
+		)
+	);
 
-	return <div className="channel"></div>;
+	return (
+		<div className="channel">
+			<TextChat />
+		</div>
+	);
 };
 
 export default Channel;

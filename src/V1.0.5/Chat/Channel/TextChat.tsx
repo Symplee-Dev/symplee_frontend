@@ -1,17 +1,12 @@
 import './TextChat.scss';
+import ChatHeader from './ChatHeader';
 
-const TextChat = ({
-	chat
-}: {
-	chat: {
-		id: number;
-		name: string;
-		icon: string;
-		isPublic: boolean;
-		mode: string;
-	};
-}) => {
-	return <div className="text-chat"></div>;
+const TextChat = () => {
+	return (
+		<div className="text-chat">
+			<ChatHeader />
+		</div>
+	);
 };
 
-export default Text;
+export default TextChat;

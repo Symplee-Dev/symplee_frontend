@@ -1,0 +1,63 @@
+.chat-header {
+	color: white;
+	width: 100%;
+	border-bottom: 1px solid #3d3d3d;
+	font-family: 'Work Sans', sans-serif;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 1.5rem;
+
+	.left {
+		h4 {
+			display: flex;
+			align-items: center;
+			font-weight: 400;
+			.tag {
+				color: #6b6e73;
+				font-size: 1.3rem;
+				margin-right: 0.5rem;
+				font-weight: 700;
+			}
+		}
+
+		.left-bottom {
+			margin-top: 1rem;
+			display: flex;
+			.members {
+				color: #6b6e73;
+			}
+
+			.create-invite {
+				margin-left: 1rem;
+				transition: 0.2s;
+			}
+
+			.icon {
+				margin-left: 0.5rem;
+			}
+
+			.create-invite:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+		}
+	}
+
+	.right {
+		display: flex;
+
+		.icon {
+			color: #6b6e73;
+			transition: 0.2s;
+			margin-left: 1rem;
+		}
+
+		.vertical-rule {
+			margin-right: 1em;
+			margin-left: 1rem;
+			border-left: 0.5px solid #6b6e73;
+		}
+	}
+}

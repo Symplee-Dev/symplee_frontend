@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 
 import { Inbox } from '../Inbox';
 import Chat from '../Chat/index';
+import Channel from '../Chat/Channel';
 
 export const Home = ({ isElectron }: { isElectron: boolean }) => {
 	return (
@@ -11,8 +12,12 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 			<div className={`layout ${isElectron ? '' : 'layout-max'}`}>
 				<NavSidebar />
 				<Switch>
-					<Route path={`/chat/:lastchatid`}>
+					<Route exact path={`/chat/:lastchatid`}>
 						<Chat />
+					</Route>
+					<Route exact path={`/chat/:lastchatid/message/:chatId`}>
+						<Chat />
+						<Channel />
 					</Route>
 					<Route exact path="/">
 						<Inbox />

@@ -60,8 +60,7 @@
 
 			.section-children {
 				.section-child {
-					padding-top: 0.5rem;
-					padding-bottom: 0.5rem;
+					padding: 0.2rem;
 					font-family: 'Work Sans', sans-serif;
 
 					color: white;
@@ -77,6 +76,16 @@
 						display: flex;
 						align-items: center;
 					}
+					transition: 0.1s;
+				}
+
+				.section-child:hover {
+					cursor: pointer;
+					background: #212529;
+				}
+
+				.active {
+					background: #212529;
 				}
 			}
 		}

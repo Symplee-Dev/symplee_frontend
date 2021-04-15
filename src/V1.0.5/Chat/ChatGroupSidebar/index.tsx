@@ -109,7 +109,7 @@ const ChatGroupSidebar = () => {
 									localChats.includes(c)
 							)
 							.map((chat, key) => (
-								<SectionChild key={key} chat={chat} active={false} />
+								<SectionChild key={key} chat={chat} />
 							))}
 					</div>
 
@@ -133,7 +133,7 @@ const ChatGroupSidebar = () => {
 									localChats.includes(c)
 							)
 							.map((chat, key) => (
-								<SectionChild key={key} chat={chat} active={false} />
+								<SectionChild key={key} chat={chat} />
 							))}
 					</div>
 					{localChats &&
