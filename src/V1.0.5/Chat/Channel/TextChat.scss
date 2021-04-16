@@ -2,4 +2,18 @@
 	height: 100%;
 	width: 100%;
 	color: white;
+	font-family: 'Work Sans', sans-serif;
+
+	.chat {
+		height: 90vh;
+		padding: 2rem;
+		display: flex;
+		flex-direction: column;
+
+		justify-content: flex-end;
+
+		.input-text {
+			margin-top: 1rem;
+		}
+	}
 }

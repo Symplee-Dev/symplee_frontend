@@ -51,12 +51,17 @@
 		.icon {
 			color: #6b6e73;
 			transition: 0.2s;
-			margin-left: 1rem;
+			margin-left: 1.5rem;
+			font-size: 1.2rem;
+		}
+
+		.icon:hover {
+			cursor: pointer;
+			opacity: 0.5;
 		}
 
 		.vertical-rule {
-			margin-right: 1em;
-			margin-left: 1rem;
+			margin-left: 1.5rem;
 			border-left: 0.5px solid #6b6e73;
 		}
 	}
