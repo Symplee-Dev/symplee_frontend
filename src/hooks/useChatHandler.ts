@@ -6,20 +6,46 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/types/state-types';
 import { useState, useEffect } from 'react';
-import { useUserTypingSubscriptionSubscription } from '../graphql';
+import {
+	useUserTypingSubscriptionSubscription,
+	useSendMessageMutation,
+	useSendUserTypingMutation
+} from '../graphql';
 import {
 	Maybe,
 	useMessageEditedSubscription,
 	useMessageDeletedSubscription
 } from '../graphql';
 
-type ChatHandlerReturn = [loading: boolean];
+type ChatHandlerReturn = [
+	loading: boolean,
+	whosTyping: {
+		userId: number;
+		username: string;
+	}[],
+	formState: string,
+	setFormState: React.Dispatch<React.SetStateAction<string>>,
+	messages: Maybe<{
+		id: number;
+		body: string;
+		createdAt: string;
+		author: {
+			id: number;
+			username: string;
+			avatar?: string;
+		};
+	}>[],
+	handleSend: (e: any) => void,
+	handleSendTyping: () => void,
+	end: HTMLSpanElement | null,
+	setEnd: React.Dispatch<React.SetStateAction<HTMLSpanElement | null>>,
+	firstLoad: boolean,
+	setFirstLoad: React.Dispatch<React.SetStateAction<boolean>>
+];
 
 export const useChatHandler = (
 	chatId: number | undefined
 ): ChatHandlerReturn => {
-	const [stillLoading, setLoading] = useState(false);
-
 	const [whosTyping, setWhosTyping] = useState<
 		{
 			userId: number;
@@ -40,7 +66,15 @@ export const useChatHandler = (
 		}>[]
 	>([]);
 
+	const [formState, setFormState] = useState('');
+	const [end, setEnd] = useState<HTMLSpanElement | null>(null);
+	const [firstLoad, setFirstLoad] = useState(true);
+
 	const userId = useSelector((state: RootState) => state.user.userId)!;
+	const user = useSelector((state: RootState) => state.user.user!);
+
+	const [sendMessage] = useSendMessageMutation();
+	const [sendUserTyping] = useSendUserTypingMutation();
 
 	const {
 		data,
@@ -130,7 +164,7 @@ export const useChatHandler = (
 		}
 	});
 
-	const { error: userTypingSubError } = useUserTypingSubscriptionSubscription({
+	useUserTypingSubscriptionSubscription({
 		variables: { chatId: chatId! },
 		onSubscriptionData(data) {
 			console.log('received typed');
@@ -175,5 +209,46 @@ export const useChatHandler = (
 		}
 	}, [error, messagesError, refetch, refetchBlocked]);
 
-	return [loading && messagesLoading];
+	const handleSend = e => {
+		e.preventDefault();
+
+		if (formState.length <= 0) {
+			return;
+		}
+
+		const chat = {
+			authorId: user.id,
+			authorUsername: user.username,
+			body: formState,
+			chatId: chatId!
+		};
+
+		sendMessage({
+			variables: { message: chat }
+		});
+
+		console.log('sending');
+
+		setFormState('');
+	};
+
+	const handleSendTyping = () => {
+		sendUserTyping({
+			variables: { chatId: chatId!, userId, username: user.username }
+		});
+	};
+
+	return [
+		loading && messagesLoading,
+		whosTyping,
+		formState,
+		setFormState,
+		messages,
+		handleSend,
+		handleSendTyping,
+		end,
+		setEnd,
+		firstLoad,
+		setFirstLoad
+	];
 };
