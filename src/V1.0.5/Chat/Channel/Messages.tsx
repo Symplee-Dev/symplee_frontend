@@ -47,7 +47,11 @@ const Messages = ({
 	return (
 		<div className="messages">
 			{messages.map((m, key) => (
-				<Message key={key} message={m} />
+				<Message
+					key={key}
+					showHeader={!(messages[key - 1]?.author.id === m?.author.id)}
+					message={m}
+				/>
 			))}
 			<span ref={el => setEnd(el)}></span>
 		</div>

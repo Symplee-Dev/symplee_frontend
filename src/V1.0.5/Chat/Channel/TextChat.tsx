@@ -36,14 +36,14 @@ const TextChat = () => {
 					/>
 				)}
 
-				<div className="input-text">
+				<form className="input-text" onSubmit={e => handleSend(e)}>
 					<TextInput
 						placeHolder="Start the conversation"
 						value={formState}
 						setValue={e => setFormState(e.target.value)}
 						type="chat"
 					/>
-				</div>
+				</form>
 			</div>
 		</div>
 	);

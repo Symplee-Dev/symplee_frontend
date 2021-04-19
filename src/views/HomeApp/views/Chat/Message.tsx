@@ -15,7 +15,7 @@ import Moment from 'react-moment';
 import MoreVertSharpIcon from '@material-ui/icons/MoreVertSharp';
 import { UserSelectors } from '../../../../redux/selectors';
 import { FormEvent, MouseEvent, useState } from 'react';
-import UserPopover from '../../components/UserPopOver/UserPopover';
+import UserPopover from '../../../../V1.0.5/components/UserPopOver/UserPopover';
 
 interface MessageProps {
 	message: Maybe<{
@@ -166,10 +166,7 @@ const Message = ({ message, noHeader = false }: MessageProps) => {
 						)}
 					</div>
 				)}
-				<div
-					className="bubbles"
-					style={{ opacity: showBubble ? '1' : '0' }}
-				>
+				<div className="bubbles" style={{ opacity: showBubble ? '1' : '0' }}>
 					{userId === message.author.id && (
 						<div className="chat-actions">
 							<MoreVertSharpIcon onClick={toggleMenu} />

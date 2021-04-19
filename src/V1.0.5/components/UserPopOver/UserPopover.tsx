@@ -6,17 +6,17 @@ import {
 	useAddFriendMutation,
 	useGetFriendsQuery,
 	Maybe
-} from '../../../../graphql';
-import { UserSelectors } from '../../../../redux/selectors';
-import { UIActions } from '../../../../redux/actions/index';
+} from '../../../graphql';
+import { UserSelectors } from '../../../redux/selectors';
+import { UIActions } from '../../../redux/actions/index';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/types/state-types';
+import { RootState } from '../../../redux/types/state-types';
 import AccessTimeSharpIcon from '@material-ui/icons/AccessTimeSharp';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import RemoveCircleSharpIcon from '@material-ui/icons/RemoveCircleSharp';
 import Moment from 'react-moment';
-import { useRemoveFriendMutation } from '../../../../graphql';
+import { useRemoveFriendMutation } from '../../../graphql';
 
 export const UserPopover = ({
 	anchor,
@@ -66,8 +66,7 @@ export const UserPopover = ({
 		console.log('new data');
 		if (data) {
 			const friend = data.getFriends.find(
-				friend =>
-					friend?.friend?.id === user.id && friend.userId === userId
+				friend => friend?.friend?.id === user.id && friend.userId === userId
 			);
 			if (friend) {
 				setThisFriend(friend);
@@ -136,9 +135,7 @@ export const UserPopover = ({
 			<div className="user-popup">
 				<div className="top">
 					<div className="left">
-						<Avatar src={user.avatar}>
-							{user.username[0].toUpperCase()}
-						</Avatar>
+						<Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
 
 						<h3>{user.username}</h3>
 					</div>
@@ -150,10 +147,7 @@ export const UserPopover = ({
 						data?.getFriends &&
 						data?.getFriends.length > 0 && (
 							<div className="right">
-								<Tooltip
-									placement="right"
-									title="Send friend request"
-								>
+								<Tooltip placement="right" title="Send friend request">
 									<PersonAddSharpIcon
 										onClick={handleAdd}
 										style={{
@@ -166,10 +160,7 @@ export const UserPopover = ({
 						)}
 					{!loading && user.id !== userId && !thisFriend && (
 						<div className="right">
-							<Tooltip
-								placement="right"
-								title="Send friend request"
-							>
+							<Tooltip placement="right" title="Send friend request">
 								<PersonAddSharpIcon
 									onClick={handleAdd}
 									style={{
@@ -187,10 +178,7 @@ export const UserPopover = ({
 						thisFriend.status === 'PENDING' &&
 						thisFriend.sentBy !== userId && (
 							<div className="right">
-								<Tooltip
-									placement="right"
-									title="View Friend Requests"
-								>
+								<Tooltip placement="right" title="View Friend Requests">
 									<AccessTimeSharpIcon
 										onClick={() => history.push('/')}
 										style={{
@@ -209,10 +197,7 @@ export const UserPopover = ({
 						thisFriend.userId === userId &&
 						thisFriend.sentBy === userId && (
 							<div className="right">
-								<Tooltip
-									placement="right"
-									title="Friend Request Pending"
-								>
+								<Tooltip placement="right" title="Friend Request Pending">
 									<AccessTimeSharpIcon
 										style={{
 											width: '30px',
@@ -230,10 +215,7 @@ export const UserPopover = ({
 						data?.getFriends &&
 						data.getFriends.length > 0 && (
 							<div className="right">
-								<Tooltip
-									placement="right"
-									title="Remove Friend"
-								>
+								<Tooltip placement="right" title="Remove Friend">
 									<RemoveCircleSharpIcon
 										onClick={() => handleRemove()}
 										style={{
@@ -262,9 +244,7 @@ export const UserPopover = ({
 						</p>
 					)}
 				<div className="content">
-					<button
-						onClick={() => history.push('/user/profile/' + user.id)}
-					>
+					<button onClick={() => history.push('/user/profile/' + user.id)}>
 						View
 					</button>
 				</div>

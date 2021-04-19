@@ -4,6 +4,8 @@ import { Avatar } from '../../components/Avatar';
 import './style.scss';
 import { useState } from 'react';
 import ChatGroupInfoSwitch from '../ChatGroupInfoSwitch/ChatGroupInfoSwitch';
+import { UISelectors } from '../../../redux/selectors';
+import { UIActions } from '../../../redux/actions';
 
 type ChatGroupInfoBarProps = {
 	name: string;
@@ -12,6 +14,11 @@ type ChatGroupInfoBarProps = {
 
 const ChatGroupInfoBar = ({ name, avatar }: ChatGroupInfoBarProps) => {
 	const [anchor, setAnchor] = useState<any | null>(null);
+
+	const currentGroup = UISelectors.useSelectCurrentChatGroup();
+	const setCurrentChat = UIActions.useSetCurrentChat();
+
+	setCurrentChat(currentGroup?.chats[0]);
 
 	return (
 		<div className="chat-group-info-bar">

@@ -10,10 +10,13 @@ import { useChatGroupQuery, Maybe } from '../../../graphql';
 import { UserSelectors } from '../../../redux/selectors';
 import { useSetLastSelectedGroup } from '../../../hooks/useSetLastSelectedGroup';
 import SectionChild from './SectionChild';
+import { useHistory } from 'react-router';
 
 const ChatGroupSidebar = () => {
 	const { lastchatid: groupId }: { lastchatid: string } = useParams();
 	const setCurrentChatGroup = UIActions.useSetCurrentChatGroup();
+
+	const history = useHistory();
 
 	const [isAuthor, setIsAuthor] = useState(false);
 
@@ -69,9 +72,12 @@ const ChatGroupSidebar = () => {
 
 	useEffect(() => {
 		if (data?.chatGroup.chats) {
+			if (data.chatGroup.chats[0])
+				history.push(`/chat/${groupId}/message/${data.chatGroup.chats[0].id}`);
+
 			setLocalChats(data.chatGroup.chats);
 		}
-	}, [data?.chatGroup.chats]);
+	}, [data?.chatGroup.chats, groupId, history]);
 
 	return (
 		<div className="chat-group-sidebar">
