@@ -2,6 +2,8 @@ import './ChatHeader.scss';
 import { UISelectors } from '../../../redux/selectors';
 import { useGetMembersQuery } from '../../../graphql';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import CreateInviteDrawer from './CreateInviteDrawer/CreateInviteDrawer';
 import {
 	faCog,
 	faEllipsisV,
@@ -20,6 +22,7 @@ const ChatHeader = ({
 }) => {
 	const chat = UISelectors.useSelectCurrentChat()!;
 	const chatgroupid = UISelectors.useSelectCurrentChatGroup()!;
+	const [inviteDrawerOpen, setInviteDrawerOpen] = useState(false);
 
 	const { data } = useGetMembersQuery({
 		skip: !chat,
@@ -35,9 +38,16 @@ const ChatHeader = ({
 				</h4>
 				<div className="left-bottom">
 					<p className="members">{data?.getMembers.length} members</p>
-					<p className="create-invite">
+					<p
+						className="create-invite"
+						onClick={() => setInviteDrawerOpen(true)}
+					>
 						Create Invite <FontAwesomeIcon icon={faPlus} className="icon" />
 					</p>
+					<CreateInviteDrawer
+						open={inviteDrawerOpen}
+						setOpen={setInviteDrawerOpen}
+					/>
 				</div>
 			</div>
 			<div className="right">
