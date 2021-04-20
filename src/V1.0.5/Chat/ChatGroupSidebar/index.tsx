@@ -72,9 +72,6 @@ const ChatGroupSidebar = () => {
 
 	useEffect(() => {
 		if (data?.chatGroup.chats) {
-			if (data.chatGroup.chats[0])
-				history.push(`/chat/${groupId}/message/${data.chatGroup.chats[0].id}`);
-
 			setLocalChats(data.chatGroup.chats);
 		}
 	}, [data?.chatGroup.chats, groupId, history]);

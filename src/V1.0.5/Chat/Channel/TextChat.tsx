@@ -5,7 +5,13 @@ import Messages from './Messages';
 import { useChatHandler } from '../../../hooks/useChatHandler';
 import { UISelectors } from '../../../redux/selectors';
 
-const TextChat = () => {
+const TextChat = ({
+	setChannelInfoOpen,
+	channelInfoOpen
+}: {
+	channelInfoOpen: boolean;
+	setChannelInfoOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
 	const currentChat = UISelectors.useSelectCurrentChat();
 
 	const [
@@ -24,7 +30,10 @@ const TextChat = () => {
 
 	return (
 		<div className="text-chat">
-			<ChatHeader />
+			<ChatHeader
+				setChannelInfoOpen={setChannelInfoOpen}
+				channelInfoOpen={channelInfoOpen}
+			/>
 			<div className="chat">
 				{!loading && (
 					<Messages

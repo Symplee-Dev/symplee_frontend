@@ -11,12 +11,19 @@ import {
 	faStar
 } from '@fortawesome/free-solid-svg-icons';
 
-const ChatHeader = () => {
+const ChatHeader = ({
+	channelInfoOpen,
+	setChannelInfoOpen
+}: {
+	channelInfoOpen: boolean;
+	setChannelInfoOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
 	const chat = UISelectors.useSelectCurrentChat()!;
+	const chatgroupid = UISelectors.useSelectCurrentChatGroup()!;
 
 	const { data } = useGetMembersQuery({
 		skip: !chat,
-		variables: { chatId: chat.id }
+		variables: { chatId: chatgroupid.id }
 	});
 
 	return (
@@ -35,7 +42,11 @@ const ChatHeader = () => {
 			</div>
 			<div className="right">
 				<FontAwesomeIcon icon={faMapPin} className="icon" />
-				<FontAwesomeIcon icon={faInfoCircle} className="icon" />
+				<FontAwesomeIcon
+					icon={faInfoCircle}
+					className="icon"
+					onClick={() => setChannelInfoOpen(!channelInfoOpen)}
+				/>
 				<FontAwesomeIcon icon={faStar} className="icon" />
 				<div className="vertical-rule"></div>
 				<FontAwesomeIcon icon={faCog} className="icon" />
