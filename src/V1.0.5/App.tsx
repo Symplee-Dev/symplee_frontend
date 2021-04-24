@@ -10,9 +10,9 @@ import { DesktopWindowBar } from './DesktopWindowBar';
 import './index.scss';
 import { isElectron } from '../utils/createNotification';
 import { UserActions } from '../redux/actions/index';
-import HomePage from '../views/Home/index';
 import Login from '../views/Onboarding/Login/index';
 import Register from '../views/Onboarding/Register/index';
+import LandingSite from './LandingSite/index';
 
 const App = () => {
 	const location = useLocation();
@@ -34,7 +34,7 @@ const App = () => {
 							<Register />
 						</Route>
 						<Route exact path="/">
-							<HomePage />
+							<LandingSite />
 						</Route>
 					</Switch>
 				</ErrorBoundary>

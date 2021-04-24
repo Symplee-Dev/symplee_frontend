@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserSelectors } from '../../../redux/selectors';
 import { useHistory } from 'react-router';
+import { UserActions } from '../../../redux/actions/index';
 import {
 	faCog,
 	faCogs,
@@ -15,6 +16,7 @@ import {
 
 const UserPopout = ({ anchor, setAnchor }: PopoutProps) => {
 	const userId = UserSelectors.useSelectUserId();
+	const logout = UserActions.useLogout();
 
 	const history = useHistory();
 
@@ -61,7 +63,9 @@ const UserPopout = ({ anchor, setAnchor }: PopoutProps) => {
 				<hr />
 
 				<div className="link logout">
-					<Link to="">Logout</Link>
+					<Link to="" onClick={logout}>
+						Logout
+					</Link>
 					<FontAwesomeIcon icon={faSignOutAlt} />
 				</div>
 			</div>
