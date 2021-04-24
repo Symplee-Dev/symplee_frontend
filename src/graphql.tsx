@@ -859,14 +859,14 @@ export type GetAcceptedFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetAcceptedFriendsQuery = { getAcceptedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetAcceptedFriendsQuery = { getAcceptedFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean, avatar?: Maybe<string> }> }>> };
 
 export type GetBlockedFriendsQueryVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetBlockedFriendsQuery = { getBlockedFriends: Array<Maybe<{ friendsSince: string, blockedBy?: Maybe<number>, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean, avatar?: Maybe<string> }> }>> };
 
 export type GetCallMembrsQueryVariables = Exact<{
   members: Array<Scalars['String']> | Scalars['String'];
@@ -924,7 +924,7 @@ export type GetPendingFriendsQueryVariables = Exact<{
 }>;
 
 
-export type GetPendingFriendsQuery = { getPendingFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean }> }>> };
+export type GetPendingFriendsQuery = { getPendingFriends: Array<Maybe<{ friendsSince: string, friend?: Maybe<{ id: number, username: string, key: string, is_online: boolean, avatar?: Maybe<string> }> }>> };
 
 export type GetProfileQueryVariables = Exact<{
   userId: Scalars['Int'];
@@ -1555,6 +1555,7 @@ export const GetAcceptedFriendsDocument = gql`
       username
       key
       is_online
+      avatar
     }
   }
 }
@@ -1594,6 +1595,7 @@ export const GetBlockedFriendsDocument = gql`
       username
       key
       is_online
+      avatar
     }
     blockedBy
   }
@@ -1903,6 +1905,7 @@ export const GetPendingFriendsDocument = gql`
       username
       key
       is_online
+      avatar
     }
   }
 }

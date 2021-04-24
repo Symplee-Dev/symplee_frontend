@@ -82,11 +82,19 @@ export const UserActions: RootActions['user'] = {
 
 		const dispatch = useDispatch();
 
-		const token = useSelector((state: RootState) => state.user.token);
+		const token = localStorage.getItem('bolttoken')!;
 
-		const userReduxId: { userId: number } = decode(token);
+		const userReduxId = () => {
+			try {
+				return decode(token);
+			} catch (e) {
+				logger.error(e);
+			}
+		};
 
 		const { refetch } = useUserQuery({
+			skip: !token || token.length < 1,
+			//@ts-ignore
 			variables: { id: userReduxId.userId },
 			onCompleted: data => {
 				const action: SetUser = {
@@ -98,6 +106,8 @@ export const UserActions: RootActions['user'] = {
 			},
 			onError: error => {
 				logger.error(error.message);
+				//@ts-ignore
+
 				refetch({ id: userReduxId.userId });
 			}
 		});

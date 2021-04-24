@@ -1,0 +1,29 @@
+.searchbar {
+	width: 250px;
+	background: #212529;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	display: flex;
+	align-items: center;
+	font-family: 'Work Sans', sans-serif;
+
+	.search-icon {
+		color: #6b6e73;
+		transition: ease-in-out 0.2s;
+		margin-right: 1rem;
+		display: block;
+	}
+
+	.hasValue {
+		opacity: 0;
+
+		transform: translate(10px);
+	}
+
+	input {
+		border: none;
+		background: none;
+		outline: none;
+		color: white;
+	}
+}

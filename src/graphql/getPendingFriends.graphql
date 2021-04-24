@@ -6,6 +6,7 @@ query GetPendingFriends($userId: Int!) {
 			username
 			key
 			is_online
+			avatar
 		}
 	}
 }

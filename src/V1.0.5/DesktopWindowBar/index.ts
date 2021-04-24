@@ -1,0 +1,1 @@
+export { DesktopWindowBar } from './DesktopWindowBar';

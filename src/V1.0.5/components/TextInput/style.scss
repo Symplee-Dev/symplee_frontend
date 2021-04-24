@@ -1,0 +1,39 @@
+.text-input-chat {
+	display: flex;
+	width: 100%;
+	padding: 0.5rem;
+	border: 1px solid #52575d;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	font-family: 'Work Sans', sans-serif;
+	background: #333438;
+
+	input {
+		width: 90%;
+		background: none;
+		border: none;
+		outline: none;
+		color: white;
+	}
+
+	input::placeholder {
+		color: white;
+		opacity: 0.5;
+	}
+
+	.icons {
+		width: 10%;
+		display: flex;
+		justify-content: space-around;
+
+		.icon {
+			transition: 0.2s;
+			opacity: 0.5;
+		}
+
+		.icon:hover {
+			cursor: pointer;
+			opacity: 1;
+		}
+	}
+}

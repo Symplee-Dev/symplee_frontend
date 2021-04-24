@@ -6,6 +6,7 @@ export const useReactPath = () => {
 		const winPath = window.location.pathname;
 		setPath(winPath);
 	};
+
 	useEffect(() => {
 		window.addEventListener('popstate', listenToPopstate);
 		return () => {

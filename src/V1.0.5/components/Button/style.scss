@@ -1,0 +1,35 @@
+.btn {
+	height: 30px;
+	color: white;
+	border: none;
+	border-radius: 0.2rem;
+	font-family: 'Work Sans', sans-serif;
+
+	font-weight: 400;
+	font-size: 1rem;
+	transition: ease-in-out 0.2s;
+}
+
+.btn:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+
+.btn:focus {
+	border: none;
+	outline: none;
+}
+
+.btn.btn-medium {
+	width: 200px;
+}
+
+.btn.btn-small {
+	font-size: 0.8rem;
+	width: 100px;
+}
+
+.btn.btn-large {
+	font-size: 1rem;
+	width: 100%;
+}

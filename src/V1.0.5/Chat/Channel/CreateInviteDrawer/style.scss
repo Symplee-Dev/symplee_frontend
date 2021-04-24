@@ -1,0 +1,75 @@
+.drawer {
+	width: 20vw;
+	padding: 1rem;
+	background: #141418;
+	height: 100vh;
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+
+	.top {
+		display: flex;
+		justify-content: flex-end;
+
+		svg {
+			transition: 0.2s;
+		}
+
+		svg:hover {
+			cursor: pointer;
+			opacity: 0.5;
+		}
+	}
+
+	.content {
+		height: 100%;
+
+		margin-top: 2rem;
+
+		h4 {
+			font-size: 1.2rem;
+		}
+
+		.desc {
+			margin-top: 1rem;
+			line-height: 1.5rem;
+			opacity: 0.5;
+		}
+
+		form {
+			margin-top: 2rem;
+
+			height: 80%;
+			p {
+				margin-top: 3rem;
+				margin-bottom: 1rem;
+				font-size: 1rem;
+				line-height: 1.5rem;
+			}
+			margin-top: 1.5rem;
+
+			.select-component {
+				color: black;
+				margin-bottom: 5rem;
+			}
+
+			.code {
+				border: 1px solid white;
+				border-radius: 0.2rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 0.5rem;
+				transition: 0.2s;
+			}
+
+			.code:hover {
+				cursor: pointer;
+				opacity: 0.5;
+			}
+		}
+	}
+}
+
+.MuiPaper-root {
+	background: #141418 !important;
+}

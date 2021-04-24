@@ -1,0 +1,58 @@
+.popout {
+	color: white;
+	width: 25vw;
+	padding: 1rem;
+	height: 50vh;
+	background: #1c1a21;
+	font-family: 'Work Sans', sans-serif;
+	overflow: hidden;
+
+	.searchbar {
+		margin-top: 1rem;
+		width: 100%;
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.groups {
+		padding: 0.5rem;
+		height: 90%;
+		overflow-y: scroll;
+
+		.group {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0.5rem;
+			margin-bottom: 1rem;
+			h4 {
+				margin-top: 1rem;
+				font-weight: 500;
+				font-size: 1rem;
+			}
+
+			.selected {
+				margin-top: 1rem;
+				opacity: 0.5;
+			}
+		}
+
+		hr {
+			opacity: 0.2;
+			margin-top: 1rem;
+			margin-bottom: 1rem;
+		}
+	}
+
+	::-webkit-scrollbar {
+		width: 0; /* Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+	/* Optional: show position indicator in red */
+	::-webkit-scrollbar-thumb {
+		background: #ff0000;
+	}
+}

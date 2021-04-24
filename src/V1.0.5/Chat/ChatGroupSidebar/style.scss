@@ -1,0 +1,93 @@
+.chat-group-sidebar {
+	background: #141418;
+
+	::-webkit-scrollbar {
+		width: 0; /* Remove scrollbar space */
+		background: transparent; /* Optional: just make scrollbar invisible */
+	}
+	/* Optional: show position indicator in red */
+	::-webkit-scrollbar-thumb {
+		background: #ff0000;
+	}
+
+	.content {
+		padding: 1rem;
+		height: 100%;
+
+		.searchbar {
+			margin-top: 1rem;
+		}
+
+		.sections {
+			margin-top: 50px;
+			height: 80%;
+			overflow-y: scroll;
+
+			.no-content {
+				color: white;
+				font-family: 'Work Sans', sans-serif;
+				padding: 1rem;
+				font-weight: 300;
+				font-size: 0.8rem;
+				opacity: 0.5;
+			}
+
+			.section-header {
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+				display: flex;
+				justify-content: space-between;
+				color: white;
+				font-family: 'Work Sans', sans-serif;
+
+				p {
+					font-weight: 500;
+					opacity: 0.4;
+					letter-spacing: 1px;
+					font-size: 0.9rem;
+				}
+
+				.header-icon {
+					transition: 0.2s;
+				}
+
+				.header-icon:hover {
+					cursor: pointer;
+					opacity: 0.5;
+					font-size: 1.2rem;
+				}
+			}
+
+			.section-children {
+				.section-child {
+					padding: 0.2rem;
+					font-family: 'Work Sans', sans-serif;
+
+					color: white;
+
+					.hash {
+						color: #6b6e73;
+						margin-right: 10px;
+						font-size: 1.5rem;
+					}
+
+					p {
+						font-size: 1rem;
+						display: flex;
+						align-items: center;
+					}
+					transition: 0.1s;
+				}
+
+				.section-child:hover {
+					cursor: pointer;
+					background: #212529;
+				}
+
+				.active {
+					background: #212529;
+				}
+			}
+		}
+	}
+}
