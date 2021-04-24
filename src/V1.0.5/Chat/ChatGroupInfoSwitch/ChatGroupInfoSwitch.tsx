@@ -68,6 +68,14 @@ const ChatGroupInfoSwitch = ({ anchor, setAnchor }: PopoutProps) => {
 			}}
 		>
 			<div className="popout">
+				<div className="settings" style={{ marginBottom: '1.5rem' }}>
+					<Button
+						clickHandler={() => alert('Not implemented')}
+						content="Group Settings"
+						size="large"
+					/>
+					<hr style={{ marginTop: '1rem', opacity: '0.2' }} />
+				</div>
 				<div className="header">
 					<p>Switch Channels</p>
 					<FontAwesomeIcon icon={faRandom} />

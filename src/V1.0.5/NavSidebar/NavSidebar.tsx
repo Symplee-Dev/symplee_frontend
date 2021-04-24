@@ -18,11 +18,13 @@ import NotificationPopout from './NotificationPopout';
 import UserPopout from './UserPopout';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { UIActions } from '../../redux/actions/index';
 
 export const NavSidebar = () => {
 	const [hasTeams] = useState(false);
 	const path = useLocation().pathname;
 	const user = useSelector((state: RootState) => state.user.user)!;
+	const clearChat = UIActions.useClearCurrentChat();
 
 	const [notifAnchor, setNotifAnchor] = useState<any | null>(null);
 	const [userAnchor, setUserAnchor] = useState<any | null>(null);
@@ -43,6 +45,7 @@ export const NavSidebar = () => {
 				/>
 				<FontAwesomeIcon
 					onClick={() => {
+						clearChat();
 						const lastChatId =
 							localStorage.getItem('LAST_SELECTED_GROUP') ??
 							user.chatGroups[0].id;

@@ -17,4 +17,31 @@
 			height: 100vh;
 		}
 	}
+
+	.chat-parent {
+		display: flex;
+		width: 100%;
+
+		.chat-empty {
+			background: #212529;
+			color: white;
+			height: 100%;
+			width: 100%;
+			font-family: 'Work Sans', sans-serif;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			p {
+				font-size: 1.2rem;
+				font-weight: 500;
+				opacity: 0.5;
+			}
+
+			svg {
+				height: 50%;
+				margin-bottom: 2rem;
+			}
+		}
+	}
 }

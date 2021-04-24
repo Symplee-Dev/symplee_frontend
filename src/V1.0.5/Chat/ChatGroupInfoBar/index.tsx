@@ -18,7 +18,7 @@ const ChatGroupInfoBar = ({ name, avatar }: ChatGroupInfoBarProps) => {
 	const currentGroup = UISelectors.useSelectCurrentChatGroup();
 	const setCurrentChat = UIActions.useSetCurrentChat();
 
-	setCurrentChat(currentGroup?.chats[0]);
+	// setCurrentChat(currentGroup?.chats[0]);
 
 	return (
 		<div className="chat-group-info-bar">

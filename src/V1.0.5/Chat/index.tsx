@@ -1,4 +1,5 @@
 import ChatGroupSidebar from './ChatGroupSidebar';
+import './index.scss';
 
 const Chat = () => {
 	return (

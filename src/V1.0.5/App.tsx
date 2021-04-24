@@ -10,6 +10,9 @@ import { DesktopWindowBar } from './DesktopWindowBar';
 import './index.scss';
 import { isElectron } from '../utils/createNotification';
 import { UserActions } from '../redux/actions/index';
+import HomePage from '../views/Home/index';
+import Login from '../views/Onboarding/Login/index';
+import Register from '../views/Onboarding/Register/index';
 
 const App = () => {
 	const location = useLocation();
@@ -17,16 +20,26 @@ const App = () => {
 	UserActions.useGetUser();
 
 	if (!authenticated) {
-		<ErrorBoundary
-			FallbackComponent={ErrorPage}
-			onReset={() => window.location.reload()}
-		>
-			<Switch location={location}>
-				<Route exact path="/">
-					Login Page
-				</Route>
-			</Switch>
-		</ErrorBoundary>;
+		return (
+			<div>
+				<ErrorBoundary
+					FallbackComponent={ErrorPage}
+					onReset={() => window.location.reload()}
+				>
+					<Switch location={location}>
+						<Route exact path="/login">
+							<Login />
+						</Route>
+						<Route exact path="/signup">
+							<Register />
+						</Route>
+						<Route exact path="/">
+							<HomePage />
+						</Route>
+					</Switch>
+				</ErrorBoundary>
+			</div>
+		);
 	}
 
 	return (
