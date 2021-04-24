@@ -84,16 +84,9 @@ export const UserActions: RootActions['user'] = {
 
 		const token = localStorage.getItem('bolttoken')!;
 
-		const userReduxId = () => {
-			try {
-				return decode(token);
-			} catch (e) {
-				logger.error(e);
-			}
-		};
+		const userReduxId = token.length < 1 ? undefined : decode(token);
 
 		const { refetch } = useUserQuery({
-			skip: !token || token.length < 1,
 			//@ts-ignore
 			variables: { id: userReduxId.userId },
 			onCompleted: data => {
