@@ -36,8 +36,7 @@ export const onLoginSubmit = (
 	if (usernameType === 'USERNAME') {
 		login({
 			variables: {
-				username:
-					loginCredentials.username + '#' + loginCredentials.key,
+				username: loginCredentials.username + '#' + loginCredentials.key,
 				password: loginCredentials.password
 			}
 		});
@@ -91,12 +90,7 @@ export const useLogin = (
 				}
 			}
 
-			if (
-				!error &&
-				data &&
-				data.login &&
-				errorState !== 'Logging you In!'
-			) {
+			if (!error && data && data.login && errorState !== 'Logging you In!') {
 				setErrorState('Logging you In!');
 				addNotication({
 					title: 'Logging you In!',
@@ -107,7 +101,6 @@ export const useLogin = (
 				});
 				setAuth(data.login.token);
 				localStorage.setItem('bolttoken', data.login.token);
-				history.push('/');
 			}
 		}
 	}, [data, loading, error, errorState, history, setAuth, addNotication, id]);

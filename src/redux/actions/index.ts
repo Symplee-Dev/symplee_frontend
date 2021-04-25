@@ -91,6 +91,7 @@ export const UserActions: RootActions['user'] = {
 			skip: !userReduxId,
 			variables: { id: userReduxId?.userId ?? -1 },
 			onCompleted: data => {
+				logger.info('Success');
 				const action: SetUser = {
 					type: UserActionConstants.SET_USER,
 					payload: data.user

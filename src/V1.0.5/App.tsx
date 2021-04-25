@@ -13,6 +13,7 @@ import { UserActions } from '../redux/actions/index';
 import Login from '../views/Onboarding/Login/index';
 import Register from '../views/Onboarding/Register/index';
 import LandingSite from './LandingSite/index';
+import Notifications from '../components/Notifications';
 
 const App = () => {
 	const location = useLocation();
@@ -26,13 +27,8 @@ const App = () => {
 					FallbackComponent={ErrorPage}
 					onReset={() => window.location.reload()}
 				>
+					<Notifications />
 					<Switch location={location}>
-						<Route exact path="/login">
-							<Login />
-						</Route>
-						<Route exact path="/signup">
-							<Register />
-						</Route>
 						<Route exact path="/">
 							<LandingSite />
 						</Route>
@@ -47,6 +43,8 @@ const App = () => {
 			FallbackComponent={ErrorPage}
 			onReset={() => window.location.reload()}
 		>
+			<Notifications />
+
 			{isElectron() && <DesktopWindowBar />}
 			<Home isElectron={isElectron()} />
 		</ErrorBoundary>

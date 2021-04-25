@@ -1,12 +1,16 @@
 import './index.scss';
 import { Footer } from './Footer';
-import { useLoginMutation } from '../../graphql';
+import { useLoginMutation, useSignupMutation } from '../../graphql';
 import { useLogin, onLoginSubmit } from '../../hooks/useLoginForm';
 import Button from '../components/Button/Button';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
+import { useRegister, onRegisterSubmit } from '../../hooks/useRegisterForm';
 
 const LandingSite = () => {
-	const [login, { data, loading, error }] = useLoginMutation();
+	const [
+		login,
+		{ data: loginData, loading: loginLoading, error: loginError }
+	] = useLoginMutation();
 
 	const [formMode, setFormMode] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
 
@@ -16,7 +20,7 @@ const LandingSite = () => {
 		setLoginCredentials,
 		setUsernameType,
 		usernameType
-	} = useLogin(loading, error, data);
+	} = useLogin(loginLoading, loginError, loginData);
 
 	const onChange = (
 		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -31,6 +35,25 @@ const LandingSite = () => {
 		onLoginSubmit(e, usernameType, loginCredentials, login);
 	};
 
+	const [signup, { data, loading, error }] = useSignupMutation();
+
+	const { registerCredentials, setRegisterCredentials } = useRegister(
+		loading,
+		error,
+		data
+	);
+
+	const onRegisterChange = event => {
+		setRegisterCredentials({
+			...registerCredentials,
+			[event.target.name]: event.target.value
+		});
+	};
+
+	const onRegisterSubmission = (e: FormEvent) => {
+		onRegisterSubmit(e, registerCredentials, signup);
+	};
+
 	return (
 		<div className="landing-site">
 			<div className="landing-top">
@@ -42,12 +65,16 @@ const LandingSite = () => {
 							and inconveniences.
 						</p>
 					</div>
-					<div className="fields">
+					<form
+						className="fields"
+						onSubmit={formMode === 'LOGIN' ? onSubmit : onRegisterSubmission}
+					>
 						{formMode === 'LOGIN' && (
 							<>
 								<div className="field">
 									<p>Username</p>
 									<input
+										required
 										type="email"
 										name="username"
 										onChange={onChange}
@@ -58,11 +85,61 @@ const LandingSite = () => {
 								<div className="field">
 									<p>Password</p>
 									<input
+										required
+										autoComplete="current-password"
 										name="password"
 										onChange={onChange}
 										type="password"
 										className="input-field"
 										value={loginCredentials.password}
+									/>
+								</div>
+							</>
+						)}
+						{formMode === 'REGISTER' && (
+							<>
+								<div className="field">
+									<p>Full Name</p>
+									<input
+										required
+										type="text"
+										name="name"
+										onChange={onRegisterChange}
+										className="input-field"
+										value={registerCredentials.name}
+									/>
+								</div>
+								<div className="field">
+									<p>Username</p>
+									<input
+										required
+										name="username"
+										onChange={onRegisterChange}
+										type="text"
+										className="input-field"
+										value={registerCredentials.username}
+									/>
+								</div>
+								<div className="field">
+									<p>Email</p>
+									<input
+										required
+										name="email"
+										onChange={onRegisterChange}
+										type="email"
+										className="input-field"
+										value={registerCredentials.email}
+									/>
+								</div>
+								<div className="field">
+									<p>Password</p>
+									<input
+										required
+										name="password"
+										onChange={onRegisterChange}
+										type="password"
+										className="input-field"
+										value={registerCredentials.password}
 									/>
 								</div>
 							</>
@@ -91,7 +168,7 @@ const LandingSite = () => {
 							content="Submit"
 							size="large"
 						/>
-					</div>
+					</form>
 				</div>
 			</div>
 			<Footer />

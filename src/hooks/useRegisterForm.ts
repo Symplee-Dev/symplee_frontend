@@ -59,7 +59,6 @@ export const useRegister = (
 					autoDismiss: true,
 					autoTimeoutTime: 3000
 				});
-				history.push('/login');
 			}
 		}
 	}, [data, error, history, loading, addNotication, id, errorState]);
