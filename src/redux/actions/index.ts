@@ -82,14 +82,16 @@ export const UserActions: RootActions['user'] = {
 
 		const dispatch = useDispatch();
 
-		const token = localStorage.getItem('bolttoken')!;
+		const token = localStorage.getItem('bolttoken');
 
-		const userReduxId = token.length < 1 ? undefined : decode(token);
+		const userReduxId: { userId: number } | undefined =
+			!token || token.length < 1 ? undefined : decode(token);
 
 		const { refetch } = useUserQuery({
-			//@ts-ignore
-			variables: { id: userReduxId.userId },
+			skip: !userReduxId,
+			variables: { id: userReduxId?.userId ?? -1 },
 			onCompleted: data => {
+				logger.info('Success');
 				const action: SetUser = {
 					type: UserActionConstants.SET_USER,
 					payload: data.user

@@ -18,12 +18,10 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 					<Route exact path={`/chat/:lastchatid`}>
 						<div className="chat-parent">
 							<Chat />
-							{!hasSelectedChat && (
-								<div className="chat-empty">
-									{/* <EmptyChatArt /> */}
-									<p>Please select a channel</p>
-								</div>
-							)}
+							<div className="chat-empty">
+								{/* <EmptyChatArt /> */}
+								<p>Please select a channel</p>
+							</div>
 						</div>
 					</Route>
 					<Route exact path={`/chat/:lastchatid/message/:chatId`}>
