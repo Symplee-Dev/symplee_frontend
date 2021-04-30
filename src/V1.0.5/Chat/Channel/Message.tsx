@@ -60,7 +60,7 @@ const Message = ({
 							fallback={message.author.username[0]}
 							src={message.author.avatar ?? ''}
 							hasStatus={false}
-							className="medium"
+							className="small"
 						/>
 					</div>
 				)}

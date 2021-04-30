@@ -3,10 +3,8 @@ import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import makeAnimated from 'react-select/animated';
-
 import Select from 'react-select';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useCreateChatGroupMutation } from '../../../graphql';
 import { RootState } from '../../../redux/types/state-types';
@@ -16,11 +14,9 @@ import { Avatar } from '../../components';
 import Button from '../../components/Button/Button';
 
 const visibilityOptions = [
-	{ value: true, label: 'Public', className: 'option' },
-	{ value: false, label: 'Private', className: 'option' }
+	{ value: 'Public', label: 'Public', className: 'option' },
+	{ value: 'Private', label: 'Private', className: 'option' }
 ];
-
-const animatedComponents = makeAnimated();
 
 const CreateGroupSidebar = ({
 	open,
@@ -37,7 +33,7 @@ const CreateGroupSidebar = ({
 
 	const history = useHistory();
 
-	const [create, { data, loading, error }] = useCreateChatGroupMutation();
+	const [create, { loading }] = useCreateChatGroupMutation();
 
 	const [imageLoading, setImageLoading] = useState(false);
 
@@ -64,18 +60,20 @@ const CreateGroupSidebar = ({
 
 	const userId = useSelector((state: RootState) => state.user.userId);
 
-	useEffect(() => {
-		if (data && !loading && !error) {
-			history.push('/group/' + data.createChatGroup.id);
-		}
-	}, [data, error, history, loading]);
-
 	const handleSubmit = e => {
 		e.preventDefault();
 
 		if (newGroup.name.length > 0) {
 			create({
 				variables: { chatGroup: { ...newGroup, userId: userId! } }
+			}).then(d => {
+				history.push('/chat/' + d.data?.createChatGroup.id);
+				setNewGroup({
+					isPublic: false,
+					name: '',
+					avatar: undefined
+				});
+				setOpen(false);
 			});
 		}
 	};
@@ -97,12 +95,14 @@ const CreateGroupSidebar = ({
 					</div>
 
 					<form onSubmit={handleSubmit}>
-						<Avatar
-							src={newGroup.avatar ?? ''}
-							fallback={newGroup.name[0]}
-							hasStatus={false}
-							className="large"
-						/>
+						<div className="image">
+							<Avatar
+								src={newGroup.avatar ?? ''}
+								fallback={newGroup.name[0]}
+								hasStatus={false}
+								className="large"
+							/>
+						</div>
 						<div className="change-avatar-root">
 							{!imageLoading ? (
 								<label className="file-upload-root">
@@ -137,10 +137,16 @@ const CreateGroupSidebar = ({
 						/>
 						<p>Visibility</p>
 						<Select
-							defaultValue={true}
-							components={animatedComponents}
-							value={newGroup.isPublic as any}
-							onChange={e => setNewGroup({ ...newGroup, isPublic: e.value })}
+							isMulti={false}
+							defaultValue={newGroup.isPublic as any}
+							onChange={e => {
+								console.log(e);
+
+								setNewGroup({
+									...newGroup,
+									isPublic: e?.value === 'Public' ? true : false
+								});
+							}}
 							options={visibilityOptions}
 							className="select-component"
 							theme={theme => ({
