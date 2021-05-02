@@ -27,7 +27,7 @@ const ChatGroupInfoBar = ({ name, avatar }: ChatGroupInfoBarProps) => {
 					fallback={name[0]}
 					hasStatus={false}
 					src={avatar ?? ''}
-					className="large"
+					className="medium"
 				/>
 				<h4>{name}</h4>
 			</div>

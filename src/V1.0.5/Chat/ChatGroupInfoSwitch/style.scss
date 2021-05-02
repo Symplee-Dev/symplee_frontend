@@ -6,6 +6,8 @@
 	background: #1c1a21;
 	font-family: 'Work Sans', sans-serif;
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 
 	.searchbar {
 		margin-top: 1rem;
@@ -18,8 +20,9 @@
 	}
 
 	.groups {
+		margin-top: 1rem;
 		padding: 0.5rem;
-		height: 90%;
+		flex: 1;
 		overflow-y: scroll;
 
 		.group {

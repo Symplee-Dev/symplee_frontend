@@ -103,42 +103,44 @@ const CreateInviteDrawer = ({
 						</p>
 					</div>
 					<form onSubmit={handleSubmit}>
-						<p>How many uses do you want available on this invite?</p>
-						<Select
-							defaultValue={-1}
-							components={animatedComponents}
-							value={uses}
-							onChange={setUses}
-							options={usesOptions}
-							className="select-component"
-							theme={theme => ({
-								...theme,
-								borderRadius: 0,
-								colors: {
-									...theme.colors,
-									primary: '#212529',
-									primary25: '#ebebeb'
-								}
-							})}
-						/>
-						<p>Select friends to send the invite to (Optional)</p>
-						<Select
-							isMulti
-							components={animatedComponents}
-							value={selected}
-							onChange={setSelected}
-							options={to}
-							className="select-component"
-							theme={theme => ({
-								...theme,
-								borderRadius: 0,
-								colors: {
-									...theme.colors,
-									primary: '#212529',
-									primary25: '#ebebeb'
-								}
-							})}
-						/>
+						<div>
+							<p>How many uses do you want available on this invite?</p>
+							<Select
+								defaultValue={-1}
+								components={animatedComponents}
+								value={uses}
+								onChange={setUses}
+								options={usesOptions}
+								className="select-component"
+								theme={theme => ({
+									...theme,
+									borderRadius: 0,
+									colors: {
+										...theme.colors,
+										primary: '#212529',
+										primary25: '#ebebeb'
+									}
+								})}
+							/>
+							<p>Select friends to send the invite to (Optional)</p>
+							<Select
+								isMulti
+								components={animatedComponents}
+								value={selected}
+								onChange={setSelected}
+								options={to}
+								className="select-component"
+								theme={theme => ({
+									...theme,
+									borderRadius: 0,
+									colors: {
+										...theme.colors,
+										primary: '#212529',
+										primary25: '#ebebeb'
+									}
+								})}
+							/>
+						</div>
 						{!code && (
 							<Button
 								clickHandler={() => {

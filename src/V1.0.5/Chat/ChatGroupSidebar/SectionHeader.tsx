@@ -13,10 +13,18 @@ const SectionHeader = ({
 	hasAction = false
 }: SectionHeaderProps) => {
 	return (
-		<div className="section-header">
-			<p>{content}</p>
-			{hasAction && <FontAwesomeIcon icon={faPlus} className="header-icon" />}
-		</div>
+		<>
+			<div className="section-header">
+				<p>{content}</p>
+				{hasAction && (
+					<FontAwesomeIcon
+						icon={faPlus}
+						className="header-icon"
+						onClick={() => actionHandler()}
+					/>
+				)}
+			</div>
+		</>
 	);
 };
 

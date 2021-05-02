@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './NavSidebar.scss';
 import { useState } from 'react';
 import { Avatar } from '../components';
-import { faInbox } from '@fortawesome/free-solid-svg-icons';
+import { faInbox, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/types/state-types';
 
@@ -19,6 +19,7 @@ import UserPopout from './UserPopout';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { UIActions } from '../../redux/actions/index';
+import CreateGroupSidebar from './CreateGroupSidebar/CreateGroupSidebar';
 
 export const NavSidebar = () => {
 	const [hasTeams] = useState(false);
@@ -28,6 +29,7 @@ export const NavSidebar = () => {
 
 	const [notifAnchor, setNotifAnchor] = useState<any | null>(null);
 	const [userAnchor, setUserAnchor] = useState<any | null>(null);
+	const [creatingGroup, setCreatingGroup] = useState(false);
 
 	const history = useHistory();
 
@@ -35,7 +37,7 @@ export const NavSidebar = () => {
 
 	return (
 		<div className="nav-sidebar">
-			<div className="top">
+			<div id="top">
 				<FontAwesomeIcon icon={faSearch} className="icon" />
 				<hr />
 				<FontAwesomeIcon
@@ -43,17 +45,19 @@ export const NavSidebar = () => {
 					icon={faInbox}
 					className={`icon ${path === '/' ? 'active' : ''}`}
 				/>
-				<FontAwesomeIcon
-					onClick={() => {
-						clearChat();
-						const lastChatId =
-							localStorage.getItem('LAST_SELECTED_GROUP') ??
-							user.chatGroups[0].id;
-						history.push(`/chat/${lastChatId}`);
-					}}
-					icon={faComment}
-					className={`icon ${path.includes('chat') ? 'active' : ''}`}
-				/>
+				{user.chatGroups.length > 0 && (
+					<FontAwesomeIcon
+						onClick={() => {
+							clearChat();
+							const lastChatId =
+								localStorage.getItem('LAST_SELECTED_GROUP') ??
+								user.chatGroups[0].id;
+							history.push(`/chat/${lastChatId}`);
+						}}
+						icon={faComment}
+						className={`icon ${path.includes('chat') ? 'active' : ''}`}
+					/>
+				)}
 				<FontAwesomeIcon
 					icon={faUserFriends}
 					className={`icon ${path.includes('teams') ? 'active' : ''}`}
@@ -62,9 +66,15 @@ export const NavSidebar = () => {
 					icon={faGlobeAmericas}
 					className={`icon ${path.includes('discover') ? 'active' : ''}`}
 				/>
+				<FontAwesomeIcon
+					icon={faPlus}
+					className={`icon`}
+					onClick={() => setCreatingGroup(!creatingGroup)}
+				/>
+				<CreateGroupSidebar open={creatingGroup} setOpen={setCreatingGroup} />
 				{hasTeams && <hr />}
 			</div>
-			<div className="bottom">
+			<div id="bottom">
 				<FontAwesomeIcon icon={faQuestionCircle} className="icon" />
 				<FontAwesomeIcon
 					icon={faBell}

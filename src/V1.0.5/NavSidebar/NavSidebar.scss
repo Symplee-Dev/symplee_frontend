@@ -19,8 +19,8 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.top,
-	.bottom {
+	#top,
+	#bottom {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -52,7 +52,7 @@
 		}
 	}
 
-	.top {
+	#top {
 		.logo {
 			margin-bottom: 1rem;
 		}

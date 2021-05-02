@@ -30,7 +30,7 @@ export const Avatar = ({
 	}
 
 	return (
-		<UserAvatar src={src}>
+		<UserAvatar src={src} className={className}>
 			<p>{fallback}</p>
 		</UserAvatar>
 	);

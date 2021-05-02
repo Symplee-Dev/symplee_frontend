@@ -11,10 +11,12 @@ import { UserSelectors } from '../../../redux/selectors';
 import { useSetLastSelectedGroup } from '../../../hooks/useSetLastSelectedGroup';
 import SectionChild from './SectionChild';
 import { useHistory } from 'react-router';
+import CreateChatSidebar from './CreateChatSidebar/CreateChatSidebar';
 
 const ChatGroupSidebar = () => {
 	const { lastchatid: groupId }: { lastchatid: string } = useParams();
 	const setCurrentChatGroup = UIActions.useSetCurrentChatGroup();
+	const [creatingChat, setCreatingChat] = useState(false);
 
 	const history = useHistory();
 
@@ -78,6 +80,8 @@ const ChatGroupSidebar = () => {
 
 	return (
 		<div className="chat-group-sidebar">
+			<CreateChatSidebar open={creatingChat} setOpen={setCreatingChat} />
+
 			<ChatGroupInfoBar
 				name={data?.chatGroup.name ?? ''}
 				avatar={data?.chatGroup.avatar ?? ''}
@@ -92,13 +96,13 @@ const ChatGroupSidebar = () => {
 
 				<div className="sections">
 					<SectionHeader
-						actionHandler={() => alert('not implemented')}
+						actionHandler={() => setCreatingChat(!creatingChat)}
 						content="FAVORITES"
 						hasAction={false}
 					/>
 					<NoContentMessage />
 					<SectionHeader
-						actionHandler={() => alert('not implemented')}
+						actionHandler={() => setCreatingChat(!creatingChat)}
 						content="TEXT CHATS"
 						hasAction={isAuthor}
 					/>
@@ -123,7 +127,7 @@ const ChatGroupSidebar = () => {
 						).length < 1 && <NoContentMessage />}
 
 					<SectionHeader
-						actionHandler={() => alert('not implemented')}
+						actionHandler={() => setCreatingChat(!creatingChat)}
 						content="VOICE CHATS"
 						hasAction={isAuthor}
 					/>
@@ -147,7 +151,7 @@ const ChatGroupSidebar = () => {
 						).length < 1 && <NoContentMessage />}
 
 					<SectionHeader
-						actionHandler={() => alert('not implemented')}
+						actionHandler={() => setCreatingChat(!creatingChat)}
 						content="SCHEDULED CHATS"
 						hasAction={isAuthor}
 					/>
