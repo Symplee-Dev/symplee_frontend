@@ -1,0 +1,104 @@
+.discover {
+	width: 100%;
+	background: #212529;
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+	overflow-y: scroll;
+
+	.inner {
+		width: 80%;
+		margin: 0 auto;
+		padding: 2rem;
+
+		hr {
+			margin-top: 1rem;
+			opacity: 0.2;
+		}
+
+		h2 {
+			font-weight: 600;
+			font-size: 2rem;
+		}
+
+		.featured {
+			margin-top: 2rem;
+			width: 100%;
+
+			h4 {
+				font-weight: 400;
+			}
+
+			.features {
+				margin-top: 1rem;
+				width: 100%;
+				display: flex;
+				flex-flow: wrap;
+				justify-content: space-between;
+
+				.feature {
+					margin-bottom: 1rem;
+					width: 48%;
+
+					flex-wrap: wrap;
+					height: 300px;
+					background: #1c1c1f;
+					border-radius: 0.5rem;
+				}
+			}
+		}
+
+		.find {
+			width: 100%;
+
+			margin-top: 2rem;
+
+			h4 {
+				margin-bottom: 1rem;
+				font-weight: 400;
+			}
+
+			.searchbar {
+				width: 100%;
+
+				border: 2px solid #393c3f;
+			}
+
+			.info-text {
+				text-align: center;
+				margin-top: 5rem;
+				opacity: 0.5;
+				font-weight: 500;
+				font-size: 1rem;
+			}
+		}
+
+		.groups {
+			margin-top: 1rem;
+			display: flex;
+			flex-direction: column;
+
+			.group {
+				margin-bottom: 1rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.left {
+					display: flex;
+					align-items: center;
+
+					.title {
+						margin-left: 1rem;
+						font-weight: 500;
+					}
+				}
+
+				.right {
+					.already-joined {
+						opacity: 0.5;
+					}
+				}
+			}
+		}
+	}
+}

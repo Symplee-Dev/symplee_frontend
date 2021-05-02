@@ -6,6 +6,7 @@ import { Inbox } from '../Inbox';
 import Chat from '../Chat/index';
 import Channel from '../Chat/Channel';
 import { UISelectors } from '../../redux/selectors';
+import Discover from '../Discover/index';
 
 export const Home = ({ isElectron }: { isElectron: boolean }) => {
 	const hasSelectedChat = UISelectors.useSelectCurrentChat();
@@ -15,6 +16,9 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 			<div className={`layout ${isElectron ? '' : 'layout-max'}`}>
 				<NavSidebar />
 				<Switch>
+					<Route exact path="/discover">
+						<Discover />
+					</Route>
 					<Route exact path={`/chat/:lastchatid`}>
 						<div className="chat-parent">
 							<Chat />
