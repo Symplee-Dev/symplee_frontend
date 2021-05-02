@@ -95,71 +95,75 @@ const CreateGroupSidebar = ({
 					</div>
 
 					<form onSubmit={handleSubmit}>
-						<div className="image">
-							<Avatar
-								src={newGroup.avatar ?? ''}
-								fallback={newGroup.name[0]}
-								hasStatus={false}
-								className="large"
+						<div>
+							<div className="image">
+								<Avatar
+									src={newGroup.avatar ?? ''}
+									fallback={newGroup.name[0]}
+									hasStatus={false}
+									className="large"
+								/>
+							</div>
+							<div className="change-avatar-root">
+								{!imageLoading ? (
+									<label className="file-upload-root">
+										<input
+											onChange={handleImageUpload}
+											type="file"
+											accept="image/*"
+											style={{ border: 'none' }}
+										/>
+										Change Avatar
+									</label>
+								) : (
+									<>
+										<LinearProgress
+											color="primary"
+											style={{
+												marginTop: '1rem',
+												marginBottom: '0.5rem'
+											}}
+										/>
+										<p>Uploading Image...</p>
+									</>
+								)}
+							</div>
+							<p>Group Name</p>
+							<input
+								type="text"
+								className="text-field"
+								required
+								onChange={e =>
+									setNewGroup({ ...newGroup, name: e.target.value })
+								}
+								value={newGroup.name}
+							/>
+							<p>Visibility</p>
+							<Select
+								isMulti={false}
+								defaultValue={newGroup.isPublic as any}
+								onChange={e => {
+									console.log(e);
+
+									setNewGroup({
+										...newGroup,
+										isPublic: e?.value === 'Public' ? true : false
+									});
+								}}
+								options={visibilityOptions}
+								className="select-component"
+								theme={theme => ({
+									...theme,
+									borderRadius: 0,
+									colors: {
+										...theme.colors,
+										primary: '#212529',
+										primary25: '#ebebeb'
+									}
+								})}
 							/>
 						</div>
-						<div className="change-avatar-root">
-							{!imageLoading ? (
-								<label className="file-upload-root">
-									<input
-										onChange={handleImageUpload}
-										type="file"
-										accept="image/*"
-										style={{ border: 'none' }}
-									/>
-									Change Avatar
-								</label>
-							) : (
-								<>
-									<LinearProgress
-										color="primary"
-										style={{
-											marginTop: '1rem',
-											marginBottom: '0.5rem'
-										}}
-									/>
-									<p>Uploading Image...</p>
-								</>
-							)}
-						</div>
-						<p>Group Name</p>
-						<input
-							type="text"
-							className="text-field"
-							required
-							onChange={e => setNewGroup({ ...newGroup, name: e.target.value })}
-							value={newGroup.name}
-						/>
-						<p>Visibility</p>
-						<Select
-							isMulti={false}
-							defaultValue={newGroup.isPublic as any}
-							onChange={e => {
-								console.log(e);
-
-								setNewGroup({
-									...newGroup,
-									isPublic: e?.value === 'Public' ? true : false
-								});
-							}}
-							options={visibilityOptions}
-							className="select-component"
-							theme={theme => ({
-								...theme,
-								borderRadius: 0,
-								colors: {
-									...theme.colors,
-									primary: '#212529',
-									primary25: '#ebebeb'
-								}
-							})}
-						/>
-						<div>
+						<div className="bottom-div">
 							<p style={{ fontSize: '0.8rem' }}>
 								{!newGroup.isPublic
 									? 'This group is currently set to private and will not be able to be found on the community page'

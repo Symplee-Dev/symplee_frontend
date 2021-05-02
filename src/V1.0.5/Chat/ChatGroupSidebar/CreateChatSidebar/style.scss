@@ -1,0 +1,61 @@
+.drawer {
+	width: 20vw;
+	padding: 1rem;
+	background: #141418;
+	height: 100vh;
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+
+	.top {
+		display: flex;
+		justify-content: flex-end;
+
+		svg {
+			transition: 0.2s;
+		}
+
+		svg:hover {
+			cursor: pointer;
+			opacity: 0.5;
+		}
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		#sub-header {
+			margin-top: 1rem;
+			margin-bottom: 1rem;
+		}
+
+		#sub-value {
+			margin: 0;
+		}
+
+		.change-emoji {
+			text-decoration: underline;
+			opacity: 0.5;
+			font-size: 0.8rem !important;
+			margin-left: 1rem !important;
+		}
+
+		.change-emoji:hover {
+			cursor: pointer;
+		}
+
+		.emoji-value {
+			font-size: 1.5rem !important;
+		}
+
+		.emoji-top {
+			display: flex;
+			align-items: center;
+		}
+
+		.select-component {
+			margin-top: 2rem !important;
+			margin-bottom: 2rem !important;
+		}
+	}
+}
