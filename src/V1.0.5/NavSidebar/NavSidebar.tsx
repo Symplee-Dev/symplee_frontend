@@ -64,6 +64,7 @@ export const NavSidebar = () => {
 				/>
 				<FontAwesomeIcon
 					icon={faGlobeAmericas}
+					onClick={() => history.push('/discover')}
 					className={`icon ${path.includes('discover') ? 'active' : ''}`}
 				/>
 				<FontAwesomeIcon
