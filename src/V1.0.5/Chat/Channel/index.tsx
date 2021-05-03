@@ -6,25 +6,29 @@ import { useParams } from 'react-router-dom';
 import { UISelectors } from '../../../redux/selectors';
 import ChannelInfo from './ChannelInfo/ChannelInfo';
 import { useState } from 'react';
+import VideoChannel from './VideoChannel/index';
 
 const Channel = () => {
 	const { chatId }: { chatId: string } = useParams();
 	const setCurrentChat = UIActions.useSetCurrentChat();
+	const currentChat = UISelectors.useSelectCurrentChatGroup()?.chats.find(
+		c => c?.id === parseInt(chatId)
+	);
 
 	const [channelInfoOpen, setChannelInfoOpen] = useState(false);
 
-	setCurrentChat(
-		UISelectors.useSelectCurrentChatGroup()?.chats.find(
-			c => c?.id === parseInt(chatId)
-		)
-	);
+	setCurrentChat(currentChat);
 
 	return (
 		<div className="channel">
-			<TextChat
-				setChannelInfoOpen={setChannelInfoOpen}
-				channelInfoOpen={channelInfoOpen}
-			/>
+			{currentChat?.mode === 'text chat' ? (
+				<TextChat
+					setChannelInfoOpen={setChannelInfoOpen}
+					channelInfoOpen={channelInfoOpen}
+				/>
+			) : (
+				<VideoChannel />
+			)}
 			{channelInfoOpen && (
 				<ChannelInfo setChannelInfoOpen={setChannelInfoOpen} />
 			)}

@@ -1,0 +1,252 @@
+import { logger } from '../../../../../utils/logger';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux/types/state-types';
+import { createRoomJWT } from '../../../../../utils/createRoomJWT';
+import { useState } from 'react';
+import {
+	LocalVideoTrack,
+	Room,
+	connect as connectToRoom,
+	createLocalVideoTrack,
+	ConnectOptions
+} from 'twilio-video';
+import { useGetCallMembrsLazyQuery } from '../../../../../graphql';
+import CallUser from '../CallUser/CallUser';
+import { RemoteParticipant, RemoteTrack } from 'twilio-video';
+
+export interface RoomHandlerInterface {
+	chatGroupId: number;
+	chatId: number;
+}
+
+export const useRoomHandler = ({
+	chatGroupId,
+	chatId
+}: RoomHandlerInterface): {
+	handler: typeof handler;
+	room: Room | undefined;
+	elements: JSX.Element[];
+	setRoom: React.Dispatch<React.SetStateAction<Room | undefined>>;
+} => {
+	const user = useSelector((state: RootState) => state.user.user)!;
+
+	logger.info(`${user.username} is joining chat room`);
+
+	const accessToken = createRoomJWT(
+		`${chatGroupId}-${chatId}`,
+		`${user.username}#${user.key}`
+	);
+
+	const [globalRoom, setRoom] = useState<Room>();
+	const [elements, setElements] = useState<{ [id: string]: JSX.Element }>({});
+	const [localTrack, setLocalTrack] = useState<LocalVideoTrack>();
+	const [getCallMembers, { data }] = useGetCallMembrsLazyQuery();
+
+	const handler = {
+		connect: async (options: ConnectOptions): Promise<boolean> => {
+			const room: Room = await connectToRoom(accessToken, {
+				...options,
+				name: `${chatGroupId}-${chatId}`
+			});
+			logger.success('Connected to room!');
+
+			createLocalVideoTrack().then(localVideoTrack => {
+				setLocalTrack(localVideoTrack);
+				setElements(prev => {
+					return {
+						...prev,
+						'local-user': (
+							<CallUser
+								key="local-user"
+								id="local-user"
+								identity={`${user.username}#${user.key}`}
+								tracks={[]}
+							/>
+						)
+					};
+				});
+				const localUserTarget = document.getElementById('local-user');
+
+				if (localUserTarget) {
+					localUserTarget.append(localVideoTrack.attach());
+				}
+			});
+
+			if (room.participants) {
+				room.participants.forEach(handler.participantConnected);
+			}
+
+			room.on('participantConnected', handler.participantConnected);
+
+			room.on('participantDisconnected', handler.participantDisconnected);
+
+			room.once('disconnected', error =>
+				room.participants.forEach(handler.participantDisconnected)
+			);
+
+			return true;
+		},
+		participantConnected: async (participant: RemoteParticipant) => {
+			logger.info(`${participant.identity} has connected`);
+
+			await getCallMembers({
+				variables: { members: [participant.identity] }
+			});
+
+			await data;
+
+			setElements(prev => {
+				return {
+					...prev,
+					[participant.sid]: (
+						<CallUser
+							key={participant.sid}
+							id={participant.sid}
+							identity={participant.identity}
+							avatar={data?.getCallMembers[0].avatar}
+							tracks={[]}
+						/>
+					)
+				};
+			});
+
+			participant.on('trackSubscribed', track => {
+				const targetP = document.getElementById(participant.sid);
+
+				//@ts-ignore
+				targetP?.appendChild(track.attach());
+			});
+
+			participant.on('trackUnsubscribed', handler.trackUnsubscribed);
+
+			const targetP = document.getElementById(participant.sid);
+
+			participant.tracks.forEach(publication => {
+				console.log(publication.track);
+
+				if (publication.isSubscribed) {
+					if (publication.track) {
+						//@ts-ignore
+						targetP?.appendChild(publication.track.attach());
+					}
+				}
+				publication.on('subscribed', handler.handleTrackDisabled);
+			});
+		},
+		handleTrackDisabled: (track: RemoteTrack) => {
+			track.on('disabled', () => {
+				//@ts-ignore
+				track.detach().forEach(element => element.remove());
+			});
+		},
+		participantDisconnected: (participant): void => {
+			logger.info('Leaving call');
+			logger.warning('Participant "%s" disconnected', participant.identity);
+
+			setElements(prev => {
+				let result = {};
+
+				for (const [key, val] of Object.entries(prev)) {
+					if (key !== participant.sid) {
+						result[key] = val;
+					}
+				}
+
+				return result;
+			});
+		},
+		disconnecting: () => {
+			localTrack?.disable();
+			localTrack?.stop();
+			localTrack?.detach().forEach(element => element.remove());
+			globalRoom?.localParticipant.videoTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+
+				publication.track.detach().forEach(element => element.remove());
+				publication.track.stop();
+				publication.unpublish();
+			});
+
+			setElements(prev => {
+				let result = {};
+
+				for (const [key, val] of Object.entries(prev)) {
+					if (key !== 'local-user') {
+						result[key] = val;
+					}
+				}
+
+				return result;
+			});
+		},
+		trackUnsubscribed: (track): void => {
+			track.detach().forEach(element => element.remove());
+		},
+		muteAudio: (): void => {
+			globalRoom?.localParticipant.audioTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+				publication.track.stop();
+				publication.unpublish();
+			});
+		},
+		unmuteAudio: (): void => {
+			globalRoom?.localParticipant.audioTracks.forEach(publication => {
+				publication.track.enable();
+				publication.track.restart();
+			});
+		},
+		muteVideo: (): void => {
+			logger.info('Disabling video');
+			localTrack?.disable();
+			localTrack?.stop();
+			localTrack?.detach().forEach(element => element.remove());
+			globalRoom?.localParticipant.videoTracks.forEach(publication => {
+				logger.info(publication);
+				publication.track.disable();
+				//@ts-ignore
+
+				publication.track.detach().forEach(element => element.remove());
+				publication.track.stop();
+				publication.unpublish();
+			});
+		},
+		unmuteVideo: (): void => {
+			createLocalVideoTrack()
+				.then(localVideoTrack => {
+					setLocalTrack(localVideoTrack);
+
+					setElements(prev => {
+						return {
+							...prev,
+							'local-user': (
+								<CallUser
+									key="local-user"
+									id="local-user"
+									identity={`${user.username}#${user.key}`}
+									tracks={[]}
+								/>
+							)
+						};
+					});
+
+					const targetP = document.getElementById('local-user');
+
+					targetP?.appendChild(localVideoTrack.attach());
+
+					return globalRoom?.localParticipant.publishTrack(localVideoTrack);
+				})
+				.then(publication => {
+					console.log('Successfully unmuted your video:', publication);
+				});
+		}
+	};
+
+	return {
+		handler,
+		room: globalRoom,
+		elements: Object.values(elements),
+		setRoom
+	};
+};
