@@ -50,6 +50,8 @@ export const useRoomHandler = ({
 			});
 			logger.success('Connected to room!');
 
+			setRoom(room);
+
 			createLocalVideoTrack().then(localVideoTrack => {
 				setLocalTrack(localVideoTrack);
 				setElements(prev => {

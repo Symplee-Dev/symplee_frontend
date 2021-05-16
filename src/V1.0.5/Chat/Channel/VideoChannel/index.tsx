@@ -36,15 +36,13 @@ const VideoChannel = () => {
 				participants={room ? room?.participants.size : 0}
 				unMuteVideo={() => handler.unmuteVideo()}
 				disconnect={() => {
-					if (room) {
-						const roo = room.disconnect();
-						setRoom(roo);
-						handler.disconnecting();
-					}
+					const roo = room?.disconnect();
+					setRoom(roo);
+					handler.disconnecting();
 				}}
 				muteVideo={() => handler.muteVideo()}
 			/>
-			{/* <div className="call-members">{elements}</div> */}
+			<div className="call-members">{elements}</div>
 		</div>
 	);
 };

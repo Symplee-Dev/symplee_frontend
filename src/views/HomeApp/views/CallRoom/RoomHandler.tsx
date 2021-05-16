@@ -147,10 +147,7 @@ export const useRoomHandler = ({
 		},
 		participantDisconnected: (participant): void => {
 			logger.info('Leaving call');
-			logger.warning(
-				'Participant "%s" disconnected',
-				participant.identity
-			);
+			logger.warning('Participant "%s" disconnected', participant.identity);
 
 			setElements(prev => {
 				let result = {};
@@ -244,15 +241,10 @@ export const useRoomHandler = ({
 
 					targetP?.appendChild(localVideoTrack.attach());
 
-					return globalRoom?.localParticipant.publishTrack(
-						localVideoTrack
-					);
+					return globalRoom?.localParticipant.publishTrack(localVideoTrack);
 				})
 				.then(publication => {
-					console.log(
-						'Successfully unmuted your video:',
-						publication
-					);
+					console.log('Successfully unmuted your video:', publication);
 				});
 		}
 	};

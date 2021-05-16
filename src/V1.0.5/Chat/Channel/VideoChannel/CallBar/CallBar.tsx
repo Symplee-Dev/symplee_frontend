@@ -80,11 +80,10 @@ const CallBar = ({
 			<div className="middle">
 				<button
 					onClick={() => {
-						if (disconnect) {
-							logger.warning('Disconnecting');
-							disconnect();
-							history.goBack();
-						}
+						logger.warning('Disconnecting');
+						//@ts-ignore
+						disconnect();
+						history.goBack();
 					}}
 				>
 					Leave <ExitToAppSharpIcon />

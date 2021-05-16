@@ -1,6 +1,6 @@
 .call-bar {
 	background: #1c1c1f;
-	width: 100vw;
+	width: 100%;
 	height: 60px;
 	color: white;
 	padding: 1rem;
@@ -17,6 +17,39 @@
 		p {
 			margin-top: 0.3rem;
 			opacity: 0.5;
+		}
+	}
+
+	.middle {
+		button {
+			width: 200px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			svg {
+				margin-left: 0.5rem;
+			}
+			transition: 0.2s;
+		}
+
+		button:hover {
+			cursor: pointer;
+			opacity: 0.7;
+		}
+	}
+
+	.right {
+		display: flex;
+		align-items: center;
+		svg {
+			margin-left: 1rem;
+			transition: 0.3s;
+		}
+
+		svg:hover {
+			cursor: pointer;
+			opacity: 0.7;
 		}
 	}
 }
