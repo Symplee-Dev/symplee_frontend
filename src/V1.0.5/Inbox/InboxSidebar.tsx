@@ -7,10 +7,22 @@ import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useReactPath } from '../../hooks/useReactPath';
 import EmptyInbox from './EmptyInbox';
+import { useGetDMsQuery, useGetDMsLazyQuery } from '../../graphql';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 const InboxSidebar = () => {
 	const path = useReactPath();
 	const user = useSelector((state: RootState) => state.user.user)!;
+
+	const history = useHistory();
+
+	const [getDms, data] = useGetDMsLazyQuery();
+	useEffect(() => {
+		if (!data.data && user) {
+			getDms({ variables: { userId: user.id } });
+		}
+	}, [data.data, getDms, user]);
 
 	if (!user) {
 		return null;
@@ -39,19 +51,45 @@ const InboxSidebar = () => {
 					size="large"
 				/>
 			</div>
-			<div className={`friends-btn ${path === '/' && 'active'}`}>
+			<div
+				className={`friends-btn ${path === '/' && 'active'}`}
+				onClick={() => history.push('/')}
+			>
 				<h4>View Friends</h4>
 				<FontAwesomeIcon icon={faUserFriends} />
 			</div>
-			<div className="dm-list dm-list-empty">
-				<EmptyInbox />
-				<p>Your Inbox Is Empty Right Now</p>
-				<Button
-					clickHandler={() => alert('Not implemented')}
-					content="Start Messaging"
-					size="large"
-				/>
-			</div>
+			{data.data && data.data.getDMS.length < 1 && (
+				<div className="dm-list dm-list-empty">
+					<EmptyInbox />
+					<p>Your Inbox Is Empty Right Now</p>
+					<Button
+						clickHandler={() => alert('Not implemented')}
+						content="Start Messaging"
+						size="large"
+					/>
+				</div>
+			)}
+			{data.data && data.data.getDMS.length > 0 && (
+				<>
+					<Button
+						style={{ height: '40px' }}
+						clickHandler={() => alert('Not implemented')}
+						content="Start Messaging"
+						size="large"
+					/>
+					<div className="dm-list">
+						{data.data.getDMS.map((dm, key) => (
+							<div
+								className="dm-card"
+								key={key}
+								onClick={() => history.push('/dm/' + dm?.id)}
+							>
+								{dm?.name}
+							</div>
+						))}
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

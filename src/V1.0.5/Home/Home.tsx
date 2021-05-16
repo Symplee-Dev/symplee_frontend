@@ -32,7 +32,7 @@ export const Home = ({ isElectron }: { isElectron: boolean }) => {
 						<Chat />
 						<Channel />
 					</Route>
-					<Route exact path="/">
+					<Route path="/">
 						<Inbox />
 					</Route>
 				</Switch>
