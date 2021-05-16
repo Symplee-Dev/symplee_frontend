@@ -1,0 +1,9 @@
+.voice-channel {
+	width: 100%;
+
+	.call-members {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+	}
+}

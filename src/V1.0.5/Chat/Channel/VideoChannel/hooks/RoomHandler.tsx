@@ -1,22 +1,20 @@
-import {
-	ConnectOptions,
-	LocalVideoTrack,
-	Participant,
-	RemoteParticipant,
-	Room,
-	Track
-} from 'twilio-video';
-import { logger } from '../../../../utils/logger';
-import { createRoomJWT } from '../../../../utils/createRoomJWT';
-import { connect as connectToRoom, RemoteTrack } from 'twilio-video';
-import { useState } from 'react';
+import { logger } from '../../../../../utils/logger';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/types/state-types';
-import CallUser from '../CallRoom/CallUser/CallUser';
-import { createLocalVideoTrack } from 'twilio-video';
-import { useGetCallMembrsLazyQuery } from '../../../../graphql';
+import { RootState } from '../../../../../redux/types/state-types';
+import { createRoomJWT } from '../../../../../utils/createRoomJWT';
+import { useState } from 'react';
+import {
+	LocalVideoTrack,
+	Room,
+	connect as connectToRoom,
+	createLocalVideoTrack,
+	ConnectOptions
+} from 'twilio-video';
+import { useGetCallMembrsLazyQuery } from '../../../../../graphql';
+import CallUser from '../CallUser/CallUser';
+import { RemoteParticipant, RemoteTrack } from 'twilio-video';
 
-interface RoomHandlerInterface {
+export interface RoomHandlerInterface {
 	chatGroupId: number;
 	chatId: number;
 }
@@ -31,28 +29,30 @@ export const useRoomHandler = ({
 	setRoom: React.Dispatch<React.SetStateAction<Room | undefined>>;
 } => {
 	const user = useSelector((state: RootState) => state.user.user)!;
-	console.log(user);
+
+	logger.info(`${user.username} is joining chat room`);
+
 	const accessToken = createRoomJWT(
 		`${chatGroupId}-${chatId}`,
 		`${user.username}#${user.key}`
 	);
+
 	const [globalRoom, setRoom] = useState<Room>();
 	const [elements, setElements] = useState<{ [id: string]: JSX.Element }>({});
 	const [localTrack, setLocalTrack] = useState<LocalVideoTrack>();
-	const [getCallMembers, { data, loading }] = useGetCallMembrsLazyQuery();
+	const [getCallMembers, { data }] = useGetCallMembrsLazyQuery();
 
 	const handler = {
 		connect: async (options: ConnectOptions): Promise<boolean> => {
 			const room: Room = await connectToRoom(accessToken, {
 				...options,
 				name: `${chatGroupId}-${chatId}`
-			}).catch(err => logger.error(err));
+			});
 			logger.success('Connected to room!');
 
 			setRoom(room);
 
 			createLocalVideoTrack().then(localVideoTrack => {
-				logger.warning(JSON.stringify(elements));
 				setLocalTrack(localVideoTrack);
 				setElements(prev => {
 					return {
@@ -67,12 +67,11 @@ export const useRoomHandler = ({
 						)
 					};
 				});
-				logger.warning(JSON.stringify(elements));
-				const targetP = document.getElementById('local-user');
+				const localUserTarget = document.getElementById('local-user');
 
-				// room.localParticipant.publishTrack(localVideoTrack);
-
-				targetP?.appendChild(localVideoTrack.attach());
+				if (localUserTarget) {
+					localUserTarget.append(localVideoTrack.attach());
+				}
 			});
 
 			if (room.participants) {
@@ -89,11 +88,8 @@ export const useRoomHandler = ({
 
 			return true;
 		},
-
 		participantConnected: async (participant: RemoteParticipant) => {
-			logger.info(participant.identity);
-
-			logger.warning(JSON.stringify(elements));
+			logger.info(`${participant.identity} has connected`);
 
 			await getCallMembers({
 				variables: { members: [participant.identity] }
