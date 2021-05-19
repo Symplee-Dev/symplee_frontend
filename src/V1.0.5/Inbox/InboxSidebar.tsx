@@ -69,14 +69,18 @@ const InboxSidebar = () => {
 					/>
 				</div>
 			)}
+			<p className="dm-count">{data?.data?.getDMS.length ?? 0} conversations</p>
+
+			<Button
+				style={{ height: '45px', marginBottom: '1rem' }}
+				clickHandler={() => alert('Not implemented')}
+				content="New Conversation"
+				size="large"
+				color="lightmain"
+			/>
 			{data.data && data.data.getDMS.length > 0 && (
 				<>
-					<Button
-						style={{ height: '40px' }}
-						clickHandler={() => alert('Not implemented')}
-						content="Start Messaging"
-						size="large"
-					/>
+					
 					<div className="dm-list">
 						{data.data.getDMS.map((dm, key) => (
 							<div
@@ -84,7 +88,7 @@ const InboxSidebar = () => {
 								key={key}
 								onClick={() => history.push('/dm/' + dm?.id)}
 							>
-								{dm?.name}
+								{dm?.name.split(',')[0]}
 							</div>
 						))}
 					</div>
