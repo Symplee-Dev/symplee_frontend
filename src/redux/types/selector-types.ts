@@ -16,5 +16,6 @@ export type RootSelectors = {
 		useSelectCurrentChat: () => UIState['currentChat'];
 		useSelectCurrentProfile: () => UIState['currentlyViewedProfile'];
 		useSelectDashboardRoute: () => UIState['dashboardRoute'];
+		useSelectModalStatus: () => UIState['rootModalOn'];
 	};
 };

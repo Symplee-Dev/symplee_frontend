@@ -77,6 +77,7 @@ export type UIState = {
 		  }
 		| undefined;
 	dashboardRoute: 'ROOT' | 'MESSAGES' | 'FRIENDS' | 'TEAMS';
+	rootModalOn: boolean;
 };
 
 type CallState = {

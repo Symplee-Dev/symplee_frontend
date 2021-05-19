@@ -8,7 +8,8 @@ export const initialUIState: UIState = {
 	currentChatGroup: undefined,
 	currentChat: undefined,
 	currentlyViewedProfile: undefined,
-	dashboardRoute: 'ROOT'
+	dashboardRoute: 'ROOT',
+	rootModalOn: false
 };
 
 export const uiReducer = (
@@ -16,6 +17,9 @@ export const uiReducer = (
 	action: { type: string; payload: any }
 ): UIState => {
 	switch (action.type) {
+		case UIActionConstants.SET_MODAL_STATUS: {
+			return { ...state, rootModalOn: action.payload };
+		}
 		case UIActionConstants.CLEAR_NOTIFICATIONS: {
 			return { ...state, notifications: [] };
 		}

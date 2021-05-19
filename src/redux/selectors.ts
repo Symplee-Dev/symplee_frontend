@@ -36,12 +36,13 @@ export const UISelectors: RootSelectors['ui'] = {
 		return useSelector((state: RootState) => state.ui.currentChat);
 	},
 	useSelectCurrentProfile() {
-		return useSelector(
-			(state: RootState) => state.ui.currentlyViewedProfile
-		);
+		return useSelector((state: RootState) => state.ui.currentlyViewedProfile);
 	},
 	useSelectDashboardRoute() {
 		return useSelector((state: RootState) => state.ui.dashboardRoute);
+	},
+	useSelectModalStatus() {
+		return useSelector((state: RootState) => state.ui.rootModalOn);
 	}
 };
 

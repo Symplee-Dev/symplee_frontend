@@ -2,6 +2,7 @@ import { Maybe } from '../../../graphql';
 import { Avatar } from '../../components/Avatar/Avatar';
 import Moment from 'react-moment';
 import { Button } from '../../components';
+import { UIActions } from '../../../redux/actions';
 
 interface UserProps {
 	friend: Maybe<{
@@ -18,6 +19,7 @@ interface UserProps {
 }
 
 const User = ({ type, friend }: UserProps) => {
+	const toggleModal = UIActions.useSetModalStatus(true);
 	if (!friend || !friend?.friend) return null;
 
 	return (
@@ -35,8 +37,7 @@ const User = ({ type, friend }: UserProps) => {
 						</h5>
 						{type === 'FRIEND' && (
 							<p>
-								Became friends{' '}
-								<Moment fromNow>{friend.friendsSince}</Moment>
+								Became friends <Moment fromNow>{friend.friendsSince}</Moment>
 							</p>
 						)}
 					</div>
@@ -50,7 +51,9 @@ const User = ({ type, friend }: UserProps) => {
 							color="success"
 						/>
 						<Button
-							clickHandler={() => alert('not implemented')}
+							clickHandler={() => {
+								toggleModal();
+							}}
 							content="View"
 							size="small"
 							color="main"

@@ -273,5 +273,16 @@ export const UIActions: RootActions['ui'] = {
 
 			dispatch(action);
 		};
+	},
+	useSetModalStatus(status: Boolean) {
+		const dispatch = useDispatch();
+
+		return () => {
+			const action = {
+				type: UIActionConstants.SET_MODAL_STATUS,
+				payload: status
+			};
+			dispatch(action);
+		};
 	}
 };

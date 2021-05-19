@@ -68,6 +68,7 @@ const HomeApp = ({
 
 	const [creatingGroup, setCreatingGroup] = useState(false);
 	const [creatingInvite, setCreatingInvite] = useState(false);
+	const [modalEnabled, setModalStatus] = useState(false);
 	const setDashboardRoute = UIActions.useSetDashboardRoute();
 	const dashboardRoute = UISelectors.useSelectDashboardRoute();
 	const currentChat = UISelectors.useSelectCurrentChat();
@@ -91,27 +92,18 @@ const HomeApp = ({
 			<div className="home-app">
 				{/* <Sidebar chatGroups={user.chatGroups} /> */}
 				{creatingGroup && (
-					<NewGroupModal
-						open={creatingGroup}
-						setOpen={setCreatingGroup}
-					/>
+					<NewGroupModal open={creatingGroup} setOpen={setCreatingGroup} />
 				)}
 
 				{creatingInvite && (
-					<SendInviteModal
-						open={creatingInvite}
-						setOpen={setCreatingInvite}
-					/>
+					<SendInviteModal open={creatingInvite} setOpen={setCreatingInvite} />
 				)}
 				<div className="sidebar-footer-container">
 					<div className="top">
 						<Sidebar setCreatingGroup={setCreatingGroup} />
-						{location.pathname.includes('/group/') &&
-							hasCurrentGroup && (
-								<ChatGroupSidebar
-									setCreatingInvite={setCreatingInvite}
-								/>
-							)}
+						{location.pathname.includes('/group/') && hasCurrentGroup && (
+							<ChatGroupSidebar setCreatingInvite={setCreatingInvite} />
+						)}
 						{(location.pathname === '/' ||
 							location.pathname.includes('/discover') ||
 							location.pathname.includes('/dm')) && (
@@ -122,9 +114,7 @@ const HomeApp = ({
 						)}
 
 						{location.pathname.includes('/user/profile/') && (
-							<PublicProfileSidebar
-								setDashboardRoute={setDashboardRoute}
-							/>
+							<PublicProfileSidebar setDashboardRoute={setDashboardRoute} />
 						)}
 					</div>
 					<SidebarFooter />
@@ -179,6 +169,7 @@ const HomeApp = ({
 					</Route>
 					<Route exact path="/">
 						<Dashbaord route={dashboardRoute} />
+						{console.log('Were in the dashboard')}
 					</Route>
 				</Switch>
 				{/* {changeLogOpen && currentLog && (

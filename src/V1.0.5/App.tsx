@@ -19,7 +19,6 @@ const App = () => {
 	const location = useLocation();
 	const authenticated = useLocalToken();
 	UserActions.useGetUser();
-
 	if (!authenticated) {
 		return (
 			<div>

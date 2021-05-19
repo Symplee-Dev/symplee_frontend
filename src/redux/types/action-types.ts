@@ -43,7 +43,8 @@ export enum UIActionConstants {
 	SET_CURRENT_CHAT = 'SET_CURRENT_CHAT',
 	CLEAR_CURRENT_CHAT = 'CLEAR_CURRENT_CHAT',
 	SET_CURRENT_PROFILE_VIEW = 'SET_CURRENT_PROFILE_VIEW',
-	SET_DASHBOARD_ROUTE = 'SET_DASHBOARD_ROUTE'
+	SET_DASHBOARD_ROUTE = 'SET_DASHBOARD_ROUTE',
+	SET_MODAL_STATUS = 'SET_MODAL_STATUS'
 }
 
 export interface SetDashboardRoute {
@@ -115,5 +116,6 @@ export type RootActions = {
 			profile: UIState['currentlyViewedProfile']
 		) => void;
 		useSetDashboardRoute(): (route: UIState['dashboardRoute']) => void;
+		useSetModalStatus(status: Boolean): () => void;
 	};
 };
